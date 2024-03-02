@@ -4,7 +4,8 @@
 <h1 align="center">Hello 👋, I'm Marcin Mozolewski</h1>
 <h3 align="center">A passionate Cloud Engineer based in Poland</h3>
 <p align="center"> TODO </p>
-<p align="center"> 
+<br>
+<p align="center">
  <img src="https://komarev.com/ghpvc/?username=marcjanek&label=PROFILE+VIEWS&color=0e75b6&style=plastic&abbreviated=true" alt="supun nanayakkara" /> 
 </p>
 
