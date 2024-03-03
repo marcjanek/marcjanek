@@ -23,13 +23,13 @@
 
 - 🔭 I'm currently working at **[Procter & Gamble](https://us.pg.com/)**
 
-- 💬 Let's talk about **Cloud** :cloud:
+- 💬 Let's talk about **Cloud** ☁
 
-- :octocat: Open Source fanboy
+- 💻 Open Source fanboy
 
 - 🔍 OSINT lover
 
-- ⛵ Sailing | 🚤 Iceboating | 🧠 Brain Teasers Solver
+- ⛵ Sailing, 🚤 Iceboating, 🧠 Brain Teasers Solver
 
 - 📫 How to reach me **[marcin.mozolewski@gmail.com](mailto:marcin.mozolewski@gmail.com?subject=Contact)**
 
