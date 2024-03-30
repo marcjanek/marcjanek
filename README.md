@@ -3,7 +3,7 @@
 
 <h1 align="center">Hello 👋, I'm Marcin Mozolewski</h1>
 <h3 align="center">A passionate Cloud Engineer based in Poland</h3>
-<p align="center"> With two years in commercial cloud computing and four years of self-directed learning in infrastructure provisioning, I initiated my cloud journey during my bachelor's studies. Guided by my thesis promoter, I integrated HashiCorp tools, working with major providers like GCP, Azure, AWS, and OCI, as well as alternative platforms such as Alibaba, IBM, and Digital Ocean. Proficient in Infrastructure as Code (IaC), I continuously enhance my cloud expertise for efficient system design and issue resolution. </p>
+<p align="center"> With three years in commercial cloud computing and five years of self-directed learning in infrastructure provisioning, I initiated my cloud journey during my bachelor's studies. Guided by my thesis promoter, I integrated HashiCorp tools. Working with major providers like GCP, Azure, AWS, and OCI, as well as alternative platforms such as Alibaba, IBM, and Digital Ocean. Proficient in Infrastructure as Code (IaC), I continuously enhance my cloud expertise for efficient system design and issue resolution. </p>
 <br>
 <p align="center">
  <img src="https://komarev.com/ghpvc/?username=marcjanek&label=PROFILE+VIEWS&color=0e75b6&style=plastic&abbreviated=true" alt="supun nanayakkara" /> 
@@ -34,63 +34,48 @@
 - 📫 How to reach me **[marcin.mozolewski@gmail.com](mailto:marcin.mozolewski@gmail.com?subject=Contact)**
 
 <br><br><br><br><br><br>
-<h3 align="left">Connect with me:</h3>
-<p align="left">
-<a href="https://pl.linkedin.com/in/marcin-mozolewski" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="supunnanayakkara" height="30" width="40" /></a>
-<a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="supun-nanayakkara" height="30" width="40" /></a>
-</p>
 <br>
 
 <img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%">
 
-<!--  Cloud run 
-<h3 align="left">Languages and Tools:</h3>
+<h3 align="left">Badges:</h3>
+<a href="https://stackoverflow.com/users/13347227/marcjanek"><img src="https://stackoverflow.com/users/flair/13347227.png?theme=dark" width="208" height="58" alt="profile for marcjanek at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for marcjanek at Stack Overflow, Q&amp;A for professional and enthusiast programmers"></a>
 
-- Infrastructure Provisioning
+<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%">
+
+<h3 align="left">Tools and technologies:</h3>
+
+- Infrastructure Provisioning:
 <p align="left">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=terraform, ansible" />
   </a>
 </p>
 
-- Container Orchestration
+- Container Orchestration:
 <p align="left">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=kubernetes, " />
   </a>
 </p>
 
-- Cloud Providers
+- Cloud Providers:
 <p align="left">
   <a href="https://skillicons.dev">
     <img src="https://skillicons.dev/icons?i=gcp,azure,aws" />
   </a>
 </p>
 
-- Databases
-<p align="left">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,github,docker,figma,xd,idea,vscode,postman,linux" />
-  </a>
-</p>
+<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%">
 
-- Programming languages
-<p align="left">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,github,docker,figma,xd,idea,vscode,postman,linux" />
-  </a>
-</p>
-
-- other
-<p align="left">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,github,docker,figma,xd,idea,vscode,postman,linux" />
-  </a>
-</p>
-
-<br/>
-
-
+<h3 align="left">Certificates:</h3>
 
 <img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%">
--->
+
+<h3 align="left">Connect with me:</h3>
+<p align="left">
+<a href="https://pl.linkedin.com/in/marcin-mozolewski" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="supunnanayakkara" height="30" width="40" /></a>
+<a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="supun-nanayakkara" height="30" width="40" /></a>
+</p>
+
+<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%">
