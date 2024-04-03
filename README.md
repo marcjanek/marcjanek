@@ -25,7 +25,7 @@
 <img align="right" alt="Spotify" src="https://spotify-github-profile.vercel.app/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=53b14f&bar_color_cover=true" />
 <br />
 
-- 🔭 I'm currently working at **[Procter & Gamble](https://us.pg.com/)**
+- 🔭 I work at **[Procter & Gamble](https://us.pg.com/)**
 - 💬 Let's talk about **Cloud** :cloud:
 - :octocat: Open Source fanboy
 - 🔍 OSINT lover
