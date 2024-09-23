@@ -87,13 +87,16 @@
 
 <img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
 
-<h3 align="left">Connect with me:</h3>
+<h3 align="left">Social media:</h3>
 <p align="left">
     <a href="https://pl.linkedin.com/in/marcin-mozolewski" target="blank">
         <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="supunnanayakkara" height="30" width="40" />
     </a>
     <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" target="blank">
         <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="supun-nanayakkara" height="30" width="40" />
+    </a>
+    <a href="https://www.credly.com/users/marcin-mozolewski" target="blank">
+        <img align="center" src="https://www.svgrepo.com/show/331358/credly.svg" alt="supun-nanayakkara" height="30" width="40" />
     </a>
 </p>
 
