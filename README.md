@@ -82,6 +82,9 @@
 
 <h3 align="left">Certificates:</h3>
 
+[![Associate Cloud Engineer Certification](https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png)](https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url "Associate Cloud Engineer Certification")
+[![Oracle Cloud Infrastructure Foundations 2020 Certified Associate](https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png)](https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url "Oracle Cloud Infrastructure Foundations 2020 Certified Associate")
+
 <img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
 
 <h3 align="left">Connect with me:</h3>
