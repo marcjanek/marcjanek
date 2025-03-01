@@ -27,7 +27,7 @@
 <img align="right" alt="Spotify" src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=53b14f&bar_color_cover=true" />
 <br />
 
-- 🔭 I work at <b>[Procter & Gamble](https://us.pg.com/)</b>
+- 🔭 I work at <b><a href="https://us.pg.com/" title="Procter & Gamble">Procter & Gamble</a>
 - 💬 Let's talk about **Cloud** :cloud:
 - :octocat: Open Source fanboy
 - 🔍 OSINT lover
