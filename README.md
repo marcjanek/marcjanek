@@ -32,7 +32,7 @@
 - :octocat: Open Source fanboy
 - 🔍 OSINT lover
 - ⛵ Sailing | 🚤 Iceboating | 🧠 Brain Teasers Solver
-- 📫 How to reach me **[marcin.mozolewski@gmail.com](mailto:marcin.mozolewski@gmail.com?subject=Contact)**
+- 📫 How to reach me **[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact)**
 
 <br />
 <br />
