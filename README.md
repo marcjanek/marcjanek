@@ -32,10 +32,10 @@
       🔭 I work at <b><a href="https://us.pg.com/" title="Procter & Gamble">Procter & Gamble</a></b>
   </li>
   <li>
-      💬 Let's talk about <b>Cloud</b> :cloud:
+      💬 Let's talk about <b>Cloud</b> &#9729
   </li>
   <li>
-      :octocat: Open Source fanboy
+      &#128275 Open Source fanboy
   </li>
   <li>
       🔍 OSINT lover
