@@ -27,12 +27,26 @@
 <img align="right" alt="Spotify" src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=53b14f&bar_color_cover=true" />
 <br />
 
-- 🔭 I work at <b><a href="https://us.pg.com/" title="Procter & Gamble">Procter & Gamble</a>
-- 💬 Let's talk about **Cloud** :cloud:
-- :octocat: Open Source fanboy
-- 🔍 OSINT lover
-- ⛵ Sailing | 🚤 Iceboating | 🧠 Brain Teasers Solver
-- 📫 How to reach me **[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact)**
+<ul>
+  <li>
+      🔭 I work at <b><a href="https://us.pg.com/" title="Procter & Gamble">Procter & Gamble</a></b>
+  </li>
+  <li>
+      💬 Let's talk about <b>Cloud</b> :cloud:
+  </li>
+  <li>
+      :octocat: Open Source fanboy
+  </li>
+  <li>
+      🔍 OSINT lover
+  </li>
+  <li>
+      ⛵ Sailing | 🚤 Iceboating | 🧠 Brain Teasers Solver
+  </li>
+  <li>
+      📫 How to reach me <b><a href="mailto:contact@mozolewski.eu?subject=Contact" title="contact@mozolewski.eu">contact@mozolewski.eu</a></b>
+  </li>
+</ul>
 
 <br />
 <br />
