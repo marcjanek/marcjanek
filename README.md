@@ -97,8 +97,9 @@
 <img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
 
 <h3 align="left">Certificates:</h3>
+
 <a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">
-    <img src="https://images.credly.com/size/110x110/images/85b9cfc4-257a-4742-878c-4f7ab4a2631b/image.png" alt="HashiCorp Certified: Terraform Associate (003)">
+    <img src="https://images.credly.com/size/110x110/images/ed4be915-68f8-428a-b332-40ded9084ee5/blob" alt="HashiCorp Certified: Terraform Associate (003)">
 </a>
 <a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">
     <img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" alt="Associate Cloud Engineer Certification">
