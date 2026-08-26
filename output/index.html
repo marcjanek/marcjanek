@@ -1,149 +1,525 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <style>
-        body{
-            background-color: black;
-            color: white;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Marcin Mozolewski — Cloud Engineer</title>
+<meta name="description" content="Marcin Mozolewski — cloud engineer in Poland. Infrastructure as code across GCP, Azure, AWS and OCI.">
+<link rel="canonical" href="https://mozolewski.eu/">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Marcin Mozolewski — Cloud Engineer">
+<meta property="og:description" content="Infrastructure as code across GCP, Azure, AWS and OCI.">
+<meta property="og:url" content="https://mozolewski.eu/">
+<meta name="theme-color" content="#F7F8F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1216" media="(prefers-color-scheme: dark)">
+<script>
+  // Set the theme before first paint so the page never flashes the wrong palette.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+<style>
+  :root {
+    --bg: #F7F8F9;
+    --ink: #14181C;
+    --muted: #666F78;
+    --rule: #DDE2E6;
+    --accent: #B8442A;
+    --well: #FFFFFF;
+
+    --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --label-col: 8.5rem;
+    --gap: 2.5rem;
+    --measure: 34rem;
+    --pad: 1.75rem;
+    --step: clamp(2.25rem, 5vw, 3.25rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1216;
+      --ink: #E6EBEF;
+      --muted: #8A949E;
+      --rule: #232A31;
+      --accent: #E0714E;
+      --well: #161B21;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0E1216;
+    --ink: #E6EBEF;
+    --muted: #8A949E;
+    --rule: #232A31;
+    --accent: #E0714E;
+    --well: #161B21;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: clamp(3rem, 10vw, 6.5rem) var(--pad) 4rem;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .page {
+    max-width: calc(var(--label-col) + var(--gap) + var(--measure));
+    margin-inline: auto;
+  }
+
+  /* The marginalia grid: a mono label hangs in the left margin, prose keeps
+     one measure. Every row shares this template so the rules line up. */
+  .row {
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, var(--measure));
+    column-gap: var(--gap);
+    border-top: 1px solid var(--rule);
+    padding-block: var(--step);
+  }
+
+  .row > .body { grid-column: 2; }
+
+  .row[hidden] { display: none; }
+
+  .label {
+    grid-column: 1;
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 2.6;
+  }
+
+  /* ---- Masthead ---- */
+
+  .lede {
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, var(--measure));
+    column-gap: var(--gap);
+    padding-bottom: var(--step);
+  }
+
+  .lede > * { grid-column: 2; }
+
+  .name {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 9vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .role a { border-bottom-color: currentColor; }
+
+  .role {
+    margin: 1.25rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .bio {
+    margin: 1.75rem 0 0;
+    font-family: var(--serif);
+    font-size: clamp(1.0625rem, 2.2vw, 1.1875rem);
+    line-height: 1.62;
+  }
+
+  .links {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  /* ---- Links ---- */
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .out::after {
+    content: "↗";
+    font-size: 0.75em;
+    margin-left: 0.3em;
+    vertical-align: 0.15em;
+    color: var(--muted);
+  }
+
+  /* ---- Platforms ---- */
+
+  .platforms { margin: 0; }
+
+  .plat-primary {
+    font-family: var(--mono);
+    font-size: 0.9375rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.25rem;
+  }
+
+  .plat-also {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .plat-also b {
+    font-weight: 500;
+    color: var(--accent);
+    margin-right: 0.9rem;
+  }
+
+  /* ---- Focus ---- */
+
+  .stack {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
+    gap: 0.85rem 1.5rem;
+  }
+
+  .stack dt {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 0.2em;
+  }
+
+  .stack dd { margin: 0; }
+
+  /* ---- Certifications ---- */
+
+  .certs { margin: 0; padding: 0; list-style: none; }
+
+  .cert {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding-block: 1.1rem;
+  }
+
+  .cert:first-child { padding-top: 0; }
+  .cert:last-child { padding-bottom: 0; }
+  .cert + .cert { border-top: 1px solid var(--rule); }
+
+  .cert-text { min-width: 0; }
+
+  .cert img {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    object-fit: contain;
+  }
+
+  .cert-issuer {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+
+  /* ---- Now playing ---- */
+
+  .well {
+    background: var(--well);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 0.75rem;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .well img { display: block; max-width: 100%; height: auto; }
+
+  /* ---- Footer ---- */
+
+  .colophon {
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, var(--measure));
+    column-gap: var(--gap);
+    border-top: 1px solid var(--rule);
+    padding-top: var(--step);
+  }
+
+  .colophon > .body { grid-column: 2; }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .meta img { display: block; }
+
+  .plain { margin: 0; }
+
+  .fine {
+    margin: 1.5rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  /* ---- Theme toggle ---- */
+
+  .theme {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 2;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    line-height: 1;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .theme:hover { color: var(--accent); border-color: var(--accent); }
+
+  .theme:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---- Narrow screens: labels become eyebrows above their section ---- */
+
+  @media (max-width: 52rem) {
+    .row, .lede, .colophon {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
+
+    .row > .body, .lede > *, .colophon > .body { grid-column: 1; }
+
+    .label { line-height: 1.6; margin-bottom: 1.25rem; }
+
+    .stack { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+
+    .stack dd { margin-bottom: 0.85rem; }
+  }
+
+  /* ---- Load sequence ---- */
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lede > *, .row, .colophon {
+      animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .name { animation-delay: 0.02s; }
+    .role { animation-delay: 0.08s; }
+    .bio { animation-delay: 0.14s; }
+    .links { animation-delay: 0.2s; }
+    .row:nth-of-type(1) { animation-delay: 0.26s; }
+    .row:nth-of-type(2) { animation-delay: 0.3s; }
+    .row:nth-of-type(3) { animation-delay: 0.34s; }
+    .row:nth-of-type(4) { animation-delay: 0.38s; }
+    .colophon { animation-delay: 0.42s; }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(0.6rem); }
+    to { opacity: 1; transform: none; }
+  }
+</style>
 </head>
 <body>
-<div class="container-lg px-3 my-5 markdown-body">
-    <img align="left" src="https://user-images.githubusercontent.com/65187002/144930161-2f783401-8d27-4fdf-a2f7-cc0ba32f1f1f.gif" style="display: inline;" width="21%"/>
-    <img align="right" src="https://user-images.githubusercontent.com/65187002/144930161-2f783401-8d27-4fdf-a2f7-cc0ba32f1f1f.gif" style="display: inline;" width="21%"/>
 
-    <h1 align="center">
-        <a id="anchor1" name="anchor1">Hello &#x1F44B;, I'm Marcin Mozolewski</a>
-    </h1>
-    <h3 align="center">
-        A passionate Cloud Engineer based in Poland
-    </h3>
-    <p align="center">
-        With three years in commercial cloud computing and five years of self-directed learning in infrastructure provisioning, I initiated my cloud journey during my bachelor's studies. Guided by my thesis promoter, I integrated HashiCorp
-        tools. Working with major providers like GCP, Azure, AWS, and OCI, as well as alternative platforms such as Alibaba, IBM, and Digital Ocean. Proficient in Infrastructure as Code (IaC), I continuously enhance my cloud expertise for
-        efficient system design and issue resolution.
-    </p>
-    <br/>
-    <p align="center">
-        <img alt="supun nanayakkara" src="https://komarev.com/ghpvc/?username=marcjanek&label=PROFILE+VIEWS&color=0e75b6&style=plastic&abbreviated=true"/>
-    </p>
+<button class="theme" type="button" id="theme" aria-label="Switch to dark theme" title="Switch theme">◐</button>
 
-    <br/>
-    <div align="center">
-        <img alt="icon" src="https://skillicons.dev/icons?i=terraform,gcp,azure,cloudflare,docker,linux,git"/>
+<main class="page">
+
+  <header class="lede">
+    <h1 class="name">Marcin Mozolewski</h1>
+    <p class="role">Cloud engineer · <a href="https://us.pg.com/">Procter&nbsp;&amp;&nbsp;Gamble</a> · Poland</p>
+    <p class="bio">
+      I build and run cloud infrastructure as code — three years of it commercially, and five before
+      that teaching myself the tooling. Most of my work lives in Terraform, across more providers
+      than any one job needs.
+    </p>
+    <nav class="links" aria-label="Contact and profiles">
+      <a href="mailto:contact@mozolewski.eu?subject=Contact">contact@mozolewski.eu</a>
+      <a class="out" href="https://github.com/marcjanek" rel="me">GitHub</a>
+      <a class="out" href="https://pl.linkedin.com/in/marcin-mozolewski" rel="me">LinkedIn</a>
+      <a class="out" href="https://stackoverflow.com/users/13347227/marcin-mozolewski" rel="me">Stack&nbsp;Overflow</a>
+      <a class="out" href="https://www.credly.com/users/marcin-mozolewski" rel="me">Credly</a>
+    </nav>
+  </header>
+
+  <section class="row" aria-labelledby="l-platforms">
+    <h2 class="label" id="l-platforms">Platforms</h2>
+    <div class="body">
+      <div class="platforms">
+        <div class="plat-primary">
+          <span>GCP</span><span>Azure</span><span>AWS</span><span>OCI</span>
+        </div>
+        <p class="plat-also"><b>Also</b>Alibaba Cloud · IBM Cloud · DigitalOcean</p>
+      </div>
     </div>
+  </section>
 
-    <img height="20" src="https://i.imgur.com/dBaSKWF.gif" width="100%"/>
+  <section class="row" aria-labelledby="l-focus">
+    <h2 class="label" id="l-focus">Focus</h2>
+    <div class="body">
+      <dl class="stack">
+        <dt>Provisioning</dt>
+        <dd>Terraform, Ansible</dd>
+        <dt>Orchestration</dt>
+        <dd>Kubernetes, Docker</dd>
+        <dt>Foundations</dt>
+        <dd>Linux, Git, Cloudflare</dd>
+      </dl>
+    </div>
+  </section>
 
-    <br/>
-
-    <img align="right" alt="Spotify" src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=53b14f&bar_color_cover=true"/>
-    <br/>
-
-    <ul>
-        <li>
-            &#x1F52D; I work at <b><a href="https://us.pg.com/" title="Procter & Gamble">Procter & Gamble</a></b>
+  <section class="row" aria-labelledby="l-certs">
+    <h2 class="label" id="l-certs">Certifications</h2>
+    <div class="body">
+      <ul class="certs">
+        <li class="cert">
+          <img src="https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob" alt="" width="46" height="46" loading="lazy">
+          <div class="cert-text">
+            <a class="out" href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">Terraform Associate (003)</a>
+            <span class="cert-issuer">HashiCorp</span>
+          </div>
         </li>
-        <li>
-            &#x1F4AC; Let's talk about <b>Cloud</b> &#9729;
+        <li class="cert">
+          <img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" alt="" width="46" height="46" loading="lazy">
+          <div class="cert-text">
+            <a class="out" href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">Associate Cloud Engineer</a>
+            <span class="cert-issuer">Google Cloud</span>
+          </div>
         </li>
-        <li>
-            &#128275; Open Source fanboy
+        <li class="cert">
+          <img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" alt="" width="46" height="46" loading="lazy">
+          <div class="cert-text">
+            <a class="out" href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url">OCI Foundations 2020 Associate</a>
+            <span class="cert-issuer">Oracle</span>
+          </div>
         </li>
-        <li>
-            &#x1F50D; OSINT lover
-        </li>
-        <li>
-            &#x26F5; Sailing | &#x1F6A4; Iceboating | &#x1F9E0; Brain Teasers Solver
-        </li>
-        <li>
-            &#x1F4EB; How to reach me <b><a href="mailto:contact@mozolewski.eu?subject=Contact" title="contact@mozolewski.eu">contact@mozolewski.eu</a></b>
-        </li>
-    </ul>
+      </ul>
+    </div>
+  </section>
 
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+  <section class="row" aria-labelledby="l-off">
+    <h2 class="label" id="l-off">Off the clock</h2>
+    <div class="body">
+      <p class="plain">
+        Open source, OSINT, and — away from screens — sailing, iceboating, and brain teasers.
+      </p>
+    </div>
+  </section>
 
-    <img height="20" src="https://i.imgur.com/dBaSKWF.gif" width="100%"/>
+  <section class="row" aria-labelledby="l-playing" id="now-playing">
+    <h2 class="label" id="l-playing">Now playing</h2>
+    <div class="body">
+      <a class="well" href="https://open.spotify.com/user/1176862723" aria-label="Spotify profile">
+        <img src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&amp;cover_image=true&amp;theme=default&amp;show_offline=true&amp;background_color=161b21&amp;interchange=true&amp;bar_color=b8442a&amp;bar_color_cover=true" alt="What Marcin is listening to on Spotify" loading="lazy"
+             onerror="document.getElementById('now-playing').hidden = true">
+      </a>
+    </div>
+  </section>
 
-    <h3 align="left">Badges:</h3>
-    <a href="https://stackoverflow.com/users/13347227/marcjanek">
-        <img
-                alt="profile for marcjanek at Stack Overflow, Q&amp;A for professional and enthusiast programmers"
-                height="58"
-                src="https://stackoverflow.com/users/flair/13347227.png?theme=dark"
-                title="profile for marcjanek at Stack Overflow, Q&amp;A for professional and enthusiast programmers"
-                width="208"
-        />
-    </a>
-
-    <img height="20" src="https://i.imgur.com/dBaSKWF.gif" width="100%"/>
-
-    <h3 align="left">Tools and technologies:</h3>
-
-    - Infrastructure Provisioning:
-    <p align="left">
-        <a href="https://skillicons.dev">
-            <img src="https://skillicons.dev/icons?i=terraform, ansible"/>
+  <footer class="colophon">
+    <h2 class="label">Elsewhere</h2>
+    <div class="body">
+      <div class="meta">
+        <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski">
+          <img id="so-flair" src="https://stackoverflow.com/users/flair/13347227.png?theme=clean" width="208" height="58" alt="Marcin Mozolewski on Stack Overflow" loading="lazy">
         </a>
-    </p>
+        <img src="https://komarev.com/ghpvc/?username=marcjanek&amp;label=VIEWS&amp;color=666f78&amp;style=flat&amp;abbreviated=true" alt="Profile view count" loading="lazy">
+      </div>
+      <p class="fine">Set in system serif, sans and mono. No trackers, no cookies.</p>
+    </div>
+  </footer>
 
-    - Container Orchestration:
-    <p align="left">
-        <a href="https://skillicons.dev">
-            <img src="https://skillicons.dev/icons?i=kubernetes, "/>
-        </a>
-    </p>
+</main>
 
-    - Cloud Providers:
-    <p align="left">
-        <a href="https://skillicons.dev">
-            <img src="https://skillicons.dev/icons?i=gcp,azure,aws"/>
-        </a>
-    </p>
+<script>
+  (function () {
+    var btn = document.getElementById('theme');
+    var root = document.documentElement;
 
-    <img height="20" src="https://i.imgur.com/dBaSKWF.gif" width="100%"/>
+    function current() {
+      var set = root.getAttribute('data-theme');
+      if (set) return set;
+      return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
 
-    <h3 align="left">Certificates:</h3>
+    // The Stack Overflow flair is a raster image with baked-in colours, so it
+    // has to be re-requested in the matching variant whenever the theme changes.
+    var flair = document.getElementById('so-flair');
 
-    <a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">
-        <img alt="HashiCorp Certified: Terraform Associate (003)" src="https://images.credly.com/size/110x110/images/ed4be915-68f8-428a-b332-40ded9084ee5/blob">
-    </a>
-    <a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">
-        <img alt="Associate Cloud Engineer Certification" src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png">
-    </a>
-    <a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url">
-        <img alt="Oracle Cloud Infrastructure Foundations 2020 Certified Associate" src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png">
-    </a>
+    function sync() {
+      var now = current();
+      var next = now === 'dark' ? 'light' : 'dark';
+      btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
+      if (flair) {
+        flair.src = 'https://stackoverflow.com/users/flair/13347227.png?theme='
+          + (now === 'dark' ? 'dark' : 'clean');
+      }
+    }
 
-    <img height="20" src="https://i.imgur.com/dBaSKWF.gif" width="100%"/>
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      sync();
+    });
 
-    <h3 align="left">Social media:</h3>
-    <p align="left">
-        <a href="https://pl.linkedin.com/in/marcin-mozolewski" target="blank">
-            <img align="center" alt="supunnanayakkara" height="30" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" width="40"/>
-        </a>
-        <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" target="blank">
-            <img align="center" alt="supun-nanayakkara" height="30" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" width="40"/>
-        </a>
-        <a href="https://www.credly.com/users/marcin-mozolewski" target="blank">
-            <img align="center" alt="supun-nanayakkara" height="30" src="https://www.svgrepo.com/show/331358/credly.svg" width="40"/>
-        </a>
-    </p>
+    sync();
+  })();
+</script>
 
-    <img height="20" src="https://i.imgur.com/dBaSKWF.gif" width="100%"/>
-
-</div>
-<script crossorigin="anonymous" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js"></script>
-<script>anchors.add();</script>
 </body>
 </html>

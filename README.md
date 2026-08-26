@@ -1,126 +1,56 @@
-<main id="content" class="main-content" role="main">
+# Marcin Mozolewski
 
-<img align="left" src="https://user-images.githubusercontent.com/65187002/144930161-2f783401-8d27-4fdf-a2f7-cc0ba32f1f1f.gif" width="21%" style="display: inline;" />
-<img align="right" src="https://user-images.githubusercontent.com/65187002/144930161-2f783401-8d27-4fdf-a2f7-cc0ba32f1f1f.gif" width="21%" style="display: inline;" />
+**Cloud engineer** · [Procter & Gamble](https://us.pg.com/) · Poland
 
-<h1 align="center"><a name="anchor1" id="anchor1">Hello 👋, I'm Marcin Mozolewski</a></h1>
-<h3 align="center">A passionate Cloud Engineer based in Poland</h3>
-<p align="center">
-    With three years in commercial cloud computing and five years of self-directed learning in infrastructure provisioning, I initiated my cloud journey during my bachelor's studies. Guided by my thesis promoter, I integrated HashiCorp
-    tools. Working with major providers like GCP, Azure, AWS, and OCI, as well as alternative platforms such as Alibaba, IBM, and Digital Ocean. Proficient in Infrastructure as Code (IaC), I continuously enhance my cloud expertise for
-    efficient system design and issue resolution.
-</p>
-<br />
-<p align="center">
-    <img src="https://komarev.com/ghpvc/?username=marcjanek&label=PROFILE+VIEWS&color=0e75b6&style=plastic&abbreviated=true" alt="supun nanayakkara" />
-</p>
+I build and run cloud infrastructure as code — three years of it commercially, and five
+before that teaching myself the tooling. Most of my work lives in Terraform, across more
+providers than any one job needs.
 
-<br />
-<div align="center">
-    <img src="https://skillicons.dev/icons?i=terraform,gcp,azure,cloudflare,docker,linux,git" alt="icon" />
-</div>
+[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) ·
+[mozolewski.eu](https://mozolewski.eu) ·
+[LinkedIn](https://pl.linkedin.com/in/marcin-mozolewski) ·
+[Stack Overflow](https://stackoverflow.com/users/13347227/marcin-mozolewski) ·
+[Credly](https://www.credly.com/users/marcin-mozolewski)
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
+---
 
-<br />
+### Platforms
 
-<img align="right" alt="Spotify" src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=53b14f&bar_color_cover=true" />
-<br />
+`GCP`  `AZURE`  `AWS`  `OCI`
 
-<ul>
-  <li>
-      🔭 I work at <b><a href="https://us.pg.com/" title="Procter & Gamble">Procter & Gamble</a></b>
-  </li>
-  <li>
-      💬 Let's talk about <b>Cloud</b> &#9729;
-  </li>
-  <li>
-      &#128275; Open Source fanboy
-  </li>
-  <li>
-      🔍 OSINT lover
-  </li>
-  <li>
-      ⛵ Sailing | 🚤 Iceboating | 🧠 Brain Teasers Solver
-  </li>
-  <li>
-      📫 How to reach me <b><a href="mailto:contact@mozolewski.eu?subject=Contact" title="contact@mozolewski.eu">contact@mozolewski.eu</a></b>
-  </li>
-</ul>
+Also Alibaba Cloud, IBM Cloud and DigitalOcean.
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+### Focus
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
+**Provisioning** — Terraform, Ansible  
+**Orchestration** — Kubernetes, Docker  
+**Foundations** — Linux, Git, Cloudflare
 
-<h3 align="left">Badges:</h3>
-<a href="https://stackoverflow.com/users/13347227/marcjanek">
-    <img
-        src="https://stackoverflow.com/users/flair/13347227.png?theme=dark"
-        width="208"
-        height="58"
-        alt="profile for marcjanek at Stack Overflow, Q&amp;A for professional and enthusiast programmers"
-        title="profile for marcjanek at Stack Overflow, Q&amp;A for professional and enthusiast programmers"
-    />
-</a>
+### Certifications
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
+<a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url"><img src="https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob" width="56" height="56" alt="Terraform Associate (003)" title="Terraform Associate (003) — HashiCorp"></a>
+&nbsp;
+<a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url"><img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" width="56" height="56" alt="Associate Cloud Engineer" title="Associate Cloud Engineer — Google Cloud"></a>
+&nbsp;
+<a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url"><img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" width="56" height="56" alt="OCI Foundations 2020 Associate" title="OCI Foundations 2020 Associate — Oracle"></a>
 
-<h3 align="left">Tools and technologies:</h3>
+[Terraform Associate (003)](https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url) ·
+[Associate Cloud Engineer](https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url) ·
+[OCI Foundations 2020 Associate](https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url)
 
-- Infrastructure Provisioning:
-<p align="left">
-    <a href="https://skillicons.dev">
-        <img src="https://skillicons.dev/icons?i=terraform, ansible" />
-    </a>
-</p>
+### Off the clock
 
-- Container Orchestration:
-<p align="left">
-    <a href="https://skillicons.dev">
-        <img src="https://skillicons.dev/icons?i=kubernetes, " />
-    </a>
-</p>
+Open source, OSINT, and — away from screens — sailing, iceboating and brain teasers.
 
-- Cloud Providers:
-<p align="left">
-    <a href="https://skillicons.dev">
-        <img src="https://skillicons.dev/icons?i=gcp,azure,aws" />
-    </a>
-</p>
+### Now playing
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
+<a href="https://open.spotify.com/user/1176862723"><img src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=b8442a&bar_color_cover=true" alt="What I'm listening to on Spotify" width="360"></a>
 
-<h3 align="left">Certificates:</h3>
+---
 
-<a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">
-    <img src="https://images.credly.com/size/110x110/images/ed4be915-68f8-428a-b332-40ded9084ee5/blob" alt="HashiCorp Certified: Terraform Associate (003)">
-</a>
-<a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">
-    <img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" alt="Associate Cloud Engineer Certification">
-</a>
-<a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url">
-    <img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" alt="Oracle Cloud Infrastructure Foundations 2020 Certified Associate">
-</a>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://stackoverflow.com/users/flair/13347227.png?theme=dark">
+  <img src="https://stackoverflow.com/users/flair/13347227.png?theme=clean" width="208" height="58" alt="Marcin Mozolewski on Stack Overflow">
+</picture>
 
-<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
-
-<h3 align="left">Social media:</h3>
-<p align="left">
-    <a href="https://pl.linkedin.com/in/marcin-mozolewski" target="blank">
-        <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="supunnanayakkara" height="30" width="40" />
-    </a>
-    <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" target="blank">
-        <img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/stack-overflow.svg" alt="supun-nanayakkara" height="30" width="40" />
-    </a>
-    <a href="https://www.credly.com/users/marcin-mozolewski" target="blank">
-        <img align="center" src="https://www.svgrepo.com/show/331358/credly.svg" alt="supun-nanayakkara" height="30" width="40" />
-    </a>
-</p>
-
-<img src="https://i.imgur.com/dBaSKWF.gif" height="20" width="100%" />
+<img src="https://komarev.com/ghpvc/?username=marcjanek&label=VIEWS&color=666f78&style=flat&abbreviated=true" alt="Profile view count">
