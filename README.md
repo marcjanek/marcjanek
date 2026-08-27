@@ -2,41 +2,29 @@
 
 **Cloud engineer** · [Procter & Gamble](https://us.pg.com/) · Poland
 
-I build and run cloud infrastructure as code — three years of it commercially, and five
-before that teaching myself the tooling. Most of my work lives in Terraform, across more
-providers than any one job needs.
+I build and run cloud infrastructure as code — three years of it commercially, and five before that teaching myself the tooling. Most of my work lives in Terraform, across more providers than any one job needs.
 
-[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) ·
-[mozolewski.eu](https://mozolewski.eu) ·
-[LinkedIn](https://pl.linkedin.com/in/marcin-mozolewski) ·
-[Stack Overflow](https://stackoverflow.com/users/13347227/marcin-mozolewski) ·
-[Credly](https://www.credly.com/users/marcin-mozolewski)
+[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) · [mozolewski.eu](https://mozolewski.eu) · [LinkedIn](https://pl.linkedin.com/in/marcin-mozolewski) · [Stack Overflow](https://stackoverflow.com/users/13347227/marcin-mozolewski) · [Credly](https://www.credly.com/users/marcin-mozolewski)
 
 ---
 
-### Platforms
+### Stack
 
-`GCP`  `AZURE`  `AWS`  `OCI`
+Scrolling [mozolewski.eu](https://mozolewski.eu) descends through it. Flattened here:
 
-Also Alibaba Cloud, IBM Cloud and DigitalOcean.
+**Workload** · Kubernetes, Docker  
+*runs on ↓*  
+**Platform** · Terraform, Ansible  
+*runs on ↓*  
+**Providers** · GCP, Azure, AWS, OCI
 
-### Focus
-
-**Provisioning** — Terraform, Ansible  
-**Orchestration** — Kubernetes, Docker  
-**Foundations** — Linux, Git, Cloudflare
+Four providers in daily use; Alibaba Cloud, IBM Cloud, DigitalOcean and Cloudflare when a project asks for them. Linux and Git at every layer.
 
 ### Certifications
 
-<a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url"><img src="https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob" width="56" height="56" alt="Terraform Associate (003)" title="Terraform Associate (003) — HashiCorp"></a>
-&nbsp;
-<a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url"><img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" width="56" height="56" alt="Associate Cloud Engineer" title="Associate Cloud Engineer — Google Cloud"></a>
-&nbsp;
-<a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url"><img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" width="56" height="56" alt="OCI Foundations 2020 Associate" title="OCI Foundations 2020 Associate — Oracle"></a>
+<a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url"><img src="https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob" width="56" height="56" alt="Terraform Associate (003)" title="Terraform Associate (003) — HashiCorp"></a>&nbsp;&nbsp;<a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url"><img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" width="56" height="56" alt="Associate Cloud Engineer" title="Associate Cloud Engineer — Google Cloud"></a>&nbsp;&nbsp;<a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url"><img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" width="56" height="56" alt="OCI Foundations 2020 Associate" title="OCI Foundations 2020 Associate — Oracle"></a>
 
-[Terraform Associate (003)](https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url) ·
-[Associate Cloud Engineer](https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url) ·
-[OCI Foundations 2020 Associate](https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url)
+[Terraform Associate (003)](https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url) · [Associate Cloud Engineer](https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url) · [OCI Foundations 2020 Associate](https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url)
 
 ### Off the clock
 
