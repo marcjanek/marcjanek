@@ -37,6 +37,8 @@
     --gap: 2.5rem;
     --measure: 34rem;
     --pad: 1.75rem;
+    --peek: 5.25rem;
+    --stack-top: 4rem;
     --step: clamp(2.25rem, 5vw, 3.25rem);
   }
 
@@ -178,22 +180,79 @@
     color: var(--muted);
   }
 
-  /* ---- Platforms ---- */
+  /* ---- The stack ----
+     Scrolling down descends through the stack. Each layer is sticky at a
+     slightly lower offset than the one before, so the next layer slides over
+     it and leaves only its label edge showing — the page ends holding all
+     three layers at once. Layers need an opaque background to occlude. */
 
-  .platforms { margin: 0; }
+  /* Trailing room so the assembled stack holds on screen for a beat before
+     the sticky layers release. This has to be a real box: the sticky
+     constraint rectangle comes from the containing block's content box, so
+     padding on .stack would not extend it. */
+  .stack-hold { height: 38vh; }
 
-  .plat-primary {
-    font-family: var(--mono);
-    font-size: 0.9375rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+  .layer {
+    position: sticky;
+    z-index: 1;
+    background: var(--bg);
+    border-top: 1px solid var(--rule);
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem 1.25rem;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 40vh;
   }
 
-  .plat-also {
-    margin-top: 1rem;
+  .layer:nth-of-type(1) { top: var(--stack-top); z-index: 1; }
+  .layer:nth-of-type(2) { top: calc(var(--stack-top) + var(--peek)); z-index: 2; }
+  /* The last layer has no connector below it, so space-between would only
+     open a dead gap. Let it size to its content instead. */
+  .layer:nth-of-type(3) {
+    top: calc(var(--stack-top) + 2 * var(--peek));
+    z-index: 3;
+    min-height: 0;
+    justify-content: flex-start;
+  }
+
+  .layer:nth-of-type(3) .layer-rest { margin-top: 1.75rem; }
+
+  /* The head is exactly one --peek tall, so the covering layer's edge always
+     lands in white space instead of slicing through type. */
+  .layer-head {
+    min-height: var(--peek);
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, var(--measure));
+    column-gap: var(--gap);
+    align-content: start;
+    padding-top: 1.5rem;
+  }
+
+  .layer-rest {
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, var(--measure));
+    column-gap: var(--gap);
+    padding-bottom: 2rem;
+  }
+
+  .layer-head > .body, .layer-rest > .body { grid-column: 2; }
+
+  .tech {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 1.0625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .note {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.0625rem;
+    color: var(--muted);
+  }
+
+  .also {
+    margin: 0.9rem 0 0;
     font-family: var(--mono);
     font-size: 0.75rem;
     letter-spacing: 0.1em;
@@ -201,31 +260,17 @@
     color: var(--muted);
   }
 
-  .plat-also b {
-    font-weight: 500;
-    color: var(--accent);
-    margin-right: 0.9rem;
-  }
+  .also b { font-weight: 500; color: var(--accent); margin-right: 0.9rem; }
 
-  /* ---- Focus ---- */
-
-  .stack {
-    margin: 0;
-    display: grid;
-    grid-template-columns: minmax(0, 9rem) minmax(0, 1fr);
-    gap: 0.85rem 1.5rem;
-  }
-
-  .stack dt {
+  /* Sits at the layer's bottom edge — pointing at the layer about to slide up. */
+  .runs-on {
+    margin: 1.75rem 0 0;
     font-family: var(--mono);
     font-size: 0.6875rem;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--muted);
-    padding-top: 0.2em;
   }
-
-  .stack dd { margin: 0; }
 
   /* ---- Certifications ---- */
 
@@ -344,15 +389,31 @@
 
     .label { line-height: 1.6; margin-bottom: 1.25rem; }
 
-    .stack { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+    .stack-hold { display: none; }
 
-    .stack dd { margin-bottom: 0.85rem; }
+    .layer { min-height: 0; }
+
+    .layer-head, .layer-rest {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
+
+    .layer-head { padding-top: var(--step); min-height: 0; }
+    .layer-rest { padding-bottom: var(--step); }
+
+    .layer-head > .body, .layer-rest > .body { grid-column: 1; }
+  }
+
+  /* Sticky stacking is motion. Honour the preference, and drop it on phones
+     where a pinned stack fights the small viewport. */
+  @media (max-width: 52rem), (prefers-reduced-motion: reduce) {
+    .layer { position: static; }
   }
 
   /* ---- Load sequence ---- */
 
   @media (prefers-reduced-motion: no-preference) {
-    .lede > *, .row, .colophon {
+    .lede > * {
       animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
@@ -360,11 +421,6 @@
     .role { animation-delay: 0.08s; }
     .bio { animation-delay: 0.14s; }
     .links { animation-delay: 0.2s; }
-    .row:nth-of-type(1) { animation-delay: 0.26s; }
-    .row:nth-of-type(2) { animation-delay: 0.3s; }
-    .row:nth-of-type(3) { animation-delay: 0.34s; }
-    .row:nth-of-type(4) { animation-delay: 0.38s; }
-    .colophon { animation-delay: 0.42s; }
   }
 
   @keyframes rise {
@@ -396,29 +452,61 @@
     </nav>
   </header>
 
-  <section class="row" aria-labelledby="l-platforms">
-    <h2 class="label" id="l-platforms">Platforms</h2>
-    <div class="body">
-      <div class="platforms">
-        <div class="plat-primary">
-          <span>GCP</span><span>Azure</span><span>AWS</span><span>OCI</span>
-        </div>
-        <p class="plat-also"><b>Also</b>Alibaba Cloud · IBM Cloud · DigitalOcean</p>
-      </div>
-    </div>
-  </section>
+  <div class="stack">
 
-  <section class="row" aria-labelledby="l-focus">
-    <h2 class="label" id="l-focus">Focus</h2>
+    <section class="layer" aria-labelledby="ly-workload">
+      <div class="layer-head">
+        <h2 class="label" id="ly-workload">Workload</h2>
+        <div class="body">
+          <p class="tech">Kubernetes · Docker</p>
+        </div>
+      </div>
+      <div class="layer-rest">
+        <div class="body">
+          <p class="note">What actually runs.</p>
+        <p class="runs-on">runs on ↓</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="layer" aria-labelledby="ly-platform">
+      <div class="layer-head">
+        <h2 class="label" id="ly-platform">Platform</h2>
+        <div class="body">
+          <p class="tech">Terraform · Ansible</p>
+        </div>
+      </div>
+      <div class="layer-rest">
+        <div class="body">
+          <p class="note">Where most of my work lives.</p>
+        <p class="runs-on">runs on ↓</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="layer" aria-labelledby="ly-providers">
+      <div class="layer-head">
+        <h2 class="label" id="ly-providers">Providers</h2>
+        <div class="body">
+          <p class="tech">GCP · Azure · AWS · OCI</p>
+        <p class="also"><b>Also</b>Alibaba Cloud · IBM Cloud · DigitalOcean · Cloudflare</p>
+        </div>
+      </div>
+      <div class="layer-rest">
+        <div class="body">
+          <p class="note">Four in daily use. The rest when a project asks for them.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="stack-hold" aria-hidden="true"></div>
+
+  </div>
+
+  <section class="row" aria-labelledby="l-constants">
+    <h2 class="label" id="l-constants">Constants</h2>
     <div class="body">
-      <dl class="stack">
-        <dt>Provisioning</dt>
-        <dd>Terraform, Ansible</dd>
-        <dt>Orchestration</dt>
-        <dd>Kubernetes, Docker</dd>
-        <dt>Foundations</dt>
-        <dd>Linux, Git, Cloudflare</dd>
-      </dl>
+      <p class="plain">Linux and Git, at every layer.</p>
     </div>
   </section>
 
