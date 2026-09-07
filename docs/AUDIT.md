@@ -5,8 +5,8 @@ Phase 1 deliverable of `docs/BRIEF.md`. Branch `redesign/2026`. Measured 2026-09
 **Method.** Live site probed with `curl` (headers, DNS, path behaviour), Lighthouse CLI 12.x against
 `https://mozolewski.eu` (mobile default preset = simulated slow 4G + Moto G Power; and `--preset=desktop`),
 Playwright driving the locally installed Chrome for 11 viewports × 2 themes with axe-core 4.x, and a read of
-the repository and of the private knowledge vault at `~/IdeaProjects/obsidian`. Raw artefacts (Lighthouse
-JSON, 22 screenshots, `report.json`) are in the session scratchpad, not committed — see §12.
+this repository plus a separately-held private content inventory (§8.1). Raw artefacts (Lighthouse JSON,
+22 screenshots, `report.json`) are in the session scratchpad, not committed — see §12.
 
 **Not done: the Chrome extension.** `tabs_context_mcp` reports *"Browser extension is not connected"*, so the
 interactive Chrome checks the brief asks for in Phase 0/1 could not run. Everything the brief wanted from them
@@ -29,8 +29,8 @@ Ranked by how much they matter.
 | 4 | **Every unknown path returns HTTP 200 with the homepage.** No `404.html`, so Pages falls back to `index.html`. `/robots.txt` and `/favicon.ico` return HTML — which is exactly why Lighthouse SEO scores 92. Soft 404s for anything a crawler guesses. | §4, §7 |
 | 5 | **No security headers at all.** No CSP, HSTS, Permissions-Policy or X-Frame-Options. Only the two Pages defaults (`x-content-type-options`, `referrer-policy`). No `_headers` file exists. | §4 |
 | 6 | **The site shows 3 of 8 certifications, and one of the 3 expired in January 2022.** Credly's public API lists five 2025 GitHub certifications that the site never mentions. | §8.2 |
-| 7 | **No "selected work" at all.** A recruiter learns the tools but not one thing built with them. This is the brief's stated biggest gap and it is confirmed. The material exists in the vault; almost none of it is publishable as-is. | §8, §9 |
-| 8 | **Two live copies of the site.** Cloudflare Pages serves `output/index.html` at mozolewski.eu; GitHub Pages *is* enabled and serves the root `index.html` at `marcjanek.github.io/marcjanek/`. `CLAUDE.md` states Pages is disabled — that check tested the wrong URL. | §3 |
+| 7 | **No "selected work" at all.** A recruiter learns the tools but not one thing built with them. This is the brief's stated biggest gap and it is confirmed. Source material exists in a private personal repository; how much of it may be published is a Phase 2 decision. | §8, §9 |
+| 8 | **Two live copies of the site.** Cloudflare Pages serves `output/index.html` at mozolewski.eu; GitHub Pages *is* enabled and serves the root `index.html` at `marcjanek.github.io/marcjanek/`. The project's `CLAUDE.md` stated Pages was disabled — that check tested the wrong URL. | §3 |
 
 What is already good and should not be lost is in §10.
 
@@ -43,10 +43,12 @@ marcjanek/marcjanek        public, created 2024-03-02, default branch main
 ├── index.html             18 254 B  hand-written, self-contained (inline CSS + JS)
 ├── output/index.html      18 254 B  byte-identical copy
 ├── README.md               3 204 B  GitHub profile page
-├── CLAUDE.md               5 878 B
 ├── LICENSE                 1 074 B  MIT
-└── .gitignore                 17 B  .idea/, .DS_Store
+└── .gitignore                       .idea/, .DS_Store, CLAUDE.md
 ```
+
+`CLAUDE.md` used to be tracked here; on this branch it is untracked and gitignored — project guidance is
+kept locally, out of the public repo. Its previous content remains in git history from commit `730e747`.
 
 - **No build step, no package manager, no dependencies, no CI, no tests, no linter.** Two HTML files kept in
   sync by hand (`cmp index.html output/index.html` currently passes).
@@ -77,7 +79,7 @@ and it is the reason to be sceptical of a framework here.
 
 ## 3. Hosting and deploy — resolved
 
-The brief and `CLAUDE.md` both left this open. It is now settled by observation.
+The brief and the project's `CLAUDE.md` both left this open. It is now settled by observation.
 
 | Question | Answer | Evidence |
 |---|---|---|
@@ -92,9 +94,9 @@ Cloudflare Pages. They are identical, so nothing is visibly wrong today; but "ed
 rule, not redundancy. `git log` shows `output/index.html` has received every content commit since `6791725`,
 and root `index.html` has received all but the first — they have been maintained in parallel by hand.
 
-Related: a second Pages project, `rysinder`, already serves `rysinder.mozolewski.eu` from the same zone
-(vault: `projects/rysinder/README.md`), deployed by `wrangler pages deploy` direct upload. So the account
-already has a working Pages + custom-domain setup, and Marcin has hands-on experience with it.
+Related: a second Pages project, `rysinder`, already serves `rysinder.mozolewski.eu` from the same zone by
+`wrangler pages deploy` direct upload. So the account already has a working Pages + custom-domain setup, and
+Marcin has hands-on experience with it.
 
 **Recommendation (for Phase 4, not now):** keep one artefact. Either delete `output/` and point the Pages
 project at the repo root, or delete the root copy and keep `output/` as the build output. Disable GitHub Pages
@@ -231,108 +233,82 @@ Missing:
 
 ## 8. Content inventory
 
-### 8.1 Confidentiality — read this before the rest
+### 8.1 Where the source material lives — and why it is not here
 
-**This repository is public.** The knowledge vault it would draw from is not: it holds P&G performance
-documents (three fiscal years of Impact Plans, a manager assessment, a promotion case), named colleagues,
-internal system codenames, internal cost figures and internal org structure. None of that can be lifted onto
-mozolewski.eu, and **it cannot be written into `docs/` either** — `docs/AUDIT.md` and
-`docs/CONTENT-QUESTIONS.md` are public the moment this branch is pushed.
+**This repository is public.** The bulk of the material a redesign would draw on sits in a private personal
+knowledge repository and cannot be reproduced here in any form, including as summary or citation. The full
+content inventory therefore lives outside this repo, in that private repository, under a project of its own.
+This section carries only what is verifiable from **public sources**: the current site, the GitHub API,
+Credly's public API and the Stack Exchange API.
 
-So this section deliberately cites the vault by path and characterises what is there, without reproducing it.
-The full, unsanitised inventory (facts, numbers, per-file citations) has been written to the session
-scratchpad instead — **it is not in this repo, and it is not durable**. Where it should live permanently is
-the first Phase 2 question.
+That split is a standing rule for this project, not a one-off: `docs/` in this repository stays free of
+anything sourced privately, and the private inventory is where facts, figures and citations are kept.
 
-The vault's own convention already anticipates this: `podsumowanie-synteza.md:255` records a hard constraint
-Marcin set for the Impact Plan — no personal names, roles only. A public site needs that rule and several
-more.
-
-### 8.2 Sources read
+### 8.2 Public sources read
 
 | Source | What it gives |
 |---|---|
-| `obsidian/projects/FY23_24/fy23-24-final-review-impact-plan.md` | First year; role **Platform Engineer, Band 1**; Terraform module/blueprint work; Terraform Cloud migration |
-| `obsidian/projects/FY24_25/fy24-25-final-review-impact-plan.md` | Role **Band 2** (promotion year); platform standardisation, security, first FinOps results; mentorship; vendor coordination |
-| `obsidian/projects/podsumowanie-roczne-2026/fy25-26-final-review-impact-plan-pl.md` | Most recent completed year: network + platform architecture ownership, a production security control plane, policy-as-code adopted by another team, FinOps at ~8× the prior year's scale, leading two engineers |
-| `obsidian/projects/podsumowanie-roczne-2026/podsumowanie-synteza.md` | The cross-check layer — which numbers are verified, which are not, and the caveats on each |
-| `obsidian/projects/podsumowanie-roczne-2026/github-inwentaryzacja.md` | Quantified GitHub activity for FY26 and the technology cross-section |
-| `obsidian/projects/FY26_27/` | Current-year goals and Outcome Measures (in progress, mostly unmeasured) |
-| `obsidian/projects/terraform-modules-monorepo/`, `shared-gke-db-platform/` | Design documents — architecture-portfolio material, all internal |
-| `obsidian/projects/rysinder/` | A personal side project: a small vanilla-JS browser game, tested with `node --test`, deployed to Cloudflare Pages at `rysinder.mozolewski.eu`. **Publishable** — no employer content. |
-| GitHub API (`users/marcjanek`) | 6 public repos, 4 followers, company `@procter-gamble`, location Warsaw, blog mozolewski.eu |
-| Credly public API | **8 badges with issue and expiry dates** |
-| Stack Exchange API | reputation 81, 5 bronze badges, account since 2020 |
+| `index.html`, `README.md` (this repo) | The claims the site makes today |
+| GitHub API `users/marcjanek` | 6 public repos, 4 followers, company `@procter-gamble`, location Warsaw, blog mozolewski.eu, account since 2018-03-06 |
+| GitHub API `repos/envoyproxy/envoy/pulls/44098` | An upstream pull request: `proxy_protocol: add HEX_STRING format for TLV values`, +336/−10 across 7 files, opened 2026-03-24, **closed without merge** |
+| Credly public API | **8 certifications, with issue and expiry dates** — see below |
+| Stack Exchange API | reputation 81, 5 bronze badges, account since April 2020 |
 
-### 8.3 Facts that are publishable today
+Public repositories: `terraform-provider-algorithm` (Go, a Terraform provider, last touched 2025-04-14, no
+description); `Naive-Bayes-email-filter` and `discrete-knapsack-problem` (Java, 2019–2020); `MIPS` (assembly,
+2019); this repo. A side project, `rysinder`, is live at `rysinder.mozolewski.eu` but its source repository
+is private.
 
-Everything here is already public, or is an abstraction that names no internal system, person or number.
+### 8.3 Certifications — the authoritative list
 
-- **Identity.** Marcin Mozolewski, Warsaw, Poland. Cloud/platform engineer at Procter & Gamble (already on
-  the site and in the GitHub profile). Contact `contact@mozolewski.eu`; GitHub, LinkedIn, Stack Overflow,
-  Credly all linked.
-- **Trajectory.** Platform Engineer Band 1 → Band 2 (promoted after year two) → currently working at staff
-  altitude on GCP network and platform foundations. Three completed fiscal years plus the one in progress.
-- **Domain, in the site's own register.** GCP networking and security: Interconnect, Private Service Connect,
-  VPC Service Controls, Secure Web Proxy, Cloud Armor. Infrastructure as code: Terraform, Terraform Cloud,
-  reusable module libraries, policy-as-code with OPA. Kubernetes on GKE (multi-region, GitOps). Serverless:
-  Cloud Run, Cloud Functions. Envoy with WASM filters.
-- **Languages actually used in anger:** HCL, Rust, Go, Python, TypeScript/React, SQL. (The site currently
-  names no language at all.)
-- **Public artefacts.** `terraform-provider-algorithm` (a Terraform provider in Go); an upstream pull request
-  to `envoyproxy/envoy` (#44098, `proxy_protocol: add HEX_STRING format for TLV values`, +336/−10 across 7
-  files, opened 2026-03-24 — **closed without merge**, and the vault is explicit that it should be described
-  honestly as upstream engagement, not a landed change); three older university-era repos (Java, MIPS
-  assembly); the `rysinder` side project.
-- **Certifications — the authoritative list, from Credly's public API:**
+| Certification | Issuer | Issued | Expires | On the site? |
+|---|---|---|---|---|
+| GitHub Actions | GitHub | 2025-06-30 | 2028-06-30 | no |
+| GitHub Advanced Security | GitHub | 2025-06-29 | 2028-06-29 | no |
+| GitHub Administration | GitHub | 2025-06-24 | 2029-06-24 | no |
+| GitHub Copilot | GitHub | 2025-06-21 | 2028-06-21 | no |
+| GitHub Foundations | GitHub | 2025-06-19 | 2028-06-19 | no |
+| HashiCorp Certified: Terraform Associate (003) | IBM Professional Certification | 2024-12-29 | 2026-12-29 | yes |
+| Associate Cloud Engineer | Google Cloud | 2024-09-22 | 2027-09-22 | yes |
+| OCI Foundations 2020 Associate | Oracle | 2020-07-17 | **2022-01-17 (expired)** | yes |
 
-  | Certification | Issuer | Issued | Expires | On the site? |
-  |---|---|---|---|---|
-  | GitHub Actions | GitHub | 2025-06-30 | 2028-06-30 | no |
-  | GitHub Advanced Security | GitHub | 2025-06-29 | 2028-06-29 | no |
-  | GitHub Administration | GitHub | 2025-06-24 | 2029-06-24 | no |
-  | GitHub Copilot | GitHub | 2025-06-21 | 2028-06-21 | no |
-  | GitHub Foundations | GitHub | 2025-06-19 | 2028-06-19 | no |
-  | HashiCorp Terraform Associate (003) | IBM Professional Certification | 2024-12-29 | 2026-12-29 | yes |
-  | Associate Cloud Engineer | Google Cloud | 2024-09-22 | 2027-09-22 | yes |
-  | OCI Foundations 2020 Associate | Oracle | 2020-07-17 | **2022-01-17 (expired)** | yes |
+This supersedes the note in the old `CLAUDE.md` that certification dates are recorded nowhere: they are
+public, dated and machine-readable at `credly.com/users/marcin-mozolewski/badges` (send `Accept:
+application/json`). Two consequences — the site shows an expired badge and hides five current ones, and the
+Terraform Associate expires 2026-12-29, within four months of this audit.
 
-  This supersedes the note in `CLAUDE.md` that certification dates exist nowhere: they are public, dated and
-  machine-readable. Two consequences — the site is showing an expired badge and hiding five current ones, and
-  the Terraform Associate expires 2026-12-29, i.e. within the next four months.
+### 8.4 Claims on the site that need confirmation
 
-### 8.4 Gaps and contradictions against the live site
+Each of these is a factual claim the site makes that cannot be verified from any public source, and that the
+private inventory either contradicts or does not support.
 
-| Site says | Source says | Action |
+| Site says | Problem | Action |
 |---|---|---|
-| "Cloud engineer" | Impact Plans: "Platform Engineer, Band 2"; the FY25/26 review argues staff-level scope | Pick the title Marcin wants recruiters to read. `Cloud/Platform Engineer` is defensible; "Cloud engineer" undersells the last two years. |
-| "three years of it commercially, and five before that teaching myself" | FY23/24 was the first P&G year; three completed fiscal years plus the current one | The count is drifting out of date. Either restate as a start year, or accept a yearly edit. |
-| Stack = Kubernetes/Docker · Terraform/Ansible · GCP/Azure/AWS/OCI | Vault evidence is overwhelmingly **GCP**; Azure appears as a peering target, not as daily work | The "four providers in daily use" line is the weakest factual claim on the site. Needs Marcin's confirmation or a rewrite. Ansible appears nowhere in the vault. |
-| Certifications: 3 | Credly: 8, one expired | Refresh from Credly. |
-| No languages, no projects, no dates | Rust/Go/Python/React are used daily; a large production system exists | The single biggest content gap; see §9. |
-| "No trackers, no cookies" | Beacon + two cookie-setting third parties | Either make it true or delete the sentence. |
+| "Cloud engineer" | The job title recruiters will read is a positioning decision, and the current one understates the last two years of work | Marcin picks the title. |
+| "three years of it commercially, and five before that teaching myself" | A hard-coded count that goes stale every year and is already drifting | Restate as a start year, or accept an annual edit. |
+| "Kubernetes · Docker / Terraform · Ansible / GCP · Azure · AWS · OCI", "Four providers in daily use" | The strongest evidence points at one provider being the daily one; **Ansible has no supporting evidence at all** | The weakest factual claim on the page. Confirm or rewrite. |
+| Three certifications | Eight exist; one shown is expired | Refresh from Credly (§8.3). |
+| "No trackers, no cookies" | Measurably false today (§4, §6) | Make it true, or delete the sentence. |
+| No languages, no projects, no dates, no employer history | The single biggest content gap | §8.5. |
 
-**Not in the vault at all:** education, employment dates, languages spoken, any CV/PDF, a photo, a
-public-facing project write-up. If the redesign needs those, they have to come from Marcin.
+Not available from any source, public or private: education, employment dates, spoken languages, a CV, a
+photo, remote/relocation stance, any talk or article. If the redesign needs them, Marcin has to supply them.
 
 ### 8.5 The "selected work" problem
 
-The brief's §4 asks for 3–5 pieces as *problem → what I built → outcome/scale*. The material is excellent —
-and almost entirely under NDA. Three levels are available, and this is a Marcin decision, not a Claude one:
+The brief's §4 asks for 3–5 pieces as *problem → what I built → outcome/scale*. The material is strong and
+almost all of it is employer-internal. Three levels are available, and the choice is Marcin's, not Claude's:
 
-1. **Abstract capability statements.** No system names, no numbers, no employer specifics — e.g. "designed
-   and ran a multi-region, policy-enforcing proxy control plane on Kubernetes". Safe; also the least
-   differentiated.
-2. **Named-technology case studies with generic scale.** Real architecture, real technology choices, real
-   trade-offs; quantities replaced by orders of magnitude ("hundreds of applications", "four cloud
-   providers"). This is what most senior engineers publish and what would move a recruiter.
-3. **Public artefacts only.** The Envoy PR, `terraform-provider-algorithm`, `rysinder`. Fully safe, verifiable
-   — and much smaller than the actual work.
+1. **Abstract capability statements.** No system names, no numbers, no employer specifics. Safe; also the
+   least differentiated.
+2. **Named-technology case studies with order-of-magnitude scale.** Real architecture, real technology
+   choices, real trade-offs; quantities generalised. This is what most senior engineers publish and what
+   would actually move a recruiter.
+3. **Public artefacts only.** The Envoy pull request, `terraform-provider-algorithm`, `rysinder`. Fully
+   verifiable — and much smaller than the real work.
 
-A mix of 2 and 3 is the recommendation, subject to Marcin's read of his employment agreement. Nothing gets
+A mix of 2 and 3 is the recommendation, subject to Marcin's reading of his employment agreement. Nothing gets
 written until he answers.
-
----
 
 ## 9. Recruiter lens — 30 seconds on the current site
 
@@ -387,8 +363,8 @@ Things the redesign must not throw away, with reasons.
 
 Listed so the STOP gate is a decision point, not a surprise. Full list with recommended defaults comes next.
 
-1. Where does the unsanitised content inventory live permanently — the vault, or nowhere?
-2. NDA boundary for "selected work": which of the three levels in §8.5?
+1. NDA boundary for "selected work": which of the three levels in §8.5?
+2. Does `docs/BRIEF.md` belong in this repo, or with the private inventory?
 3. The Spotify widget, the view counter, the Stack Overflow flair — keep, self-host, or drop?
 4. Web Analytics beacon: turn it off, or keep it and rewrite the footer line?
 5. Job title and the "three years / four providers" claims — confirm or restate.
@@ -410,4 +386,4 @@ In the session scratchpad (`…/scratchpad/audit/`), not committed:
 - `shots/report.json` — per-viewport overflow, page height, touch-target and axe data.
 - `probe.mjs` — the Playwright + axe script that produced them. A cleaned-up version becomes
   `scripts/screenshots.mjs` in Phase 4/5.
-- The unsanitised content inventory (§8.1).
+The private content inventory (§8.1) is held outside this repository.
