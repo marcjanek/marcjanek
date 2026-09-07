@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Marcin Mozolewski — Senior Cloud Platform Engineer</title>
+<meta name="description" content="Senior Cloud Platform Engineer in Warsaw. Cloud networking, egress security and the provisioning path other engineers build on.">
+
+<!--
+  PROTOTYPE D — "Blueprint". Phase 3 of docs/AUDIT.md. Throwaway; real content.
+
+  Direction: the vernacular of an engineering drawing, because that is the subject.
+  The layout is a route: one line runs the length of the page and every section is a
+  stop on it. Three times the route stops describing and starts drawing — it splits
+  and rejoins where the work is redundant, passes through a gate where a policy
+  decision is made, and converges from three strands into one where every project
+  takes the same path.
+
+  Palette   concrete #E9EBED · ink #15181B · muted #5E666D · line #2C5FAA
+            One colour. It belongs to the route and to nothing else.
+  Type      monospace at display size for the name and the section headings — the
+            inverse of the usual habit of reserving mono for tiny labels. Sans for
+            prose. No serif anywhere, no tracked-out capitals.
+  Layout    asymmetric: a 5rem route gutter on the left, one 38rem measure beside it,
+            and the right margin left open. Never centred.
+  Ends      a title block, the way a drawing ends — fields, hairlines, and a stamp.
+-->
+
+<script>
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+
+<style>
+  :root {
+    --paper: #E9EBED;
+    --ink: #15181B;
+    --muted: #5E666D;
+    --hair: #C9CED3;
+    --line: #2C5FAA;
+
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+    --gutter: 7rem;
+    --event: 5.5rem;
+    --measure: 36rem;
+    --content-x: calc(var(--gutter) + (var(--event) / 2) + 1.5rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14171A; --ink: #E7EAED; --muted: #8A939B; --hair: #262C32; --line: #8FB4E8;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14171A; --ink: #E7EAED; --muted: #8A939B; --hair: #262C32; --line: #8FB4E8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 1.0625rem/1.62 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 54rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; text-decoration-color: var(--hair); }
+  a:hover { text-decoration-color: var(--line); color: var(--line); }
+  a:focus-visible { outline: 2px solid var(--line); outline-offset: 3px; border-radius: 2px; }
+
+  /* ---------- the route ---------- */
+
+  .track { position: relative; }
+
+  /* the line itself: one continuous rule down the gutter */
+  .track::before {
+    content: "";
+    position: absolute;
+    left: var(--gutter);
+    top: 0.75rem;
+    bottom: 3rem;
+    width: 2px;
+    background: var(--line);
+    opacity: 0.85;
+  }
+
+  .stop {
+    position: relative;
+    padding: 3.25rem 0 3.25rem var(--content-x);
+    max-width: calc(var(--content-x) + var(--measure));
+  }
+
+  /* the marker where a stop meets the route */
+  .stop::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--gutter) - 4px);
+    top: 3.9rem;
+    width: 11px; height: 11px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 50%;
+  }
+
+  /* an event replaces a length of the route with a drawing of what it does */
+  .event {
+    position: absolute;
+    left: calc(var(--gutter) + 1px - (var(--event) / 2));
+    width: var(--event);
+    background: var(--paper);
+    overflow: visible;
+  }
+  .event line, .event path, .event circle, .event rect { vector-effect: non-scaling-stroke; }
+  .event .rail { stroke: var(--line); stroke-width: 2; fill: none; }
+  .event .gate { fill: var(--line); }
+  .event .faint { stroke: var(--line); stroke-width: 2; fill: none; opacity: 0.45; }
+
+  /* ---------- masthead ---------- */
+
+  .top { padding: clamp(3.5rem, 9vw, 6.5rem) 0 0 var(--content-x); max-width: calc(var(--content-x) + var(--measure)); }
+
+  .name {
+    margin: 0;
+    font: 700 clamp(1.75rem, 6.4vw, 3.5rem)/1.08 var(--mono);
+    letter-spacing: -0.04em;
+  }
+
+  .claim { margin: 1.5rem 0 0; font-size: clamp(1.125rem, 2.2vw, 1.3125rem); line-height: 1.5; max-width: 30rem; }
+  .posting { margin: 1rem 0 0; color: var(--muted); }
+  .links { margin: 1.75rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+
+  /* ---------- headings ---------- */
+
+  h2 {
+    margin: 0 0 1.5rem;
+    font: 500 0.9375rem/1.5 var(--mono);
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  h3 { margin: 0; font: 650 clamp(1.25rem, 2.7vw, 1.5rem)/1.28 var(--sans); letter-spacing: -0.015em; }
+
+  .case + .case { margin-top: 3.5rem; }
+  .case p { margin: 0.75rem 0 0; }
+  .case .note + p { margin-top: 1.1rem; }
+  .case .before { color: var(--muted); }
+  .case .parts { margin-top: 1rem; font: 0.875rem/1.6 var(--mono); color: var(--muted); }
+
+  .note { margin-top: 0.9rem; font: 0.875rem/1.5 var(--mono); color: var(--line); }
+
+  /* ---------- data rows ---------- */
+
+  .grid { display: grid; gap: 0; }
+  .grid > div { display: grid; grid-template-columns: 8rem minmax(0, 1fr); column-gap: 1.5rem; padding-block: 0.75rem; }
+  .grid > div + div { border-top: 1px solid var(--hair); }
+  .grid dt, .grid .k { font: 0.875rem/1.7 var(--mono); color: var(--muted); }
+  .grid dd { margin: 0; }
+  .grid .sub { display: block; color: var(--muted); font-size: 0.9375rem; margin-top: 0.15rem; }
+  .lapsed { color: var(--muted); }
+
+  ul.plain { margin: 0; padding: 0; list-style: none; }
+  ul.plain li + li { margin-top: 0.75rem; }
+
+  /* ---------- title block ---------- */
+
+  .titleblock {
+    margin: 1rem 0 0 var(--content-x);
+    max-width: var(--measure);
+    border: 2px solid var(--ink);
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+  .titleblock img { width: 100%; height: 100%; object-fit: cover; display: block; border-right: 2px solid var(--ink); }
+  .tb-fields > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); column-gap: 1rem; padding: 0.6rem 0.9rem; }
+  .tb-fields > div + div { border-top: 1px solid var(--hair); }
+  .tb-fields .f { font: 0.75rem/1.6 var(--mono); color: var(--muted); }
+  .tb-fields .v { font-size: 0.9375rem; line-height: 1.6; overflow-wrap: anywhere; }
+
+  .fine { margin: 1.25rem 0 0 var(--content-x); font: 0.8125rem/1.6 var(--mono); color: var(--muted); }
+
+  /* ---------- chrome ---------- */
+
+  .theme {
+    position: fixed; top: 1rem; right: 1rem; z-index: 2;
+    width: 2.75rem; height: 2.75rem;
+    display: grid; place-items: center;
+    background: var(--paper); color: var(--muted);
+    border: 1px solid var(--hair);
+    cursor: pointer; font: 0.8125rem/1 var(--mono);
+  }
+  .theme:hover { color: var(--line); border-color: var(--line); }
+  .theme:focus-visible { outline: 2px solid var(--line); outline-offset: 3px; }
+
+  .skip { position: absolute; left: -9999px; background: var(--paper); color: var(--ink); padding: 0.75rem 1rem; border: 2px solid var(--line); }
+  .skip:focus { left: 1rem; top: 1rem; z-index: 3; }
+
+  /* ---------- narrow: the route stays, everything tightens ---------- */
+
+  @media (max-width: 46rem) {
+    :root { --gutter: 1.5rem; --event: 2rem; --content-x: calc(var(--gutter) + (var(--event) / 2) + 1.25rem); }
+    .grid > div { grid-template-columns: minmax(0, 1fr); row-gap: 0.15rem; }
+    .titleblock { grid-template-columns: minmax(0, 1fr); margin-left: var(--content-x); }
+    .titleblock img { height: 9rem; border-right: 0; border-bottom: 2px solid var(--ink); }
+    .tb-fields > div { grid-template-columns: 4.5rem minmax(0, 1fr); }
+  }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<button class="theme" type="button" id="theme" aria-label="Switch theme" title="Switch theme">◐</button>
+
+<div class="sheet">
+
+  <header class="top">
+    <h1 class="name">Marcin Mozolewski</h1>
+    <p class="claim">I build the layer other engineers build on: the network under the workloads, the
+      policy in front of them, and the path every new project takes.</p>
+    <p class="posting">Senior Cloud Platform Engineer at <a href="https://us.pg.com/">Procter &amp; Gamble</a>.
+      Warsaw, Poland. Paid to do this since 2021.</p>
+    <nav class="links" aria-label="Contact and profiles">
+      <a href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a>
+      <a href="https://github.com/marcjanek" rel="me">GitHub</a>
+      <a href="https://pl.linkedin.com/in/marcin-mozolewski" rel="me">LinkedIn</a>
+      <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" rel="me">Stack Overflow</a>
+    </nav>
+  </header>
+
+  <main class="track" id="main">
+
+    <!-- ── stop 1 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-net">
+
+      <!-- the route splits and rejoins: this is the work, drawn -->
+      <svg class="event" style="top: 7.5rem; height: 12rem;" viewBox="0 0 56 176"
+           preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="rail" d="M28 0 V 34 C 28 52, 6 46, 6 66 V 110 C 6 130, 28 124, 28 142 V 176"></path>
+        <path class="rail" d="M28 34 C 28 52, 50 46, 50 66 V 110 C 50 130, 28 124, 28 142"></path>
+      </svg>
+
+      <h2 id="s-net">Selected work — the network</h2>
+      <article class="case">
+        <h3>A foundation two clouds and a datacentre share</h3>
+        <p class="note">Two legs beside this section, either can fail — that is the shape of it.</p>
+        <p class="before">Every team solved connectivity its own way, and there was no highly available path
+          between Google Cloud, on-premise and the second public cloud.</p>
+        <p>I led the build of a redundant interconnect foundation with geo-redundant failover, and a pattern
+          that lets spoke networks attach to it without bespoke work. I own its infrastructure as code and
+          the cloud-side configuration; the architecture was co-designed with one other engineer, whom I
+          mentored through it.</p>
+        <p>It runs in production carrying live workloads, with automatic failover across regions, headroom
+          to scale, and a measurable latency improvement on the traffic it already moves.</p>
+        <p class="parts">Cloud Interconnect, Cloud Router, VPC, Terraform</p>
+      </article>
+    </section>
+
+    <!-- ── stop 2 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-pol">
+
+      <!-- the route passes through a gate: the decision is on the path -->
+      <svg class="event" style="top: 7.5rem; height: 10rem;" viewBox="0 0 56 144"
+           preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="rail" d="M28 0 V 52"></path>
+        <rect class="gate" x="10" y="52" width="36" height="40"></rect>
+        <path class="rail" d="M28 92 V 144"></path>
+      </svg>
+
+      <h2 id="s-pol">Selected work — the policy</h2>
+      <article class="case">
+        <h3>Egress policy that runs inside the request</h3>
+        <p class="note">The block on the route is the decision. Nothing leaves the path to make it.</p>
+        <p class="before">Traffic arriving over Private Service Connect cannot be attributed to the consumer
+          behind it, so egress policy could not be enforced per consumer. I proved the managed options could
+          not do it before building anything.</p>
+        <p>I designed and built a control plane that identifies each connection's consumer, resolves its
+          place in the resource hierarchy, and evaluates allow-or-deny in-process inside the proxy —
+          fail-closed by default, with no network round trip on the decision path. Other teams adopt it
+          through a Terraform provider I wrote, so it looks like adopting any other resource.</p>
+        <p>Live in development and production on a two-region Kubernetes deployment, run hands-off with
+          GitOps and metric-driven autoscaling.</p>
+        <p class="parts">Envoy, WASM policy filters in Rust, Go, PostgreSQL, Kubernetes, Flux</p>
+      </article>
+    </section>
+
+    <!-- ── stop 3 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-prov">
+
+      <!-- three strands converge into one: every project takes the same path -->
+      <svg class="event" style="top: 7.5rem; height: 10rem;" viewBox="0 0 56 144"
+           preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path class="faint" d="M6 0 V 30 C 6 54, 28 46, 28 72"></path>
+        <path class="faint" d="M50 0 V 30 C 50 54, 28 46, 28 72"></path>
+        <path class="rail" d="M28 0 V 72"></path>
+        <path class="rail" d="M28 72 V 144"></path>
+      </svg>
+
+      <h2 id="s-prov">Selected work — the path in</h2>
+      <article class="case">
+        <h3>One route for every new project</h3>
+        <p class="note">Three ways in, one way through. There is no side entrance.</p>
+        <p class="before">New cloud projects, their Terraform workspaces and their infrastructure
+          repositories were created ad hoc, with no consistent folder or labelling model to inherit.</p>
+        <p>I designed the automated path they all take now — creation, labelling, perimeter placement,
+          workload identity federation, multi-environment support, group membership — and the API in front
+          of it.</p>
+        <p>Every new project goes through it. Hundreds of applications have been provisioned on one uniform
+          model.</p>
+        <p class="parts">Terraform, Terraform Cloud, Google Cloud, Open Policy Agent</p>
+      </article>
+    </section>
+
+    <!-- ── stop 4 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-open">
+      <h2 id="s-open">In the open</h2>
+      <ul class="plain">
+        <li><a href="https://github.com/envoyproxy/envoy/pull/44098">envoyproxy/envoy #44098</a> — a
+          HEX_STRING format for proxy_protocol TLV values, straight out of the policy work above. Closed
+          without merge; the problem it came from is solved in the control plane instead.</li>
+        <li><a href="https://github.com/marcjanek/terraform-provider-algorithm">terraform-provider-algorithm</a>
+          — a small Terraform provider in Go.</li>
+        <li><a href="https://rysinder.mozolewski.eu">rysinder</a> — a browser game with no dependencies and
+          a test that fails if any single clue gives the answer away.</li>
+      </ul>
+    </section>
+
+    <!-- ── stop 5 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-stack">
+      <h2 id="s-stack">What I work in</h2>
+      <dl class="grid">
+        <div><dt>workload</dt><dd>Kubernetes, Docker, Envoy</dd></div>
+        <div><dt>platform</dt><dd>Terraform, Terraform Cloud, Open Policy Agent, Flux</dd></div>
+        <div><dt>languages</dt><dd>Go, Rust, Python, TypeScript, HCL, SQL</dd></div>
+        <div><dt>cloud</dt><dd>Google Cloud, daily.
+          <span class="sub">Worked with AWS, Azure, OCI, IBM Cloud, Alibaba Cloud, Cloudflare, DigitalOcean.</span></dd></div>
+        <div><dt>constants</dt><dd>Linux and Git, at every layer</dd></div>
+      </dl>
+    </section>
+
+    <!-- ── stop 6 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-where">
+      <h2 id="s-where">Where</h2>
+      <div class="grid">
+        <div><span class="k">2023 — now</span><span>Senior Cloud Platform Engineer, Procter &amp; Gamble
+          <span class="sub">Cloud network and platform architecture, egress security, policy as code, cost
+          optimisation. Responsible for the delivery of other engineers.</span></span></div>
+        <div><span class="k">2021 — 2023</span><span>Junior Cloud Developer, PKO BP Finat
+          <span class="sub">Google Cloud infrastructure provisioning.</span></span></div>
+        <div><span class="k">2019</span><span>Java Developer, intern, eService
+          <span class="sub">Java and Spring Boot.</span></span></div>
+        <div><span class="k">2017 — 2022</span><span>Warsaw University of Technology
+          <span class="sub">MSc Eng and BEng in Computer Science, Faculty of Electronics and Information
+          Technology.</span></span></div>
+      </div>
+    </section>
+
+    <!-- ── stop 7 ──────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-certs">
+      <h2 id="s-certs">Certifications</h2>
+      <div class="grid">
+        <div><span class="k">2025</span><span><a href="https://www.credly.com/users/marcin-mozolewski">Five
+          GitHub certifications</a> — Actions, Advanced Security, Administration, Copilot, Foundations</span></div>
+        <div><span class="k">2024</span><span><a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">HashiCorp
+          Terraform Associate (003)</a><span class="sub">Expires December 2026.</span></span></div>
+        <div><span class="k">2024</span><span><a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">Google
+          Associate Cloud Engineer</a></span></div>
+        <div><span class="k">2021</span><span>Microsoft AZ-204 Azure Developer Associate and AZ-900 Azure Fundamentals</span></div>
+        <div><span class="k lapsed">2020</span><span class="lapsed"><a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url">Oracle
+          Cloud Infrastructure Foundations 2020</a><span class="sub">Lapsed in 2022. Listed because I
+          earned it, not because it still counts.</span></span></div>
+      </div>
+    </section>
+
+    <!-- ── terminus ────────────────────────────────────────────── -->
+    <section class="stop" aria-labelledby="s-end">
+      <h2 id="s-end">Off the clock</h2>
+      <p style="margin:0">Open source, OSINT, and — away from screens — sailing, iceboating, and brain
+        teasers.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <h2 class="sr-only" id="s-tb" hidden>Contact</h2>
+    <div class="titleblock">
+      <img src="data:image/webp;base64,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" width="128" height="128" alt="Marcin Mozolewski">
+      <div class="tb-fields">
+        <div><span class="f">name</span><span class="v">Marcin Mozolewski</span></div>
+        <div><span class="f">role</span><span class="v">Senior Cloud Platform Engineer</span></div>
+        <div><span class="f">based</span><span class="v">Warsaw, Poland</span></div>
+        <div><span class="f">contact</span><span class="v"><a href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a></span></div>
+      </div>
+    </div>
+    <p class="fine">One HTML file. No trackers, no cookies, no fonts to download.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('theme');
+    var root = document.documentElement;
+    function current() {
+      return root.getAttribute('data-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      btn.setAttribute('aria-label', 'Switch to ' + (next === 'dark' ? 'light' : 'dark') + ' theme');
+    });
+  })();
+</script>
+</body>
+</html>
