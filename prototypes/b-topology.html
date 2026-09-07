@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Marcin Mozolewski — Senior Cloud Platform Engineer</title>
+<meta name="description" content="Senior Cloud Platform Engineer in Warsaw. Cloud networking, egress security and the provisioning path other engineers build on.">
+
+<!--
+  PROTOTYPE B — "Topology". Phase 3 of docs/AUDIT.md. Throwaway; real content.
+
+  Direction: the work is systems, so the page draws them. Each piece of work opens
+  with the shape of the thing before a word of prose.
+  Palette   paper #F4F6F7 · ink #10151A · muted #5A646E · rule #D6DCE0
+            colour appears ONLY inside drawings: path #1D6478 · decision #5C3D9B
+  Type      one family (system sans) at two weights. No monospace, no tracked-out
+            capitals, no arrows glued to link text — those belong to prototype A.
+  Layout    one measure of prose at 34rem; drawings break out to full width.
+  Principle The page is quiet so the drawings can be loud. Numbers appear only where
+            the content is genuinely a sequence — the steps of a provisioning path.
+-->
+
+<script>
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+
+<style>
+  :root {
+    --paper: #F4F6F7;
+    --ink: #10151A;
+    --muted: #5A646E;
+    --rule: #D6DCE0;
+    --fill: #E4E9EC;
+
+    --path: #1D6478;
+    --decision: #5C3D9B;
+    --ghost: #A7B2BB;
+
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --measure: 34rem;
+    --step: clamp(3rem, 7vw, 5rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0C1116; --ink: #E4EAEE; --muted: #8894A0; --rule: #1E262E; --fill: #161E26;
+      --path: #5FB6CE; --decision: #B49BE8; --ghost: #4A5661;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0C1116; --ink: #E4EAEE; --muted: #8894A0; --rule: #1E262E; --fill: #161E26;
+    --path: #5FB6CE; --decision: #B49BE8; --ghost: #4A5661;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0 1.5rem 5rem;
+    background: var(--paper);
+    color: var(--ink);
+    font: 1.0625rem/1.65 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 58rem; margin-inline: auto; }
+  .prose { max-width: var(--measure); }
+
+  a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; text-decoration-color: var(--rule); }
+  a:hover { text-decoration-color: currentColor; }
+  a:focus-visible { outline: 2px solid var(--path); outline-offset: 3px; border-radius: 2px; }
+
+  /* ---- masthead ---- */
+
+  .hero { padding-block: clamp(3rem, 9vw, 6rem) var(--step); }
+
+  .name {
+    margin: 0;
+    font-size: clamp(2.5rem, 8vw, 4.25rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  .standfirst {
+    margin: 1.5rem 0 0;
+    max-width: 30rem;
+    font-size: clamp(1.125rem, 2.4vw, 1.375rem);
+    line-height: 1.5;
+  }
+
+  .whereabouts { margin: 1.25rem 0 0; color: var(--muted); }
+
+  .links { margin: 2rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+
+  /* ---- drawings ---- */
+
+  figure { margin: 0; }
+
+  .drawing {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: transparent;
+  }
+  .drawing text { font-family: var(--sans); fill: var(--ink); }
+  .drawing .dim { fill: var(--muted); }
+  .drawing .box { fill: var(--fill); stroke: var(--rule); stroke-width: 2; }
+  .drawing .live { stroke: var(--path); stroke-width: 3; fill: none; }
+  .drawing .node { fill: none; stroke: var(--path); stroke-width: 3; }
+  .drawing .gate { fill: var(--decision); }
+  .drawing .off { stroke: var(--ghost); stroke-width: 2; stroke-dasharray: 6 6; fill: none; }
+  .drawing .offtext { fill: var(--ghost); }
+
+  figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.9375rem; max-width: var(--measure); }
+
+  /* ---- sections ---- */
+
+  section { padding-block: var(--step); border-top: 1px solid var(--rule); }
+
+  h2 { margin: 0 0 2rem; font-size: 1.375rem; font-weight: 650; letter-spacing: -0.015em; }
+
+  .case + .case { margin-top: var(--step); }
+  .case h3 { margin: 1.75rem 0 0; font-size: clamp(1.375rem, 3vw, 1.75rem); font-weight: 650; letter-spacing: -0.02em; line-height: 1.25; }
+  .case p { margin: 0.85rem 0 0; }
+  .case .setup { color: var(--muted); }
+  .case .tech { margin-top: 1.1rem; font-size: 0.9375rem; color: var(--muted); }
+
+  ul { margin: 0; padding: 0; list-style: none; }
+
+  .rows li { padding-block: 0.85rem; display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); column-gap: 1.5rem; }
+  .rows li + li { border-top: 1px solid var(--rule); }
+  .rows .k { color: var(--muted); }
+  .rows .sub { display: block; color: var(--muted); font-size: 0.9375rem; margin-top: 0.15rem; }
+
+  .stamp { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .lapsed { color: var(--decision); }
+
+  .portrait {
+    width: 4.5rem; height: 4.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+    margin-right: 1rem;
+  }
+  .signoff { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 0; }
+
+  .fine { margin: 2rem 0 0; color: var(--muted); font-size: 0.9375rem; }
+
+  .theme {
+    position: fixed; top: 1.25rem; right: 1.25rem; z-index: 2;
+    width: 2.75rem; height: 2.75rem;
+    display: grid; place-items: center;
+    background: var(--paper); color: var(--muted);
+    border: 1px solid var(--rule); border-radius: 50%;
+    cursor: pointer; font-size: 0.875rem;
+  }
+  .theme:hover { color: var(--ink); border-color: var(--muted); }
+  .theme:focus-visible { outline: 2px solid var(--path); outline-offset: 3px; }
+
+  .skip { position: absolute; left: -9999px; background: var(--paper); color: var(--ink); padding: 0.75rem 1rem; border: 1px solid var(--path); }
+  .skip:focus { left: 1rem; top: 1rem; z-index: 3; }
+
+  @media (max-width: 40rem) {
+    .rows li { grid-template-columns: minmax(0, 1fr); row-gap: 0.15rem; }
+  }
+</style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<button class="theme" type="button" id="theme" aria-label="Switch theme" title="Switch theme">◐</button>
+
+<main class="page" id="main">
+
+  <header class="hero">
+    <h1 class="name">Marcin Mozolewski</h1>
+    <p class="standfirst">I build the layer other engineers build on — the network under the workloads,
+      the policy in front of them, and the path every new project takes.</p>
+    <p class="whereabouts">Senior Cloud Platform Engineer at Procter &amp; Gamble. Warsaw, Poland.</p>
+    <nav class="links" aria-label="Contact and profiles">
+      <a href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a>
+      <a href="https://github.com/marcjanek" rel="me">GitHub</a>
+      <a href="https://pl.linkedin.com/in/marcin-mozolewski" rel="me">LinkedIn</a>
+      <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" rel="me">Stack Overflow</a>
+    </nav>
+  </header>
+
+  <section aria-labelledby="h-work">
+    <h2 id="h-work">Three things I built</h2>
+
+    <article class="case">
+      <figure>
+        <svg class="drawing" viewBox="0 0 640 260" role="img" aria-labelledby="d1t">
+          <title id="d1t">On-premise and a second cloud connect through a redundant interconnect to workloads
+            running in Google Cloud.</title>
+          <rect class="box" x="2" y="34" width="150" height="56" rx="3"></rect>
+          <text x="77" y="68" text-anchor="middle" font-size="22">On-premise</text>
+          <rect class="box" x="2" y="164" width="150" height="56" rx="3"></rect>
+          <text x="77" y="198" text-anchor="middle" font-size="22">Second cloud</text>
+
+          <path class="live" d="M152 62 H 250"></path>
+          <path class="live" d="M152 192 H 250"></path>
+
+          <rect class="node" x="250" y="34" width="140" height="186" rx="3"></rect>
+          <text x="320" y="118" text-anchor="middle" font-size="22">Interconnect</text>
+          <text x="320" y="146" text-anchor="middle" font-size="20" class="dim">two paths</text>
+
+          <path class="live" d="M390 62 H 470"></path>
+          <path class="live" d="M390 192 H 470"></path>
+          <path class="live" d="M470 62 V 192"></path>
+          <path class="live" d="M470 127 H 500"></path>
+
+          <rect class="box" x="500" y="14" width="138" height="48" rx="3"></rect>
+          <text x="569" y="44" text-anchor="middle" font-size="22">Inference</text>
+          <rect class="box" x="500" y="103" width="138" height="48" rx="3"></rect>
+          <text x="569" y="133" text-anchor="middle" font-size="22">Containers</text>
+          <rect class="box" x="500" y="192" width="138" height="48" rx="3"></rect>
+          <text x="569" y="222" text-anchor="middle" font-size="22">Serverless</text>
+
+          <text x="320" y="252" text-anchor="middle" font-size="19" class="dim">either path can fail</text>
+        </svg>
+        <figcaption>Redundant by construction: either leg can fail and traffic keeps moving.</figcaption>
+      </figure>
+
+      <h3>A network foundation two clouds and a datacentre share</h3>
+      <p class="setup">Every team solved connectivity its own way, and there was no highly available path
+        between Google Cloud, on-premise and the second public cloud.</p>
+      <p>I led the build of a highly available interconnect foundation with geo-redundant failover, and a
+        pattern that lets spoke networks attach without bespoke work. I own its infrastructure as code and
+        the cloud-side configuration; the architecture was co-designed with one other engineer, whom I
+        mentored through it.</p>
+      <p>It runs in production, carrying live workloads, with automatic failover across regions, headroom
+        to scale, and a measurable latency improvement on the traffic it already moves.</p>
+      <p class="tech">Cloud Interconnect, Cloud Router, VPC, Terraform.</p>
+    </article>
+
+    <article class="case">
+      <figure>
+        <svg class="drawing" viewBox="0 0 640 260" role="img" aria-labelledby="d2t">
+          <title id="d2t">A request passes through the proxy, where the policy decision is made in-process,
+            instead of calling out to a separate policy service.</title>
+          <rect class="box" x="2" y="46" width="132" height="56" rx="3"></rect>
+          <text x="68" y="80" text-anchor="middle" font-size="22">Consumer</text>
+
+          <path class="live" d="M134 74 H 236"></path>
+
+          <rect class="node" x="236" y="18" width="168" height="112" rx="3"></rect>
+          <text x="320" y="48" text-anchor="middle" font-size="22">Proxy</text>
+          <rect class="gate" x="272" y="66" width="96" height="42" rx="3"></rect>
+          <text x="320" y="93" text-anchor="middle" font-size="20" fill="#FFFFFF">decision</text>
+
+          <path class="live" d="M404 74 H 506"></path>
+          <rect class="box" x="506" y="46" width="132" height="56" rx="3"></rect>
+          <text x="572" y="80" text-anchor="middle" font-size="22">Destination</text>
+
+          <path class="off" d="M320 130 V 196"></path>
+          <rect x="236" y="196" width="168" height="50" rx="3" fill="none" stroke="var(--ghost)" stroke-width="2" stroke-dasharray="6 6"></rect>
+          <text x="320" y="227" text-anchor="middle" font-size="20" class="offtext">policy service</text>
+          <text x="424" y="172" font-size="19" class="offtext">not on the path</text>
+        </svg>
+        <figcaption>The decision happens inside the proxy. Nothing is asked over the network to allow a
+          request through.</figcaption>
+      </figure>
+
+      <h3>Egress policy that runs inside the request, not beside it</h3>
+      <p class="setup">Traffic arriving over Private Service Connect cannot be attributed to the consumer
+        behind it, so egress policy could not be enforced per consumer. I proved the managed options could
+        not do it before building anything.</p>
+      <p>I designed and built a control plane that identifies each connection's consumer, resolves its
+        place in the resource hierarchy, and evaluates allow-or-deny in-process inside the proxy —
+        fail-closed by default, with no network round trip on the decision path. I exposed it to other
+        teams as a Terraform provider I wrote, so adopting it looks like adopting any other resource.</p>
+      <p>Live in development and production on a two-region Kubernetes deployment, run hands-off with
+        GitOps and metric-driven autoscaling.</p>
+      <p class="tech">Envoy, WASM policy filters in Rust, Go, PostgreSQL, Kubernetes, Flux, a custom
+        Terraform provider.</p>
+    </article>
+
+    <article class="case">
+      <figure>
+        <svg class="drawing" viewBox="0 0 640 230" role="img" aria-labelledby="d3t">
+          <title id="d3t">Requests from any team pass through four provisioning steps and come out as one
+            uniform project.</title>
+          <text x="2" y="40" font-size="20" class="dim">any team</text>
+          <path class="live" d="M2 60 H 96"></path>
+          <path class="live" d="M2 104 H 96"></path>
+          <path class="live" d="M2 148 H 96"></path>
+          <path class="live" d="M96 60 V 148"></path>
+          <path class="live" d="M96 104 H 134"></path>
+
+          <rect class="node" x="134" y="62" width="360" height="84" rx="3"></rect>
+          <g font-size="20">
+            <text x="164" y="98" text-anchor="middle" class="dim">1</text>
+            <text x="164" y="126" text-anchor="middle">project</text>
+            <text x="254" y="98" text-anchor="middle" class="dim">2</text>
+            <text x="254" y="126" text-anchor="middle">perimeter</text>
+            <text x="344" y="98" text-anchor="middle" class="dim">3</text>
+            <text x="344" y="126" text-anchor="middle">identity</text>
+            <text x="434" y="98" text-anchor="middle" class="dim">4</text>
+            <text x="434" y="126" text-anchor="middle">repository</text>
+          </g>
+
+          <path class="live" d="M494 104 H 528"></path>
+          <rect class="box" x="528" y="76" width="110" height="56" rx="3"></rect>
+          <text x="583" y="110" text-anchor="middle" font-size="22">one shape</text>
+
+          <text x="314" y="186" text-anchor="middle" font-size="19" class="dim">no other route in</text>
+        </svg>
+        <figcaption>Four steps, one order, no side entrance — so every project inherits the same
+          structure.</figcaption>
+      </figure>
+
+      <h3>One path for every new project</h3>
+      <p class="setup">New cloud projects, their Terraform workspaces and their infrastructure repositories
+        were created ad hoc, with no consistent folder or labelling model to inherit.</p>
+      <p>I designed the automated path they all take now — project creation, labelling, perimeter
+        placement, workload identity federation, multi-environment support, group membership — and the API
+        in front of it.</p>
+      <p>Every new project goes through it. Hundreds of applications have been provisioned on one uniform
+        model.</p>
+      <p class="tech">Terraform, Terraform Cloud, Google Cloud, Open Policy Agent.</p>
+    </article>
+  </section>
+
+  <section aria-labelledby="h-open">
+    <h2 id="h-open">In the open</h2>
+    <div class="prose">
+      <p><a href="https://github.com/envoyproxy/envoy/pull/44098">envoyproxy/envoy #44098</a> — a
+        HEX_STRING format for proxy_protocol TLV values, straight out of the work above. Closed without
+        merge; the problem it came from is solved in the control plane instead.</p>
+      <p><a href="https://github.com/marcjanek/terraform-provider-algorithm">terraform-provider-algorithm</a>
+        — a small Terraform provider in Go.</p>
+      <p><a href="https://rysinder.mozolewski.eu">rysinder</a> — a browser game with no dependencies and a
+        test that fails if any single clue gives the answer away.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-stack">
+    <h2 id="h-stack">What I work in</h2>
+    <ul class="rows">
+      <li><span class="k">Workload</span><span>Kubernetes, Docker, Envoy</span></li>
+      <li><span class="k">Platform</span><span>Terraform, Terraform Cloud, Open Policy Agent, Flux</span></li>
+      <li><span class="k">Languages</span><span>Go, Rust, Python, TypeScript, HCL, SQL</span></li>
+      <li><span class="k">Cloud</span><span>Google Cloud, daily.
+        <span class="sub">Worked with AWS, Azure, OCI, IBM Cloud, Alibaba Cloud, Cloudflare, DigitalOcean.</span></span></li>
+      <li><span class="k">Constants</span><span>Linux and Git, at every layer</span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-exp">
+    <h2 id="h-exp">Where</h2>
+    <ul class="rows">
+      <li><span class="k stamp">2023 — now</span><span>Senior Cloud Platform Engineer, Procter &amp; Gamble
+        <span class="sub">Cloud network and platform architecture, egress security, policy as code, cost
+        optimisation. Responsible for the delivery of other engineers.</span></span></li>
+      <li><span class="k stamp">2021 — 2023</span><span>Junior Cloud Developer, PKO BP Finat
+        <span class="sub">Google Cloud infrastructure provisioning.</span></span></li>
+      <li><span class="k stamp">2019</span><span>Java Developer, intern, eService
+        <span class="sub">Java and Spring Boot.</span></span></li>
+      <li><span class="k stamp">2017 — 2022</span><span>Warsaw University of Technology
+        <span class="sub">MSc Eng and BEng in Computer Science, Faculty of Electronics and Information
+        Technology.</span></span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-certs">
+    <h2 id="h-certs">Certifications</h2>
+    <ul class="rows">
+      <li><span class="k stamp">2025</span><span><a href="https://www.credly.com/users/marcin-mozolewski">Five
+        GitHub certifications</a> — Actions, Advanced Security, Administration, Copilot, Foundations</span></li>
+      <li><span class="k stamp">2024</span><span><a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">HashiCorp
+        Terraform Associate (003)</a> <span class="sub">Expires December 2026.</span></span></li>
+      <li><span class="k stamp">2024</span><span><a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">Google
+        Associate Cloud Engineer</a></span></li>
+      <li><span class="k stamp">2021</span><span>Microsoft AZ-204 Azure Developer Associate and AZ-900 Azure Fundamentals</span></li>
+      <li><span class="k stamp lapsed">2020</span><span><a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url">Oracle
+        Cloud Infrastructure Foundations 2020</a> <span class="sub">Lapsed in 2022. Listed because I earned
+        it, not because it still counts.</span></span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <section aria-labelledby="h-contact">
+      <h2 id="h-contact">Off the clock, and how to reach me</h2>
+      <div class="prose">
+        <p>Open source, OSINT, and — away from screens — sailing, iceboating, and brain teasers.</p>
+        <p class="signoff"><img class="portrait" src="data:image/webp;base64,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" width="72" height="72" alt="Marcin Mozolewski">
+          <a href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a></p>
+        <p class="fine">One HTML file. No trackers, no cookies, no fonts to download.</p>
+      </div>
+    </section>
+  </footer>
+
+</main>
+
+<script>
+  (function () {
+    var btn = document.getElementById('theme');
+    var root = document.documentElement;
+    function current() {
+      return root.getAttribute('data-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      btn.setAttribute('aria-label', 'Switch to ' + (next === 'dark' ? 'light' : 'dark') + ' theme');
+    });
+  })();
+</script>
+</body>
+</html>
