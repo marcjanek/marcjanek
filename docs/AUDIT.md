@@ -8,12 +8,10 @@ Playwright driving the locally installed Chrome for 11 viewports × 2 themes wit
 this repository plus a separately-held private content inventory (§8.1). Raw artefacts (Lighthouse JSON,
 22 screenshots, `report.json`) are in the session scratchpad, not committed — see §12.
 
-**Not done: the Chrome extension.** `tabs_context_mcp` reports *"Browser extension is not connected"*, so the
-interactive Chrome checks the brief asks for in Phase 0/1 could not run. Everything the brief wanted from them
-(screenshots at every width, both themes, console errors, third-party request inventory) was obtained instead
-from Playwright + Lighthouse, which drive the same Chrome build headlessly. The interactive pass is worth
-repeating once `/chrome` connects — mainly to confirm scroll behaviour of the sticky stack, which a
-screenshot cannot show.
+**Chrome integration.** The extension was disconnected for the first pass, so the viewport matrix was
+captured with Playwright driving the same locally installed Chrome. It connected afterwards and the live site
+was then re-checked interactively at 1512×720 in the real browser: scrolling through the sticky stack, the
+network waterfall, and the two visible defects in §2 and §6. Both passes agree.
 
 ---
 
@@ -28,7 +26,7 @@ Ranked by how much they matter.
 | 3 | **Rocket Loader defeats the anti-flash theme script.** The edge rewrites the `<head>` script to `type="6dc2c8…-text/javascript"`, so the stored theme is applied *after* Rocket Loader runs, not before first paint. Only on the custom domain — `marcjanek.pages.dev` is clean. | §4 |
 | 4 | **Every unknown path returns HTTP 200 with the homepage.** No `404.html`, so Pages falls back to `index.html`. `/robots.txt` and `/favicon.ico` return HTML — which is exactly why Lighthouse SEO scores 92. Soft 404s for anything a crawler guesses. | §4, §7 |
 | 5 | **No security headers at all.** No CSP, HSTS, Permissions-Policy or X-Frame-Options. Only the two Pages defaults (`x-content-type-options`, `referrer-policy`). No `_headers` file exists. | §4 |
-| 6 | **The site shows 3 of 8 certifications, and one of the 3 expired in January 2022.** Credly's public API lists five 2025 GitHub certifications that the site never mentions. | §8.2 |
+| 6 | **The site shows 3 of 8 certifications, and one of the 3 expired in January 2022.** Credly's public API lists five 2025 GitHub certifications that the site never mentions. | §8.3 |
 | 7 | **No "selected work" at all.** A recruiter learns the tools but not one thing built with them. This is the brief's stated biggest gap and it is confirmed. Source material exists in a private personal repository; how much of it may be published is a Phase 2 decision. | §8, §9 |
 | 8 | **Two live copies of the site.** Cloudflare Pages serves `output/index.html` at mozolewski.eu; GitHub Pages *is* enabled and serves the root `index.html` at `marcjanek.github.io/marcjanek/`. The project's `CLAUDE.md` stated Pages was disabled — that check tested the wrong URL. | §3 |
 
@@ -67,9 +65,10 @@ kept locally, out of the public repo. Its previous content remains in git histor
 1. The two HTML files can silently diverge — nothing enforces `cmp`.
 2. `README.md` can silently diverge from both — it is a third hand-maintained copy of the same content.
 3. Every image is hot-linked to a third party (§6); two are already broken upstream.
-4. The `onerror` that hides the Spotify row races `loading="lazy"`: until the image is scrolled into view no
-   request is made, so the row renders as an empty bordered box. Visible in the 1440 px capture — the row is
-   present and empty; at 390 px the error had landed and the row was gone.
+4. The `onerror` that hides the Spotify row races `loading="lazy"`: the row is laid out first and only
+   disappears once the image request has failed. **Reproduced interactively** — scrolling to the bottom of
+   the live site in Chrome leaves a "NOW PLAYING" label beside an empty bordered box. Whether the row is
+   hidden or visibly empty depends on how fast the reader scrolls.
 
 **The baseline any proposed tooling must beat:** zero dependencies, zero build, edit-one-file deploys, and
 a 6.8 KB HTML document that scores 100/100 on desktop performance. That is a high bar for a static one-pager,
@@ -184,7 +183,20 @@ Missing regardless of axe: **no skip link** (brief §2 requires one).
   pacing while scrolling; as raw page length for a reader in a hurry, it is expensive. See §9.
 - Both themes render identically in layout; only tokens change.
 
-### 5.4 Screenshots
+### 5.4 Interactive check in Chrome
+
+Live site, Marcin's own Chrome, 1512×720, dark theme (following the OS preference):
+
+- The sticky stack does assemble — WORKLOAD pins at the top, PLATFORM slides up under it — but at this
+  window height it holds for roughly one scroll gesture before the whole group scrolls away. The effect is
+  real and easy to miss.
+- The network waterfall matches the Lighthouse trace exactly: rocket-loader, email-decode, the beacon
+  (twice) plus a `POST /cdn-cgi/rum?` → 204, three Credly images, the Stack Overflow flair (dark variant),
+  the view counter, and the Spotify image returning **400**.
+- `/favicon.ico` returns 200 — the HTML fallback, not an icon.
+- The "NOW PLAYING" row rendered as an empty bordered box (§2, fragile point 4).
+
+### 5.5 Screenshots
 
 22 PNGs in the scratchpad (`shots/{light,dark}-{w}x{h}.png`, 7.5 MB total). They are not committed —
 Phase 4 should decide whether screenshot artefacts belong in the repo or only in CI. Two are attached to the
