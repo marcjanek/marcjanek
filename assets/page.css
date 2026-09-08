@@ -176,6 +176,19 @@ html { scroll-behavior: smooth; }
   @media (max-width: 720px) {
     [data-prompt] > [data-cmd] { margin-left: 0 !important }
     [data-prompt] > span:nth-last-child(3) { margin-right: 1ch }
+    /* ~/shell's history prints the same prompt, minus the caret, so `$` is second
+       from the end there rather than third. */
+    [data-term] [role="log"] > div > div:first-child > span:last-child { margin-left: 0 !important }
+    [data-term] [role="log"] > div > div:first-child > span:nth-last-child(2) { margin-right: 1ch }
+
+    /* `guest@mozolewski.eu:~$` is 185px of a 296px line and the input asks for
+       140, so on a phone the input wrapped onto a line of its own — where, having
+       no border and no background by decision, it was invisible. The page ended
+       with a prompt and an empty box and no way to tell you could type in it. 56px
+       lets it stay on the prompt line; flex:1 then hands it the 81px that are
+       actually there, which is nine characters and scrolls like a narrow terminal.
+       Do not answer this with a border: see the note on the focus indicator. */
+    [data-term] input { min-width: 56px !important }
   }
 
   /* ~/work is the only long-form prose on the page and the narrowest place to
