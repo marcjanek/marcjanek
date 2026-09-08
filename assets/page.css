@@ -180,8 +180,15 @@ html { scroll-behavior: smooth; }
   }
 
   /* Two inline links sat at 18-19px high, under the 24px WCAG 2.5.8 asks for.
-     Padding, not a bigger font, so the neofetch grid keeps its rhythm. */
-  a.tap { display: inline-block; padding-block: 3px }
+     Padding, not a bigger font, so the neofetch grid keeps its rhythm.
+
+     The negative margin is what keeps that promise. Padding on an inline-block
+     pushes its first line down, and `Contact`'s label sits in a separate grid
+     cell that does not move with it: measured at 1440, that row was the only one
+     of the ten off its label, by exactly the 3px of padding. The margin cancels
+     the layout cost and keeps the hit area — getBoundingClientRect reports the
+     border box, so both links still measure ~32px. */
+  a.tap { display: inline-block; padding-block: 3px; margin-block: -3px }
 
   /* A wrapped prompt used to start its second line one character in. The 1ch
      that separates `$` from the command is a margin-left on the command, so when
