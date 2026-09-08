@@ -216,7 +216,17 @@ CSP or to `scripts/build.mjs`.
 `~/shell`'s `●` was finished off in the same commit — the one character the review left behind, and
 with it gone the page asks the OS fallback for nothing.
 
-Cost: 2.1 KB gzipped of the 20.1 KB headroom. Re-verified in headless Chrome at 320, 390, 768 and
+One thing the pass surfaced only on production: **the Leaflet warming had never worked there.**
+Cloudflare answers any request carrying `Sec-Purpose: prefetch` with 503 — measured against
+`/assets/vendor/leaflet.js` and against `/` itself, while a plain GET and the legacy
+`Purpose: prefetch` both return 200 — so the two `<link rel=prefetch>` failed on every visit that
+scrolled to `~/visitor`, leaving two console errors and a cold click. The "console clean" result in
+§6 was measured against localhost, where prefetch works, which is how it survived. `warmLeaflet()`
+fetches both files instead and reads the body; a `Response` dropped unread is cancelled before it
+reaches the cache the click depends on. Nothing is parsed or executed — `window.L` stays `undefined`
+until `loadLeaflet()` injects the real tags — so the privacy model is untouched.
+
+Cost: 2.4 KB gzipped of the 20.1 KB headroom. Re-verified in headless Chrome at 320, 390, 768 and
 1440 px: `scrollWidth` equals `clientWidth` at every width, nothing inside `main` overflows, both
 gauges measure identically, no link or button has a target under 24 px, the shell's status dot is a
 6.9 px CSS circle, and the build still exits 0.
@@ -339,12 +349,12 @@ closed by eye in a headed browser: the caret is visible.
 
 ### Byte budget
 
-**131.9 KB gzipped on first view against a 150 KB ceiling — 18.1 KB of headroom**, measured from the
-eight resources requested before any scroll. The follow-up pass cost 2.1 KB of the headroom.
+**132.2 KB gzipped on first view against a 150 KB ceiling — 17.8 KB of headroom**, measured from the
+eight resources requested before any scroll. The follow-up pass cost 2.4 KB of the headroom.
 
 | Resource | raw | gz | |
 |---|---|---|---|
-| `index.html` | 93,034 | 22,645 | +1,211 |
+| `index.html` | 93,703 | 22,889 | +1,455 |
 | `react-dom.js` | 131,835 | 42,897 | |
 | `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) | |
 | `dc-runtime.js` | 69,150 | 19,017 | |

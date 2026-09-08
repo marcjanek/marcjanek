@@ -395,7 +395,7 @@ class Component extends DCLogic {
             if (!entries.some((e) => e.isIntersecting)) return;
             io.disconnect();
             this._vio = null;
-            this.prefetchLeaflet();
+            this.warmLeaflet();
         }, {rootMargin: "300px 0px", threshold: 0});
         io.observe(el);
         this._vio = io;
@@ -403,24 +403,36 @@ class Component extends DCLogic {
 
     // Leaflet is a first-party file, so warming it changes nothing about the
     // privacy model — ipapi.co and tile.openstreetmap.org are still only reached
-    // after the visitor presses the button in ~/visitor. rel=prefetch stores the
-    // bytes without parsing or executing them, so this costs bandwidth and no
-    // main-thread time.
-    prefetchLeaflet() {
-        if (this._leafletLoading || this._prefetched) return;
+    // after the visitor presses the button in ~/visitor. The bytes are fetched
+    // and dropped: nothing is parsed, window.L stays undefined until loadLeaflet()
+    // injects the real tags, and the response lands in the cache that click reads.
+    //
+    // This was two <link rel=prefetch>. Do not put them back: Cloudflare answers
+    // any request carrying Sec-Purpose: prefetch with 503 — measured on this file
+    // and on / itself, while a plain GET returns 200 — so the warming never
+    // happened in production, and everyone who scrolled this far collected two
+    // console errors instead.
+    warmLeaflet() {
+        if (this._leafletLoading || this._warmed) return;
         /** @type {{saveData?: boolean, effectiveType?: string}} */
         const c = navigator.connection || {};
         if (c.saveData || /2g$/.test(c.effectiveType || "")) return;
-        this._prefetched = true;
+        this._warmed = true;
         const warm = () => {
             this._idle = null;
-            [["assets/vendor/leaflet.js", "script"], ["assets/leaflet.css", "style"]].forEach(([href, as]) => {
-                const l = document.createElement("link");
-                l.rel = "prefetch";
-                l.as = as;
-                l.href = href;
-                document.head.appendChild(l);
-                this._injected.push(l);
+            ["assets/vendor/leaflet.js", "assets/leaflet.css"].forEach((href) => {
+                const d = this.deadline(8000);
+                // the body has to be read: a Response dropped unread is cancelled,
+                // and the cache the click depends on never gets the file
+                fetch(href, {signal: d.signal})
+                    .then((r) => {
+                        d.done();
+                        return r.ok ? r.blob() : null;
+                    })
+                    .catch(() => {
+                        d.done();
+                        return null;
+                    });
             });
         };
         if (window.requestIdleCallback) this._idle = window.requestIdleCallback(warm, {timeout: 1500});
@@ -941,7 +953,7 @@ class Component extends DCLogic {
         this._injected = [];
         this._leafletLoading = false;
         this._leafletFailed = false;
-        this._prefetched = false;
+        this._warmed = false;
         this._booting = false;
     }
 
