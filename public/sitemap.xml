@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- One page, one URL. lastmod is hand-maintained on purpose: scripts/build.mjs
+     runs on Cloudflare on every deploy, so a build-stamped date would move on
+     deploys that changed nothing and teach Google to ignore the field. Bump it
+     when the page's content changes. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://mozolewski.eu/</loc>
+    <lastmod>2026-09-08</lastmod>
+  </url>
+</urlset>
