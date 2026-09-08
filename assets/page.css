@@ -146,6 +146,36 @@ html { scroll-behavior: smooth; }
      Padding, not a bigger font, so the neofetch grid keeps its rhythm. */
   a.tap { display: inline-block; padding-block: 3px }
 
+  /* ~/whoami's neofetch row wraps below ~734px — 206px of portrait and the data
+     block's 420px minimum stop fitting side by side. Stacked, the portrait is
+     235px tall on a 320px screen: measured, `marcin@mozolewski` began at y=1030
+     and the whole first screen of the site was a photograph. Below 720px the row
+     becomes a grid, the portrait sits beside the name at 26vw, and the
+     Role/Host/… table spans the full width under both.
+
+     Three things here are not optional. `gap` needs !important because .nf-row
+     carries an inline `gap:clamp(20px,4vw,48px)` and an inline shorthand beats a
+     stylesheet longhand — every row sat 20px apart until it did. The img needs a
+     width because it carries width="192" and no CSS width, so it kept its
+     intrinsic size and painted straight across the name. And the name's clamp
+     floor drops to 17px here only: `marcin@mozolewski` is 17 characters of a
+     0.6em-advance monospace and cannot wrap, so at 320px it needs 194px at 19px
+     against the 195px the column has, which is not a margin.
+
+     The transfer bar and its scp line follow the text, not the photo: under the
+     photo they float 43px below it, and at 26vw the line wraps to three. */
+  @media (max-width: 720px) {
+    .nf-row { display: grid !important; grid-template-columns: clamp(76px, 26vw, 112px) minmax(0, 1fr); gap: 0 14px !important; align-items: start }
+    .nf-logo, .nf-data { display: contents !important }
+    .nf-shot { grid-column: 1; grid-row: 1 / span 4 }
+    .nf-shot img { width: 100%; height: auto }
+    .nf-name { grid-column: 2; grid-row: 1; font-size: clamp(17px, 5.5vw, 24px) !important }
+    .nf-tag { grid-column: 2; grid-row: 2 }
+    .nf-bar { grid-column: 2; grid-row: 3 }
+    .nf-cap { grid-column: 2; grid-row: 4; margin-top: 6px }
+    .nf-grid { grid-column: 1 / -1; grid-row: 5; margin-top: 16px }
+  }
+
   /* ~/career's date column is max-content and cannot wrap, so on a phone it was
      taking two thirds of the row and leaving one word per line for the job
      title. Below 560px the same dates print short. */
