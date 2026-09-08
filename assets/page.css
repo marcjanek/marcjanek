@@ -205,10 +205,28 @@ html { scroll-behavior: smooth; }
      title. Below 560px the same dates print short. */
   .d-short { display: none }
   @media (max-width: 560px) {
-    .d-full { display: none }
-    .d-short { display: inline }
     /* the two 16px gutters are worth 32px of job title on a 320px screen */
     .cgrid { column-gap: 8px !important }
+
+    /* The date column is `max-content` and cannot wrap, so beside the entry it
+       took 92px of the 292px a 320px screen has — a third of the row — and left
+       the text ~20 characters a line: the job title broke over two lines, the
+       `(HEAD -> main)` tag fell onto a third, and the one-line summary ran to
+       seven. Below 560px the date goes above the entry instead, which is where
+       `git log` prints a date anyway, and the text gets 275px — 32 characters.
+
+       Each entry stops being three cells of one big grid and becomes its own
+       two-column grid, so the graph column can span both of its rows. .cgrid
+       carries the 20px that used to be its row-gap, because the rule drawn down
+       the graph column reaches 20px past the bottom of each entry to bridge it.
+
+       Short dates were the workaround for the column this replaces, so the full
+       ones come back: `2023-05 — 2024-09` is 143px of the 275 now available. */
+    .cgrid { display: flex !important; flex-direction: column; gap: 20px }
+    .cgrid > div { display: grid !important; grid-template-columns: 1ch minmax(0, 1fr); column-gap: 8px; align-items: start }
+    .cgrid > div > :nth-child(1) { grid-column: 1; grid-row: 1 / span 2 }
+    .cgrid > div > :nth-child(2) { grid-column: 2; grid-row: 1 }
+    .cgrid > div > :nth-child(3) { grid-column: 2; grid-row: 2; margin-top: 2px }
   }
 
   /* ~/stack used to be drawn with U+2500 box characters. They are not in the
