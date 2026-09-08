@@ -905,7 +905,10 @@ class Component extends DCLogic {
     // Twenty-one boot lines do not fit a short viewport, so the log scrolls the
     // way a real one does: a line at a time, only as far as it overflows, and
     // not at all when it fits. Measured rather than guessed, because the line
-    // height is a clamp() of the viewport and the font swaps in late.
+    // height is a clamp() of the viewport and the font swaps in late. The room
+    // it scrolls into stops short of the bottom because #boot reserves 2.4em of
+    // padding there for the skip note, which is a separate fixed element — the
+    // log used to scroll its last line straight onto it.
     // The note under ~/visitor is a different length before, during and after
     // the lookup, so the button above it — the one the visitor just pressed —
     // used to jump down a line under their cursor, and the map with it. Reserve

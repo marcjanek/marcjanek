@@ -271,8 +271,13 @@ before mount, and a probe that read the DOM early forced the layout that made it
 at the gate is what fixes it. Measured on a throttled connection: black at 756 ms, the gate opening at
 2.3 s, then the lines staggering in one at a time.
 
-Cost: 3.9 KB gzipped for the boot work, which takes the first view to 136.1 KB and the headroom to
-13.9 KB.
+The skip note is a separate fixed element sharing the boot box's bottom inset, so the log scrolled its
+last line straight onto it — measured at 5 px of overlap at 390×640, 8 px at 320×568 and 15 px at
+1280×560. `#boot` now reserves 2.4em of bottom padding for it, which `bootScroll()` reads as less room
+and scrolls further into: every size from 320×480 to 1280×900 clears the note, the tightest by 13 px.
+
+Cost: 4.0 KB gzipped for the boot work, which takes the first view to 136.2 KB and the headroom to
+13.8 KB.
 
 ---
 
@@ -392,12 +397,12 @@ closed by eye in a headed browser: the caret is visible.
 
 ### Byte budget
 
-**136.1 KB gzipped on first view against a 150 KB ceiling — 13.9 KB of headroom**, measured from the
-eight resources requested before any scroll. The review passes cost 6.2 KB of the headroom.
+**136.2 KB gzipped on first view against a 150 KB ceiling — 13.8 KB of headroom**, measured from the
+eight resources requested before any scroll. The review passes cost 6.3 KB of the headroom.
 
 | Resource | raw | gz | |
 |---|---|---|---|
-| `index.html` | 107,223 | 26,659 | +5,225 |
+| `index.html` | 107,488 | 26,761 | +5,327 |
 | `react-dom.js` | 131,835 | 42,897 | |
 | `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) | |
 | `dc-runtime.js` | 69,150 | 19,017 | |

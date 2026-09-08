@@ -68,7 +68,7 @@
 
     <sc-if hint-placeholder-val="{{ true }}" value="{{ intro }}">
         <div>
-        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#000;overflow:hidden;padding:clamp(20px,6vh,64px) clamp(14px,4vw,56px);font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
+        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#000;overflow:hidden;padding:clamp(20px,6vh,64px) clamp(14px,4vw,56px) calc(clamp(20px,6vh,64px) + 2.4em);font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
             <div id="boot-log" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
                 <div style="animation:fadeIn .01s linear 0.05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
                 <div style="animation:fadeIn .01s linear 0.11s both"><span style="color:#8A857D">[    0.031418]</span> Command line: ro quiet net.ifnames=0</div>
