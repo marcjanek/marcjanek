@@ -155,7 +155,13 @@ html { scroll-behavior: smooth; }
      count toward the 24px WCAG 2.5.8 asks for — the rows are 21px of line at
      phone widths — and the box still wraps its own text, which six of the ten
      names need. */
-  .cert-link { color: inherit; display: inline-block; padding-block: 2px; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: #4E4E4A; text-underline-offset: 2px }
+  /* The negative margin cancels what the padding costs in layout and keeps what
+     it buys in hit area. Without it the padding pushed each linked name 2px
+     below the date beside it — measured, exactly 2.0px on all eight links and
+     0.0 on the two plain rows — because the date is a separate grid cell and
+     does not move with it. getBoundingClientRect still reports the border box,
+     so the target stays 25px and measure.mjs still sees it. */
+  .cert-link { color: inherit; display: inline-block; padding-block: 2px; margin-block: -2px; text-decoration: underline; text-decoration-style: dotted; text-decoration-color: #4E4E4A; text-underline-offset: 2px }
   .cert-link:hover { color: #E0A33C; text-decoration-color: #E0A33C }
   .cert-link:focus-visible { color: #E0A33C; text-decoration-color: #E0A33C; outline: 2px solid #7FC8A9; outline-offset: 2px }
 
