@@ -231,6 +231,32 @@ Cost: 2.4 KB gzipped of the 20.1 KB headroom. Re-verified in headless Chrome at 
 gauges measure identically, no link or button has a target under 24 px, the shell's status dot is a
 6.9 px CSS circle, and the build still exits 0.
 
+### Third pass — what only a phone could show
+
+Four defects came back from Safari on an iPhone, none of which any check here could see, and one
+answer to "can the first screen come up faster".
+
+| Reported | What it was |
+|---|---|
+| Every boot line appears at once, then the sequence restarts | `assets/page.css` is a `<link>` inside `<x-dc>`, so the browser paints the log before the `@keyframes` that stagger it arrive. An inline `<style>` in `<head>` now covers the intro and pauses it until `startBoot()` has the stylesheet and the font |
+| The boot log's last line lands on "press any key or tap to skip" | The note is a separate fixed element on the same bottom inset; `#boot` reserves 2.4em of padding for it |
+| Tapping `0:whoami` rings the whole section | It is the only section with `tabindex="-1"`, because it is where the skip link lands, and Safari rings a focused `tabindex="-1"` element. `:not(:focus-visible)` keeps the ring for the keyboard |
+| A strip beside the home indicator is not the footer's colour | `viewport-fit=cover` plus `env(safe-area-inset-*)` on every fixed edge, so the footer's own box reaches the bottom of the display |
+
+Giving `html` the bar colour was tried first for that last one and put a lighter band across the
+middle of the page — a reminder that a colour fix aimed at a browser nobody here can drive is a guess,
+and has to be verified on the device before it is trusted.
+
+On speed: the first screen is not waiting on bytes. Measured on production, TTFB is 47 ms, the first
+paint 110 ms and the intro starts at 191 ms; content appears at about 4.0 s, so **95% of the wait is
+the intro itself**, which is a deliberate design and stays. What was recovered underneath it: react
+and react-dom were serialized behind dc-runtime, which loads them itself, and now preload alongside
+everything else; and `/assets/*` was served `max-age=0, must-revalidate`, which cost nine
+revalidations on a returning visit *and* defeated those preloads — `page.css` and `fonts.css` were
+being fetched three times in a single load. With both fixed, every asset is requested once, a
+returning visit crosses the wire only for the HTML, and the four "preloaded but not used" console
+warnings are gone.
+
 ### Second pass — the boot sequence, and three things it exposed
 
 A further round, taken whole. The intro was rebuilt: twenty-one log lines at a 0.06 s cadence instead
@@ -397,18 +423,18 @@ closed by eye in a headed browser: the caret is visible.
 
 ### Byte budget
 
-**136.2 KB gzipped on first view against a 150 KB ceiling — 13.8 KB of headroom**, measured from the
-eight resources requested before any scroll. The review passes cost 6.3 KB of the headroom.
+**137.4 KB gzipped on first view against a 150 KB ceiling — 12.6 KB of headroom**, measured from the
+eight resources requested before any scroll. The review passes cost 7.5 KB of the headroom.
 
 | Resource | raw | gz | |
 |---|---|---|---|
-| `index.html` | 107,488 | 26,761 | +5,327 |
+| `index.html` | 110,287 | 27,587 | +6,153 |
 | `react-dom.js` | 131,835 | 42,897 | |
 | `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) | |
 | `dc-runtime.js` | 69,150 | 19,017 | |
 | `marcin.webp` | 11,592 | 11,627 (raw counted) | |
 | `react.js` | 10,751 | 4,272 | |
-| `page.css` | 6,534 | 2,762 | +1,305 |
+| `page.css` | 7,787 | 3,229 | +1,772 |
 | `fonts.css` | 2,061 | 809 | −134 |
 
 Leaflet's 45,961 B is what moved: deferring it is what brings 168.8 KB back under the ceiling.
