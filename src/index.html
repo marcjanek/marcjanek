@@ -175,7 +175,7 @@
         <h1 class="sr">Marcin Mozolewski — Senior Cloud Platform Engineer</h1>
 
         <section aria-labelledby="h-whoami" id="whoami" tabindex="-1" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
-            <h2 class="sr" id="h-whoami">Profile</h2>
+            <h2 id="h-whoami">Profile</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/whoami</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Mounted <span style="color:#F3EFE9">/home/marcin</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">neofetch</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
@@ -187,11 +187,10 @@
                     <div style="height:2px;background:#2A2724;overflow:hidden">
                         <div data-decode="1" style="height:100%;background:#7FC8A9;animation:bar 1.1s linear both"></div>
                     </div>
-                    <div style="color:#8A857D;font-size:11.5px">marcin.webp 100% 11KB</div>
+                    <div style="color:#8A857D;font-size:12.5px">marcin.webp 100% 11KB</div>
                 </div>
-                <div style="min-width:min(100%,420px);flex:1;font-size:13.5px;line-height:1.85;display:flex;flex-direction:column">
-                    <div><span style="color:#7FC8A9">marcin</span>@<span style="color:#6FA8FF">mozolewski</span></div>
-                    <div style="color:#8A857D">-----------------</div>
+                <div style="min-width:min(100%,420px);flex:1;font-size:14px;line-height:1.85;display:flex;flex-direction:column">
+                    <div style="font-size:clamp(19px,5.5vw,24px);line-height:1.35;width:fit-content;max-width:100%;border-bottom:1px solid #4E4E4A;padding-bottom:7px;margin-bottom:9px"><span style="color:#7FC8A9">marcin</span>@<span style="color:#6FA8FF">mozolewski</span></div>
                     <div style="color:#F3EFE9;max-width:52ch;padding-bottom:10px">I build the layer other engineers build on.</div>
                     <div style="display:grid;grid-template-columns:10ch minmax(0,1fr);column-gap:8px">
                         <span style="color:#E0A33C">Role</span><span>Senior Cloud Platform Engineer</span>
@@ -224,39 +223,42 @@
         </section>
 
         <section aria-labelledby="h-work" id="work" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:22px">
-            <h2 class="sr" id="h-work">Selected work</h2>
+            <h2 id="h-work">Selected work</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/work</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">work.target</span> — the three most recent</div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~/work</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">head sys-0*.md</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
 
             <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
-                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-01.md</span> &lt;==</div>
-                <div style="color:#F3EFE9;font-weight:500"># A network foundation shared by two clouds and a data center</div>
-                <div style="max-width:78ch;color:#C5C0B8">Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect foundation with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering. It is in production with disaster recovery in a second region, designed against a four-nines target, and the first applications are running over it.</div>
-                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">cloud-interconnect cloud-router vpc terraform</span></div>
+                <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-01.md</span> &lt;==</div>
+                <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># A network foundation shared by two clouds and a data center</div>
+                <div style="max-width:66ch;color:#C5C0B8">Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect foundation with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering. It is in production with disaster recovery in a second region, designed against a four-nines target, and the first applications are running over it.</div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: in production · DR in a second region · designed against four nines</div>
+                <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">cloud-interconnect cloud-router vpc terraform</span></div>
             </div>
 
             <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
-                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-02.md</span> &lt;==</div>
-                <div style="color:#F3EFE9;font-weight:500"># Egress policy that runs inside the request, not beside it</div>
-                <div style="max-width:78ch;color:#C5C0B8">Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time, which I established before building anything. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path. It runs across two regions and is operated hands-off through GitOps. Other teams adopt it through a Terraform provider I wrote.</div>
-                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">envoy rust-wasm go postgresql kubernetes flux</span></div>
+                <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-02.md</span> &lt;==</div>
+                <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># Egress policy that runs inside the request, not beside it</div>
+                <div style="max-width:66ch;color:#C5C0B8">Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time, which I established before building anything. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path. It runs across two regions and is operated hands-off through GitOps. Other teams adopt it through a Terraform provider I wrote.</div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: two regions · fail-closed · no round trip on the decision path</div>
+                <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">envoy rust-wasm go postgresql kubernetes flux</span></div>
             </div>
 
             <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
-                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-03.md</span> &lt;==</div>
-                <div style="color:#F3EFE9;font-weight:500"># One path for every new project</div>
-                <div style="max-width:78ch;color:#C5C0B8">New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it. Hundreds of applications have been provisioned on one uniform model.</div>
-                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">terraform terraform-cloud google-cloud open-policy-agent</span></div>
+                <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-03.md</span> &lt;==</div>
+                <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># One path for every new project</div>
+                <div style="max-width:66ch;color:#C5C0B8">New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it. Hundreds of applications have been provisioned on one uniform model.</div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: hundreds of applications on one uniform model</div>
+                <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">terraform terraform-cloud google-cloud open-policy-agent</span></div>
             </div>
         </section>
 
         <section aria-labelledby="h-career" id="career" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
-            <h2 class="sr" id="h-career">Career</h2>
+            <h2 id="h-career">Career</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/career</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Replayed <span style="color:#F3EFE9">career/</span> — 4 commits</div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">git log --graph career/</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
-            <div class="cgrid" style="display:grid;grid-template-columns:14px max-content minmax(0,1fr);column-gap:16px;row-gap:20px;align-items:start;font-size:13.5px">
+            <div class="cgrid" style="display:grid;grid-template-columns:1ch max-content minmax(0,1fr);column-gap:16px;row-gap:20px;align-items:start;font-size:14px">
                 <div style="display:contents">
                     <div style="position:relative;align-self:stretch;color:#E0A33C;line-height:1.7">*
                         <div style="position:absolute;left:calc(.3em - .5px);top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
@@ -299,11 +301,11 @@
         </section>
 
         <section aria-labelledby="h-expertise" id="expertise" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
-            <h2 class="sr" id="h-expertise">Expertise</h2>
+            <h2 id="h-expertise">Expertise</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/expertise</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Indexed <span style="color:#F3EFE9">expertise/</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">ls -l expertise/</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
-            <div class="lsx" style="display:grid;grid-template-columns:max-content max-content minmax(0,1fr);column-gap:16px;row-gap:3px;align-items:baseline;font-size:13.5px">
+            <div class="lsx" style="display:grid;grid-template-columns:max-content max-content minmax(0,1fr);column-gap:16px;row-gap:3px;align-items:baseline;font-size:14px">
                 <div style="grid-column:1/-1;color:#8A857D">total 5</div>
                 <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">cloud-network-architecture/</span><span style="color:#C5C0B8">hybrid and multi-cloud connectivity, routing, segmentation, and the failure modes of each</span></div>
                 <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">egress-security/</span><span style="color:#C5C0B8">deciding what may leave a network, and proving which consumer asked</span></div>
@@ -314,11 +316,11 @@
         </section>
 
         <section aria-labelledby="h-stack" id="stack" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
-            <h2 class="sr" id="h-stack">Stack</h2>
+            <h2 id="h-stack">Stack</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/stack</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Loaded <span style="color:#F3EFE9">stack.modules</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">tree ~/stack -L 2</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
-            <div style="font-size:13.5px;line-height:1.9;color:#C5C0B8">
+            <div style="font-size:14px;line-height:1.9;color:#C5C0B8">
                 <div style="color:#6FA8FF">~/stack</div>
                 <ul class="tree">
                     <li><span style="color:#E0A33C">workload/</span><ul><li>kubernetes</li><li>docker</li><li>envoy</li></ul></li>
@@ -331,15 +333,15 @@
         </section>
 
         <section aria-labelledby="h-certs" id="certs" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
-            <h2 class="sr" id="h-certs">Certifications</h2>
+            <h2 id="h-certs">Certifications</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/certs</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] {{ certOk }}</div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~/certs</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">ls -l</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
             <sc-if hint-placeholder-val="{{ true }}" value="{{ certsOk }}">
-                <div class="ls" style="display:grid;grid-template-columns:max-content max-content max-content minmax(0,1fr);column-gap:2ch;font-size:13.5px;line-height:1.9;color:#C5C0B8">
+                <div class="ls" style="display:grid;grid-template-columns:max-content max-content max-content minmax(0,1fr);column-gap:2ch;font-size:14px;line-height:1.9;color:#C5C0B8">
                     <span style="grid-column:1/-1">{{ certTotal }}</span>
                     <sc-for as="c" hint-placeholder-count="10" list="{{ certLines }}">
-                        <div style="display:contents"><span class="ls-dim {{ c.cls }}">-rw-r--r--</span><span class="ls-dim {{ c.cls }}">1 marcin</span><span class="{{ c.cls }}" style="white-space:nowrap">{{ c.issued }}</span><span class="{{ c.cls }}">{{ c.name }} {{ c.note }}</span></div>
+                        <div style="display:contents"><span class="ls-dim {{ c.cls }}">-rw-r--r--</span><span class="ls-dim {{ c.cls }}">1 marcin</span><span class="{{ c.cls }}" style="white-space:nowrap">{{ c.issued }}</span><span class="{{ c.cls }}" style="overflow-wrap:anywhere">{{ c.name }} {{ c.note }}</span></div>
                     </sc-for>
                 </div>
             </sc-if>
@@ -348,7 +350,7 @@
 
 
         <section aria-labelledby="h-visitor" id="visitor" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
-            <h2 class="sr" id="h-visitor">What this page can see about you</h2>
+            <h2 id="h-visitor">What this page can see about you</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/visitor</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Read <span style="color:#F3EFE9">local environment</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">whois $REMOTE_ADDR</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
@@ -356,7 +358,7 @@
             <div data-note="1" style="color:#8A857D;font-size:12px">{{ vNote }}</div>
             <button aria-disabled="{{ whoisDisabled }}" sc-camel-on-click="{{ runWhois }}" style="align-self:flex-start;font:inherit;font-size:13px;color:#0C0C0C;background:#7FC8A9;border:0;padding:11px 18px;cursor:pointer;min-height:44px" style-focus-visible="outline:2px solid #F3EFE9;outline-offset:2px" style-hover="background:#E0A33C" type="button">run the lookup</button>
             <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
-                <div style="min-width:min(100%,320px);flex:1;font-size:13.5px;display:flex;flex-direction:column;gap:12px;align-content:start">
+                <div style="min-width:min(100%,320px);flex:1;font-size:14px;display:flex;flex-direction:column;gap:12px;align-content:start">
                     <div style="display:grid;grid-template-columns:10ch minmax(0,1fr);column-gap:8px;row-gap:2px">
                         <span style="grid-column:1/-1;color:#8A857D;font-size:12px">read from your browser</span>
                         <span style="color:#E0A33C">timezone</span><span>{{ vTz }}</span>
@@ -374,13 +376,13 @@
                         <div style="border:1px dashed #2A2724;background:#111110;padding:6px">
                             <div style="width:100%;height:214px;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">the map is drawn from openstreetmap.org<br>once you run the lookup</div>
                         </div>
-                        <div style="color:#8A857D;font-size:11.5px;margin-top:6px">no tiles requested yet</div>
+                        <div style="color:#8A857D;font-size:12.5px;margin-top:6px">no tiles requested yet</div>
                     </sc-if>
                     <sc-if hint-placeholder-val="{{ true }}" value="{{ hasGeo }}">
                         <div style="border:1px solid #2A2724;background:#111110;padding:6px">
                             <div ref="{{ mapRef }}" style="width:100%;height:214px;background:#111110;filter:grayscale(1) invert(0.92) contrast(0.92) brightness(0.95) sepia(0.35) hue-rotate(96deg)"></div>
                         </div>
-                        <div style="color:#8A857D;font-size:11.5px;margin-top:6px">openstreetmap tiles · approximate</div>
+                        <div style="color:#8A857D;font-size:12.5px;margin-top:6px">openstreetmap tiles · approximate</div>
                     </sc-if>
                     <sc-if hint-placeholder-val="{{ false }}" value="{{ noGeo }}">
                         <div style="width:100%;height:220px;border:1px dashed #2A2724;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">location unavailable — no coordinates to plot</div>
@@ -390,12 +392,12 @@
         </section>
 
         <section aria-labelledby="h-contact" id="contact" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:16px">
-            <h2 class="sr" id="h-contact">Contact</h2>
+            <h2 id="h-contact">Contact</h2>
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/contact</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Listening on <span style="color:#F3EFE9">mailto:contact@mozolewski.eu</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">cat contact.txt</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;animation:caret 1.05s steps(1) infinite"></span></div>
             <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> write in English or Polish, whichever is easier.</div>
-            <div style="display:flex;flex-direction:column;font-size:13.5px">
+            <div style="display:flex;flex-direction:column;font-size:14px">
                 <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">email</span><a href="mailto:contact@mozolewski.eu" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">contact@mozolewski.eu</a></div>
                 <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">github</span><a href="https://github.com/marcjanek" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">github.com/marcjanek</a></div>
                 <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">linkedin</span><a href="https://www.linkedin.com/in/marcin-mozolewski" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">linkedin.com/in/marcin-mozolewski</a></div>
@@ -407,12 +409,12 @@
         </section>
 
         <section aria-labelledby="h-shell" id="shell" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:12px;border:1px solid #2A2724;background:#0E0E0D;padding:16px 18px 18px">
-            <h2 class="sr" id="h-shell">Interactive shell</h2>
+            <h2 id="h-shell">Interactive shell</h2>
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:#8A857D;font-size:12.5px;border-bottom:1px solid #2A2724;padding-bottom:10px">
                 <span><span class="dot"></span> bash — interactive</span>
                 <span>try: help · ls · cd work · sudo hire marcin</span>
             </div>
-            <div data-term="1" ref="{{ shellRef }}" role="presentation" sc-camel-on-click="{{ focusShell }}" style="display:flex;flex-direction:column;gap:8px;height:clamp(260px,44vh,380px);overflow-y:auto;cursor:text;font-size:13.5px">
+            <div data-term="1" ref="{{ shellRef }}" role="presentation" sc-camel-on-click="{{ focusShell }}" style="display:flex;flex-direction:column;gap:8px;height:clamp(260px,44vh,380px);overflow-y:auto;cursor:text;font-size:14px">
                 <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> this prompt works. <span style="color:#C5C0B8">up</span> recalls, <span style="color:#C5C0B8">tab</span> completes, <span style="color:#C5C0B8">help</span> lists everything.</div>
                 <div aria-atomic="false" aria-live="polite" role="log" style="display:flex;flex-direction:column;gap:8px">
                     <sc-for as="h" hint-placeholder-count="2" list="{{ hist }}">

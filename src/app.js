@@ -864,7 +864,7 @@ class Component extends DCLogic {
                 io.unobserve(e.target);
                 this.typeRow(e.target);
             });
-        }, {rootMargin: "-8% 0px -22% 0px", threshold: 0});
+        }, {rootMargin: "-8% 0px -5% 0px", threshold: 0});
         rows.forEach((r) => io.observe(r));
         this._io = io;
 
@@ -1093,7 +1093,7 @@ class Component extends DCLogic {
             kids.slice(kids.indexOf(row) + 1).forEach((el, i) => {
                 this._timers.push(setTimeout(() => {
                     this.show(el);
-                }, 140 + i * 80));
+                }, 60 + i * 36));
             });
         };
         if (!cmd) {
@@ -1103,7 +1103,7 @@ class Component extends DCLogic {
 
         const n = Math.max(4, (cmd.textContent || "").trim().length);
         const w = cmd.getBoundingClientRect().width;
-        const pace = Math.min(32, Math.max(11, 700 / n));
+        const pace = Math.min(18, Math.max(6, 380 / n));
         let k = 0;
         const step = () => {
             k++;
@@ -1119,7 +1119,7 @@ class Component extends DCLogic {
             }
         };
         if (caret) caret.style.opacity = "1";
-        this._timers.push(setTimeout(step, 220));
+        this._timers.push(setTimeout(step, 120));
     }
 
     // The page never unmounts in production, but dc-runtime swaps the logic
