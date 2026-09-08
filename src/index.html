@@ -218,27 +218,27 @@
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~/work</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">head sys-0*.md</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
 
             <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
-                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-01.md</span> &lt;==</div>
+                <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-01.md</span> &lt;==</div>
                 <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># A network foundation shared by two clouds and a data center</div>
                 <div style="max-width:66ch;color:#C5C0B8">Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect foundation with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering. It is in production with disaster recovery in a second region, designed against a four-nines target, and the first applications are running over it.</div>
-                <div style="color:#7FC8A9;padding-top:2px">result: in production · DR in a second region · designed against four nines</div>
-                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">cloud-interconnect cloud-router vpc terraform</span></div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: in production · DR in a second region · designed against four nines</div>
+                <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">cloud-interconnect cloud-router vpc terraform</span></div>
             </div>
 
             <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
-                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-02.md</span> &lt;==</div>
+                <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-02.md</span> &lt;==</div>
                 <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># Egress policy that runs inside the request, not beside it</div>
                 <div style="max-width:66ch;color:#C5C0B8">Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time, which I established before building anything. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path. It runs across two regions and is operated hands-off through GitOps. Other teams adopt it through a Terraform provider I wrote.</div>
-                <div style="color:#7FC8A9;padding-top:2px">result: two regions · fail-closed · no round trip on the decision path</div>
-                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">envoy rust-wasm go postgresql kubernetes flux</span></div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: two regions · fail-closed · no round trip on the decision path</div>
+                <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">envoy rust-wasm go postgresql kubernetes flux</span></div>
             </div>
 
             <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
-                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-03.md</span> &lt;==</div>
+                <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-03.md</span> &lt;==</div>
                 <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># One path for every new project</div>
                 <div style="max-width:66ch;color:#C5C0B8">New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it. Hundreds of applications have been provisioned on one uniform model.</div>
-                <div style="color:#7FC8A9;padding-top:2px">result: hundreds of applications on one uniform model</div>
-                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">terraform terraform-cloud google-cloud open-policy-agent</span></div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: hundreds of applications on one uniform model</div>
+                <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">terraform terraform-cloud google-cloud open-policy-agent</span></div>
             </div>
         </section>
 
