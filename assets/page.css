@@ -80,6 +80,25 @@ html { scroll-behavior: smooth; }
     .ls { grid-template-columns: max-content minmax(0, 1fr) !important }
     .lsx { grid-template-columns: minmax(0, 1fr) !important }
     .ls-dim { display: none }
+
+    /* Even with the mode and owner columns gone, the issue date is `max-content`
+       and takes 88px of 292, so six of the ten names wrap — `github-advanced-` /
+       `security.cert`. At line-height 1.9 and no row-gap the second line of one
+       entry sits exactly as far from the first as the next entry does, so a
+       wrapped name reads as two certificates. 1.5 pulls the wrap together and
+       8px of row-gap pushes the entries apart, which is the distinction the
+       reader actually needs; the gutter gives back a character on the way. */
+    .ls { line-height: 1.5 !important; row-gap: 8px; column-gap: 1ch !important }
+
+    /* 14px of side padding leaves the ~/certs name column 200px, and the longest
+       chunk a browser will not break — `foundations.cert.expired`, no hyphen to
+       break at and no rule that breaks at a dot — measures 201.6px. Two pixels,
+       and `overflow-wrap: anywhere` pays for them by cutting the word in half:
+       `oracle-oci-foundations.cert.expire` / `d`. 12px hands back four, which
+       every section below 560px gets to spend on its own measure. The safe-area
+       inset stays: on a notched phone in landscape this is what keeps text out
+       from under the corner. */
+    main { padding-left: calc(12px + env(safe-area-inset-left, 0px)) !important; padding-right: calc(12px + env(safe-area-inset-right, 0px)) !important }
   }
 
   /* Long URLs are unbreakable strings. `anywhere` (not `break-word`) is what
