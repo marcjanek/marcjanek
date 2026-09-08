@@ -56,6 +56,15 @@ html { scroll-behavior: smooth; }
      on a phone. */
   *, *::before, *::after { box-sizing: border-box }
 
+  /* ~/whoami is the only section carrying tabindex="-1", because it is where the
+     skip link lands and without it Tab would carry on from the nav — the classic
+     way a skip link fails. The side effect is that any jump to #whoami focuses the
+     section, and Safari paints a ring around the whole thing: tapping 0:whoami in
+     the tmux bar drew a box no other section draws. Chrome never showed it because
+     it only rings :focus-visible. Keep the ring for the keyboard, which is who it
+     is for, and drop it for the pointer. */
+  #whoami:focus:not(:focus-visible) { outline: none }
+
   /* ~/certs row colours. These live here rather than in a style attribute so
      the template never interpolates into CSS, which nothing can parse. */
   .cert-ok { color: #C5C0B8 }
