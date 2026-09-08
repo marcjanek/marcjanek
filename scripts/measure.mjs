@@ -232,9 +232,19 @@ try {
     if (outFile) writeFileSync(outFile, json + "\n");
     else console.log(json);
     const bad = results.filter((r) => r.scrollWidth !== r.clientWidth
-        || r.overflow.length || r.clipped.length || r.small.length);
+        || r.overflow.length || r.clipped.length || r.small.length
+        || Object.values(r.sizes).some((v) => v === null));
     if (bad.length) {
         console.error("FAIL at widths: " + bad.map((r) => r.width).join(", "));
+        // A null probe passes the four checks above silently — name it, or a
+        // later task goes hunting at the wrong width for the wrong reason.
+        for (const r of bad) {
+            const nullProbes = Object.keys(r.sizes).filter((k) => r.sizes[k] === null);
+            if (nullProbes.length) {
+                console.error("FAIL: probe(s) returned null at " + r.width
+                    + ": " + nullProbes.join(", "));
+            }
+        }
         process.exitCode = 1;
     } else {
         console.error("OK at " + WIDTHS.join(", "));
