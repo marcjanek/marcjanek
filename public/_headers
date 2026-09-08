@@ -31,3 +31,31 @@
   X-Frame-Options: DENY
   Permissions-Policy: geolocation=(), camera=(), microphone=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://cloudflareinsights.com https://ipapi.co https://ipwho.is https://github.com https://mozolewski.eu https://rysinder.mozolewski.eu
+
+# Cloudflare Pages serves every asset `public, max-age=0, must-revalidate` by
+# default, which means a returning visitor revalidates all nine of them to be
+# told nothing changed — and, measured on production, that even a *single* page
+# load re-requests page.css and fonts.css three times and the two react files
+# twice, because a must-revalidate response cannot be reused from the preload
+# cache. Those duplicate requests are also what produced four "preloaded but not
+# used" warnings in the console on production and none locally.
+#
+# The three directories below are content that does not change in place: the
+# vendor bundles are never edited, and a new portrait or font subset arrives
+# under a new name. **If you ever overwrite one of these files without renaming
+# it, a returning visitor keeps the old one for a year.** The stylesheets are
+# hand-edited, so they get five minutes instead — long enough to serve one page
+# load from cache, short enough that a deploy is picked up before anyone
+# notices. index.html itself is untouched here and stays uncached, so a deploy
+# is always visible immediately.
+/assets/*.css
+  Cache-Control: public, max-age=300
+
+/assets/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
