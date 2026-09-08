@@ -1,5 +1,5 @@
 html { scroll-behavior: smooth; }
-  body { margin: 0; background: #0C0C0C; color: #D6D2CB; font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 14px; line-height: 1.7; }
+  body { margin: 0; background: #0C0C0C; color: #D6D2CB; font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 15px; line-height: 1.7; }
   a { color: #6FA8FF; }
   a:hover { color: #E0A33C; }
   @keyframes caret { 0%, 45% { opacity: 1 } 46%, 100% { opacity: 0 } }
