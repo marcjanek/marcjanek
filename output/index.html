@@ -1,613 +1,1309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
-<title>Marcin Mozolewski — Cloud Engineer</title>
-<meta name="description" content="Marcin Mozolewski — cloud engineer in Poland. Infrastructure as code across GCP, Azure, AWS and OCI.">
-<link rel="canonical" href="https://mozolewski.eu/">
-<meta property="og:type" content="profile">
-<meta property="og:title" content="Marcin Mozolewski — Cloud Engineer">
-<meta property="og:description" content="Infrastructure as code across GCP, Azure, AWS and OCI.">
-<meta property="og:url" content="https://mozolewski.eu/">
-<meta name="theme-color" content="#F7F8F9" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0E1216" media="(prefers-color-scheme: dark)">
-<script>
-  // Set the theme before first paint so the page never flashes the wrong palette.
-  try {
-    var t = localStorage.getItem('theme');
-    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
-  } catch (e) {}
-</script>
-<style>
-  :root {
-    --bg: #F7F8F9;
-    --ink: #14181C;
-    --muted: #666F78;
-    --rule: #DDE2E6;
-    --accent: #B8442A;
-    --well: #FFFFFF;
-
-    --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-
-    --label-col: 8.5rem;
-    --gap: 2.5rem;
-    --measure: 34rem;
-    --pad: 1.75rem;
-    --peek: 5.25rem;
-    --stack-top: 4rem;
-    --step: clamp(2.25rem, 5vw, 3.25rem);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0E1216;
-      --ink: #E6EBEF;
-      --muted: #8A949E;
-      --rule: #232A31;
-      --accent: #E0714E;
-      --well: #161B21;
-    }
-  }
-
-  :root[data-theme="dark"] {
-    --bg: #0E1216;
-    --ink: #E6EBEF;
-    --muted: #8A949E;
-    --rule: #232A31;
-    --accent: #E0714E;
-    --well: #161B21;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    padding: clamp(3rem, 10vw, 6.5rem) var(--pad) 4rem;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 1rem;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  .page {
-    max-width: calc(var(--label-col) + var(--gap) + var(--measure));
-    margin-inline: auto;
-  }
-
-  /* The marginalia grid: a mono label hangs in the left margin, prose keeps
-     one measure. Every row shares this template so the rules line up. */
-  .row {
-    display: grid;
-    grid-template-columns: var(--label-col) minmax(0, var(--measure));
-    column-gap: var(--gap);
-    border-top: 1px solid var(--rule);
-    padding-block: var(--step);
-  }
-
-  .row > .body { grid-column: 2; }
-
-  .row[hidden] { display: none; }
-
-  .label {
-    grid-column: 1;
-    margin: 0;
-    font-family: var(--mono);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--muted);
-    line-height: 2.6;
-  }
-
-  /* ---- Masthead ---- */
-
-  .lede {
-    display: grid;
-    grid-template-columns: var(--label-col) minmax(0, var(--measure));
-    column-gap: var(--gap);
-    padding-bottom: var(--step);
-  }
-
-  .lede > * { grid-column: 2; }
-
-  .name {
-    grid-column: 1 / -1;
-    margin: 0;
-    font-family: var(--serif);
-    font-weight: 600;
-    font-size: clamp(2.75rem, 9vw, 4.5rem);
-    line-height: 0.98;
-    letter-spacing: -0.03em;
-  }
-
-  .role a { border-bottom-color: currentColor; }
-
-  .role {
-    margin: 1.25rem 0 0;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .bio {
-    margin: 1.75rem 0 0;
-    font-family: var(--serif);
-    font-size: clamp(1.0625rem, 2.2vw, 1.1875rem);
-    line-height: 1.62;
-  }
-
-  .links {
-    margin-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.5rem;
-    font-size: 0.9375rem;
-  }
-
-  /* ---- Links ---- */
-
-  a {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 1px;
-    transition: color 0.15s ease, border-color 0.15s ease;
-  }
-
-  a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-  a:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  .out::after {
-    content: "↗";
-    font-size: 0.75em;
-    margin-left: 0.3em;
-    vertical-align: 0.15em;
-    color: var(--muted);
-  }
-
-  /* ---- The stack ----
-     Scrolling down descends through the stack. Each layer is sticky at a
-     slightly lower offset than the one before, so the next layer slides over
-     it and leaves only its label edge showing — the page ends holding all
-     three layers at once. Layers need an opaque background to occlude. */
-
-  /* Trailing room so the assembled stack holds on screen for a beat before
-     the sticky layers release. This has to be a real box: the sticky
-     constraint rectangle comes from the containing block's content box, so
-     padding on .stack would not extend it. */
-  .stack-hold { height: 38vh; }
-
-  .layer {
-    position: sticky;
-    z-index: 1;
-    background: var(--bg);
-    border-top: 1px solid var(--rule);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 40vh;
-  }
-
-  .layer:nth-of-type(1) { top: var(--stack-top); z-index: 1; }
-  .layer:nth-of-type(2) { top: calc(var(--stack-top) + var(--peek)); z-index: 2; }
-  /* The last layer has no connector below it, so space-between would only
-     open a dead gap. Let it size to its content instead. */
-  .layer:nth-of-type(3) {
-    top: calc(var(--stack-top) + 2 * var(--peek));
-    z-index: 3;
-    min-height: 0;
-    justify-content: flex-start;
-  }
-
-  .layer:nth-of-type(3) .layer-rest { margin-top: 1.75rem; }
-
-  /* The head is exactly one --peek tall, so the covering layer's edge always
-     lands in white space instead of slicing through type. */
-  .layer-head {
-    min-height: var(--peek);
-    display: grid;
-    grid-template-columns: var(--label-col) minmax(0, var(--measure));
-    column-gap: var(--gap);
-    align-content: start;
-    padding-top: 1.5rem;
-  }
-
-  .layer-rest {
-    display: grid;
-    grid-template-columns: var(--label-col) minmax(0, var(--measure));
-    column-gap: var(--gap);
-    padding-bottom: 2rem;
-  }
-
-  .layer-head > .body, .layer-rest > .body { grid-column: 2; }
-
-  .tech {
-    margin: 0;
-    font-family: var(--mono);
-    font-size: 1.0625rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .note {
-    margin: 0;
-    font-family: var(--serif);
-    font-size: 1.0625rem;
-    color: var(--muted);
-  }
-
-  .also {
-    margin: 0.9rem 0 0;
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .also b { font-weight: 500; color: var(--accent); margin-right: 0.9rem; }
-
-  /* Sits at the layer's bottom edge — pointing at the layer about to slide up. */
-  .runs-on {
-    margin: 1.75rem 0 0;
-    font-family: var(--mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* ---- Certifications ---- */
-
-  .certs { margin: 0; padding: 0; list-style: none; }
-
-  .cert {
-    display: flex;
-    align-items: center;
-    gap: 1.1rem;
-    padding-block: 1.1rem;
-  }
-
-  .cert:first-child { padding-top: 0; }
-  .cert:last-child { padding-bottom: 0; }
-  .cert + .cert { border-top: 1px solid var(--rule); }
-
-  .cert-text { min-width: 0; }
-
-  .cert img {
-    width: 46px;
-    height: 46px;
-    flex: none;
-    object-fit: contain;
-  }
-
-  .cert-issuer {
-    display: block;
-    font-family: var(--mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 0.15rem;
-  }
-
-  /* ---- Now playing ---- */
-
-  .well {
-    background: var(--well);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    padding: 0.75rem;
-    display: block;
-    width: fit-content;
-    max-width: 100%;
-  }
-
-  .well img { display: block; max-width: 100%; height: auto; }
-
-  /* ---- Footer ---- */
-
-  .colophon {
-    display: grid;
-    grid-template-columns: var(--label-col) minmax(0, var(--measure));
-    column-gap: var(--gap);
-    border-top: 1px solid var(--rule);
-    padding-top: var(--step);
-  }
-
-  .colophon > .body { grid-column: 2; }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1.25rem;
-  }
-
-  .meta img { display: block; }
-
-  .plain { margin: 0; }
-
-  .fine {
-    margin: 1.5rem 0 0;
-    font-family: var(--mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-  }
-
-  /* ---- Theme toggle ---- */
-
-  .theme {
-    position: fixed;
-    top: 1.25rem;
-    right: 1.25rem;
-    z-index: 2;
-    width: 2.25rem;
-    height: 2.25rem;
-    display: grid;
-    place-items: center;
-    background: var(--bg);
-    color: var(--muted);
-    border: 1px solid var(--rule);
-    border-radius: 50%;
-    cursor: pointer;
-    font-family: var(--mono);
-    font-size: 0.8125rem;
-    line-height: 1;
-    transition: color 0.15s ease, border-color 0.15s ease;
-  }
-
-  .theme:hover { color: var(--accent); border-color: var(--accent); }
-
-  .theme:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-  /* ---- Narrow screens: labels become eyebrows above their section ---- */
-
-  @media (max-width: 52rem) {
-    .row, .lede, .colophon {
-      grid-template-columns: minmax(0, 1fr);
-      column-gap: 0;
-    }
-
-    .row > .body, .lede > *, .colophon > .body { grid-column: 1; }
-
-    .label { line-height: 1.6; margin-bottom: 1.25rem; }
-
-    .stack-hold { display: none; }
-
-    .layer { min-height: 0; }
-
-    .layer-head, .layer-rest {
-      grid-template-columns: minmax(0, 1fr);
-      column-gap: 0;
-    }
-
-    .layer-head { padding-top: var(--step); min-height: 0; }
-    .layer-rest { padding-bottom: var(--step); }
-
-    .layer-head > .body, .layer-rest > .body { grid-column: 1; }
-  }
-
-  /* Sticky stacking is motion. Honour the preference, and drop it on phones
-     where a pinned stack fights the small viewport. */
-  @media (max-width: 52rem), (prefers-reduced-motion: reduce) {
-    .layer { position: static; }
-  }
-
-  /* ---- Load sequence ---- */
-
-  @media (prefers-reduced-motion: no-preference) {
-    .lede > * {
-      animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-
-    .name { animation-delay: 0.02s; }
-    .role { animation-delay: 0.08s; }
-    .bio { animation-delay: 0.14s; }
-    .links { animation-delay: 0.2s; }
-  }
-
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(0.6rem); }
-    to { opacity: 1; transform: none; }
-  }
-</style>
+    <meta charset="utf-8">
+    <link as="font" crossorigin href="assets/fonts/jetbrains-mono-latin.woff2" rel="preload" type="font/woff2">
+    <link href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='5'%20fill='%230C0C0C'/%3E%3Cpath%20d='M8%2011l5.5%205-5.5%205'%20stroke='%237FC8A9'%20stroke-width='3'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Crect%20x='16.5'%20y='19.5'%20width='9'%20height='3'%20rx='1.5'%20fill='%237FC8A9'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml">
+    <meta content="#0C0C0C" name="theme-color">
+    <script>window.__resources = {
+        "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "assets/vendor/react.js",
+        "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "assets/vendor/react-dom.js"
+    };</script>
+    <script id="mz-baked" type="application/json">{"credly":{"badges":[{"issued":"2024-09-22","expires":"2027-09-22","name":"Associate Cloud Engineer Certification"},{"issued":"2020-07-17","expires":"2022-01-17","name":"Oracle Cloud Infrastructure Foundations 2020 Certified Associate"},{"issued":"2025-06-30","expires":"2028-06-30","name":"GitHub Actions"},{"issued":"2025-06-29","expires":"2028-06-29","name":"GitHub Advanced Security"},{"issued":"2025-06-24","expires":"2029-06-24","name":"GitHub Administration"},{"issued":"2025-06-21","expires":"2028-06-21","name":"GitHub Copilot"},{"issued":"2025-06-19","expires":"2028-06-19","name":"GitHub Foundations"},{"issued":"2024-12-29","expires":"2026-12-29","name":"HashiCorp Certified: Terraform Associate (003)"}]},"certs":[{"issued":"2025-06-30","expires":"2028-06-30","file":"github-actions"},{"issued":"2025-06-29","expires":"2028-06-29","file":"github-advanced-security"},{"issued":"2025-06-24","expires":"2029-06-24","file":"github-administration"},{"issued":"2025-06-21","expires":"2028-06-21","file":"github-copilot"},{"issued":"2025-06-19","expires":"2028-06-19","file":"github-foundations"},{"issued":"2024-12-29","expires":"2026-12-29","file":"hashicorp-terraform-associate-003"},{"issued":"2024-09-22","expires":"2027-09-22","file":"google-associate-cloud-engineer"},{"issued":"2021","expires":"2022","file":"microsoft-az-204"},{"issued":"2021","expires":null,"file":"microsoft-az-900"},{"issued":"2020-07-17","expires":"2022-01-17","file":"oracle-oci-foundations"}]}</script>
+    <title>Marcin Mozolewski — Senior Cloud Platform Engineer</title>
+    <meta content="Senior Cloud Platform Engineer in Warsaw. Cloud network architecture, in-process egress security, and one provisioning path for hundreds of applications." name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="dark" name="color-scheme">
+    <meta content="Marcin Mozolewski" name="author">
+    <link href="https://mozolewski.eu/" rel="canonical">
+    <meta content="website" property="og:type">
+    <meta content="https://mozolewski.eu/" property="og:url">
+    <meta content="mozolewski.eu" property="og:site_name">
+    <meta content="en_US" property="og:locale">
+    <meta content="Marcin Mozolewski — Senior Cloud Platform Engineer" property="og:title">
+    <meta content="Senior Cloud Platform Engineer in Warsaw. Cloud network architecture, in-process egress security, and one provisioning path for hundreds of applications." property="og:description">
+    <meta content="https://mozolewski.eu/assets/img/marcin.jpg" property="og:image">
+    <meta content="image/jpeg" property="og:image:type">
+    <meta content="440" property="og:image:width">
+    <meta content="506" property="og:image:height">
+    <meta content="Marcin Mozolewski" property="og:image:alt">
+    <meta content="summary" name="twitter:card">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Marcin Mozolewski","url":"https://mozolewski.eu/","image":"https://mozolewski.eu/assets/img/marcin.jpg","jobTitle":"Senior Cloud Platform Engineer","worksFor":{"@type":"Organization","name":"Procter & Gamble"},"address":{"@type":"PostalAddress","addressLocality":"Warsaw","addressCountry":"PL"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Warsaw University of Technology"},"sameAs":["https://github.com/marcjanek","https://www.linkedin.com/in/marcin-mozolewski","https://stackoverflow.com/users/13347227/marcin-mozolewski","https://www.credly.com/users/marcin-mozolewski"]}</script>
+    <script defer src="assets/vendor/dc-runtime.js"></script>
 </head>
 <body>
+<x-dc>
+    <helmet>
+        <link href="assets/fonts.css" rel="stylesheet">
+        <link href="assets/page.css" rel="stylesheet">
+    </helmet>
 
-<button class="theme" type="button" id="theme" aria-label="Switch to dark theme" title="Switch theme">◐</button>
+    <sc-if hint-placeholder-val="{{ true }}" value="{{ intro }}">
+        <div aria-hidden="true" style="position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:clamp(20px,6vh,64px) clamp(14px,4vw,56px);overflow:hidden;font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .7s cubic-bezier(.7,0,.3,1) 3.1s forwards">
+            <div style="animation:fadeIn .01s linear .05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
+            <div style="animation:fadeIn .01s linear .3s both"><span style="color:#8A857D">[    0.184213]</span> Loading Linux kernel modules ... done</div>
+            <div style="animation:fadeIn .01s linear .55s both"><span style="color:#8A857D">[    0.612907]</span> systemd 255 running in system mode</div>
+            <div style="height:10px"></div>
+            <div style="animation:fadeIn .01s linear .8s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">network-online.target</span></div>
+            <div style="animation:fadeIn .01s linear 1.05s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">interconnect.service</span> — two clouds &lt;-&gt; on-premises, geo-redundant</div>
+            <div style="animation:fadeIn .01s linear 1.3s both">[<span style="color:#7FC8A9">  OK  </span>] Mounted <span style="color:#F3EFE9">/srv/providers</span> — google-cloud daily, seven more worked with</div>
+            <div style="animation:fadeIn .01s linear 1.55s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">egress-policy.service</span> — in-process, fail-closed</div>
+            <div style="animation:fadeIn .01s linear 1.8s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">provisioning-path.service</span> — one route, no side entrance</div>
+            <div style="animation:fadeIn .01s linear 2.05s both">[<span style="color:#E0A33C"> INFO </span>] terraform: hundreds of applications reconciled</div>
+            <div style="animation:fadeIn .01s linear 2.3s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">multi-user.target</span></div>
+            <div style="height:14px"></div>
+            <div style="animation:fadeIn .01s linear 2.6s both">mozolewski.eu login: <span style="color:#F3EFE9">guest</span><span style="background:#D6D2CB;color:#000;animation:caret 1.05s steps(1) infinite">&nbsp;</span></div>
+        </div>
+    </sc-if>
 
-<main class="page">
+    <a href="#whoami" style="position:fixed;left:-9999px;top:0;z-index:70;background:#0C0C0C;color:#7FC8A9;border:1px solid #7FC8A9;padding:10px 14px" style-focus="left:8px;top:42px">skip to content</a>
 
-  <header class="lede">
-    <h1 class="name">Marcin Mozolewski</h1>
-    <p class="role">Cloud engineer · <a href="https://us.pg.com/">Procter&nbsp;&amp;&nbsp;Gamble</a> · Poland</p>
-    <p class="bio">
-      I build and run cloud infrastructure as code — three years of it commercially, and five before
-      that teaching myself the tooling. Most of my work lives in Terraform, across more providers
-      than any one job needs.
-    </p>
-    <nav class="links" aria-label="Contact and profiles">
-      <a href="mailto:contact@mozolewski.eu?subject=Contact">contact@mozolewski.eu</a>
-      <a class="out" href="https://github.com/marcjanek" rel="me">GitHub</a>
-      <a class="out" href="https://pl.linkedin.com/in/marcin-mozolewski" rel="me">LinkedIn</a>
-      <a class="out" href="https://stackoverflow.com/users/13347227/marcin-mozolewski" rel="me">Stack&nbsp;Overflow</a>
-      <a class="out" href="https://www.credly.com/users/marcin-mozolewski" rel="me">Credly</a>
+    <nav aria-label="Sections" style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;flex-wrap:nowrap;align-items:center;gap:2px;background:#151513;background-image:linear-gradient(90deg,#151513,#151513),linear-gradient(90deg,rgba(12,12,12,0),rgba(12,12,12,.92));background-repeat:no-repeat;background-position:right center;background-size:32px 100%;background-attachment:local,scroll;border-bottom:1px solid #2A2724;padding:0 10px;font-size:12.5px;height:34px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none">
+        <span style="background:#7FC8A9;color:#0C0C0C;font-weight:700;padding:0 10px;line-height:34px">tmux</span>
+        <a href="#whoami" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">0:whoami</a>
+        <a href="#work" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">1:work</a>
+        <a href="#career" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">2:career</a>
+        <a href="#expertise" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">3:expertise</a>
+        <a href="#stack" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">4:stack</a>
+        <a href="#certs" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">5:certs</a>
+        <a href="#visitor" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">6:visitor</a>
+        <a href="#contact" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">7:contact</a>
+        <a href="#shell" style="color:#7FC8A9;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">8:shell*</a>
+        <span style="margin-left:auto;color:#8A857D;padding:0 10px;white-space:nowrap;flex:none">guest@mozolewski.eu · {{ clock }}</span>
     </nav>
-  </header>
 
-  <div class="stack">
+    <main style="max-width:1180px;margin:0 auto;padding:64px clamp(14px,4vw,40px) 96px;display:flex;flex-direction:column;gap:44px">
+        <h1 class="sr">Marcin Mozolewski — Senior Cloud Platform Engineer</h1>
 
-    <section class="layer" aria-labelledby="ly-workload">
-      <div class="layer-head">
-        <h2 class="label" id="ly-workload">Workload</h2>
-        <div class="body">
-          <p class="tech">Kubernetes · Docker</p>
-        </div>
-      </div>
-      <div class="layer-rest">
-        <div class="body">
-          <p class="note">What actually runs.</p>
-        <p class="runs-on">runs on ↓</p>
-        </div>
-      </div>
-    </section>
+        <section aria-labelledby="h-whoami" id="whoami" tabindex="-1" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
+            <h2 class="sr" id="h-whoami">Profile</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/whoami</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Mounted <span style="color:#F3EFE9">/home/marcin</span></div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">neofetch</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,48px);align-items:flex-start">
+                <div style="flex:none;display:flex;flex-direction:column;gap:8px;width:206px">
+                    <div style="border:1px solid #2A2724;background:#111110;padding:6px">
+                        <img alt="Marcin Mozolewski" decoding="async" height="221" src="assets/img/marcin.webp" style="display:block;object-fit:cover;animation:decode 1.1s steps(14) both" width="192">
+                    </div>
+                    <div style="height:2px;background:#2A2724;overflow:hidden">
+                        <div style="height:100%;background:#7FC8A9;animation:bar 1.1s linear both"></div>
+                    </div>
+                    <div style="color:#8A857D;font-size:11.5px">marcin.webp 100% 11KB</div>
+                </div>
+                <div style="min-width:min(100%,420px);flex:1;font-size:13.5px;line-height:1.85;display:flex;flex-direction:column">
+                    <div><span style="color:#7FC8A9">marcin</span>@<span style="color:#6FA8FF">mozolewski</span></div>
+                    <div style="color:#8A857D">-----------------</div>
+                    <div style="color:#F3EFE9;max-width:52ch;padding-bottom:10px">I build the layer other engineers build on.</div>
+                    <div style="display:grid;grid-template-columns:10ch minmax(0,1fr);column-gap:8px">
+                        <span style="color:#E0A33C">Role</span><span>Senior Cloud Platform Engineer</span>
+                        <span style="color:#E0A33C">Host</span><span>Procter &amp; Gamble</span>
+                        <span style="color:#E0A33C">Uptime</span><span>commercial since 2021 · five years self-taught before that</span>
+                        <span style="color:#E0A33C">Kernel</span><span>Cloud · Terraform · Kubernetes · Computing · Optimization · AI</span>
+                        <span style="color:#E0A33C">Shell</span><span>Python · Rust · Go · HCL · SQL</span>
+                        <span style="color:#E0A33C">Providers</span><span><span style="color:#8A857D">daily:</span> <span style="color:#F3EFE9">google-cloud</span></span><span></span><span><span style="color:#8A857D">worked with:</span> <span style="color:#C5C0B8">azure · aws · oci · ibm-cloud · alibaba-cloud · digitalocean · cloudflare</span></span>
+                        <span style="color:#E0A33C">Location</span><span>Warsaw, Poland</span>
+                        <span style="color:#E0A33C">Languages</span><span>Polish (native) · English (professional)</span>
+                        <span style="color:#E0A33C">Off-clock</span><span>open source · OSINT · sailing · iceboating · brain teasers</span>
+                        <span style="color:#E0A33C">Contact</span><span><a href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a></span>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;gap:4px;margin-top:4px">
+                <span style="width:34px;height:16px;background:#3A3A38;display:block"></span>
+                <span style="width:34px;height:16px;background:#C0503F;display:block"></span>
+                <span style="width:34px;height:16px;background:#7FC8A9;display:block"></span>
+                <span style="width:34px;height:16px;background:#E0A33C;display:block"></span>
+                <span style="width:34px;height:16px;background:#6FA8FF;display:block"></span>
+                <span style="width:34px;height:16px;background:#E0709E;display:block"></span>
+                <span style="width:34px;height:16px;background:#8FD3E8;display:block"></span>
+                <span style="width:34px;height:16px;background:#D6D2CB;display:block"></span>
+            </div>
+            <div style="margin-top:10px;white-space:pre-wrap;color:#8A857D;font-size:13px;line-height:1.9">clouds [<span style="color:#E0A33C">█</span><span style="color:#4E4E4A">░░░░░░░░░</span>] 1 of 8 in daily use
+certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4E4A">{{ certEmpty }}</span>] {{ certGauge }}</div>
+        </section>
 
-    <section class="layer" aria-labelledby="ly-platform">
-      <div class="layer-head">
-        <h2 class="label" id="ly-platform">Platform</h2>
-        <div class="body">
-          <p class="tech">Terraform · Ansible</p>
-        </div>
-      </div>
-      <div class="layer-rest">
-        <div class="body">
-          <p class="note">Where most of my work lives.</p>
-        <p class="runs-on">runs on ↓</p>
-        </div>
-      </div>
-    </section>
+        <section aria-labelledby="h-work" id="work" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:22px">
+            <h2 class="sr" id="h-work">Selected work</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/work</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">work.target</span> — the three most recent</div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~/work</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">head sys-0*.md</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
 
-    <section class="layer" aria-labelledby="ly-providers">
-      <div class="layer-head">
-        <h2 class="label" id="ly-providers">Providers</h2>
-        <div class="body">
-          <p class="tech">GCP · Azure · AWS · OCI</p>
-        <p class="also"><b>Also</b>Alibaba Cloud · IBM Cloud · DigitalOcean · Cloudflare</p>
-        </div>
-      </div>
-      <div class="layer-rest">
-        <div class="body">
-          <p class="note">Four in daily use. The rest when a project asks for them.</p>
-        </div>
-      </div>
-    </section>
+            <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
+                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-01.md</span> &lt;==</div>
+                <div style="color:#F3EFE9;font-weight:500"># A network foundation shared by two clouds and a data center</div>
+                <div style="max-width:78ch;color:#C5C0B8">Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect foundation with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering. It is in production with disaster recovery in a second region, designed against a four-nines target, and the first applications are running over it.</div>
+                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">cloud-interconnect cloud-router vpc terraform</span></div>
+            </div>
 
-    <div class="stack-hold" aria-hidden="true"></div>
+            <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
+                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-02.md</span> &lt;==</div>
+                <div style="color:#F3EFE9;font-weight:500"># Egress policy that runs inside the request, not beside it</div>
+                <div style="max-width:78ch;color:#C5C0B8">Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time, which I established before building anything. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path. It runs across two regions and is operated hands-off through GitOps. Other teams adopt it through a Terraform provider I wrote.</div>
+                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">envoy rust-wasm go postgresql kubernetes flux</span></div>
+            </div>
 
-  </div>
+            <div style="border-left:2px solid #2A2724;padding-left:18px;display:flex;flex-direction:column;gap:8px">
+                <div style="color:#8A857D">==&gt; <span style="color:#E0A33C">sys-03.md</span> &lt;==</div>
+                <div style="color:#F3EFE9;font-weight:500"># One path for every new project</div>
+                <div style="max-width:78ch;color:#C5C0B8">New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it. Hundreds of applications have been provisioned on one uniform model.</div>
+                <div style="color:#8A857D">tags: <span style="color:#6FA8FF">terraform terraform-cloud google-cloud open-policy-agent</span></div>
+            </div>
+        </section>
 
-  <section class="row" aria-labelledby="l-constants">
-    <h2 class="label" id="l-constants">Constants</h2>
-    <div class="body">
-      <p class="plain">Linux and Git, at every layer.</p>
-    </div>
-  </section>
+        <section aria-labelledby="h-career" id="career" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
+            <h2 class="sr" id="h-career">Career</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/career</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Replayed <span style="color:#F3EFE9">career/</span> — 4 commits</div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">git log --graph career/</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <div style="display:grid;grid-template-columns:14px max-content minmax(0,1fr);column-gap:16px;row-gap:20px;align-items:start;font-size:13.5px">
+                <div style="display:contents">
+                    <div style="position:relative;align-self:stretch;color:#E0A33C;line-height:1.7">*
+                        <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
+                    </div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2023-05 — now</div>
+                    <div style="display:flex;flex-direction:column;gap:2px">
+                        <div><span style="color:#F3EFE9">Senior Cloud Platform Engineer</span><span style="color:#8A857D"> — Procter &amp; Gamble</span> <span style="color:#E0A33C">(HEAD -&gt; main)</span></div>
+                        <div style="color:#8A857D">cloud network and platform architecture, security, policy as code, cost optimization; mentoring the engineers who build on it</div>
+                    </div>
+                </div>
+                <div style="display:contents">
+                    <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*
+                        <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
+                    </div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2021-07 — 2023-04</div>
+                    <div style="display:flex;flex-direction:column;gap:2px">
+                        <div><span style="color:#F3EFE9">Junior Cloud Developer</span><span style="color:#8A857D"> — PKO BP Finat</span></div>
+                        <div style="color:#8A857D">Google Cloud infrastructure provisioning</div>
+                    </div>
+                </div>
+                <div style="display:contents">
+                    <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*
+                        <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
+                    </div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2019-08 — 2019-09</div>
+                    <div style="display:flex;flex-direction:column;gap:2px">
+                        <div><span style="color:#F3EFE9">Java Developer (intern)</span><span style="color:#8A857D"> — eService</span></div>
+                        <div style="color:#8A857D">Java and Spring Boot</div>
+                    </div>
+                </div>
+                <div style="display:contents">
+                    <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*</div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2017 — 2022</div>
+                    <div style="display:flex;flex-direction:column;gap:2px">
+                        <div><span style="color:#F3EFE9">MSc Eng &amp; BEng, Computer Science</span><span style="color:#8A857D"> — Warsaw University of Technology</span> <span style="color:#E0A33C">(root)</span></div>
+                        <div style="color:#8A857D">Faculty of Electronics and Information Technology</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <section class="row" aria-labelledby="l-certs">
-    <h2 class="label" id="l-certs">Certifications</h2>
-    <div class="body">
-      <ul class="certs">
-        <li class="cert">
-          <img src="https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob" alt="" width="46" height="46" loading="lazy">
-          <div class="cert-text">
-            <a class="out" href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url">Terraform Associate (003)</a>
-            <span class="cert-issuer">HashiCorp</span>
-          </div>
-        </li>
-        <li class="cert">
-          <img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" alt="" width="46" height="46" loading="lazy">
-          <div class="cert-text">
-            <a class="out" href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url">Associate Cloud Engineer</a>
-            <span class="cert-issuer">Google Cloud</span>
-          </div>
-        </li>
-        <li class="cert">
-          <img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" alt="" width="46" height="46" loading="lazy">
-          <div class="cert-text">
-            <a class="out" href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url">OCI Foundations 2020 Associate</a>
-            <span class="cert-issuer">Oracle</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </section>
+        <section aria-labelledby="h-expertise" id="expertise" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
+            <h2 class="sr" id="h-expertise">Expertise</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/expertise</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Indexed <span style="color:#F3EFE9">expertise/</span></div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">ls -l expertise/</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <div class="lsx" style="display:grid;grid-template-columns:max-content max-content minmax(0,1fr);column-gap:16px;row-gap:3px;align-items:baseline;font-size:13.5px">
+                <div style="grid-column:1/-1;color:#8A857D">total 5</div>
+                <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">cloud-network-architecture/</span><span style="color:#C5C0B8">hybrid and multi-cloud connectivity, routing, segmentation, and the failure modes of each</span></div>
+                <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">egress-security/</span><span style="color:#C5C0B8">deciding what may leave a network, and proving which consumer asked</span></div>
+                <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">provisioning-platform/</span><span style="color:#C5C0B8">self-service infrastructure that still lands inside the guardrails</span></div>
+                <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">finops/</span><span style="color:#C5C0B8">cost work that shows up on the bill rather than on a slide</span></div>
+                <div style="display:contents"><span class="ls-dim" style="color:#8A857D;white-space:nowrap">drwxr-xr-x  2 marcin</span><span style="color:#E0A33C;white-space:nowrap">technical-leadership/</span><span style="color:#C5C0B8">mentoring engineers, and owning what the team ships</span></div>
+            </div>
+        </section>
 
-  <section class="row" aria-labelledby="l-off">
-    <h2 class="label" id="l-off">Off the clock</h2>
-    <div class="body">
-      <p class="plain">
-        Open source, OSINT, and — away from screens — sailing, iceboating, and brain teasers.
-      </p>
-    </div>
-  </section>
+        <section aria-labelledby="h-stack" id="stack" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
+            <h2 class="sr" id="h-stack">Stack</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/stack</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Loaded <span style="color:#F3EFE9">stack.modules</span></div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">tree ~/stack -L 2</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <div style="white-space:pre-wrap;font-size:13.5px;line-height:1.9;color:#C5C0B8"><span style="color:#6FA8FF">~/stack</span>
+├── <span style="color:#E0A33C">workload/</span>
+│   ├── kubernetes
+│   ├── docker
+│   └── envoy
+├── <span style="color:#E0A33C">platform/</span>
+│   ├── terraform
+│   ├── terraform-cloud
+│   ├── open-policy-agent
+│   └── flux
+├── <span style="color:#E0A33C">providers/</span>
+│   ├── google-cloud <span style="color:#8A857D">daily</span>
+│   ├── azure <span style="color:#8A857D">worked with</span>
+│   ├── aws <span style="color:#8A857D">worked with</span>
+│   ├── oci <span style="color:#8A857D">worked with</span>
+│   ├── ibm-cloud <span style="color:#8A857D">worked with</span>
+│   ├── alibaba-cloud <span style="color:#8A857D">worked with</span>
+│   ├── digitalocean <span style="color:#8A857D">worked with</span>
+│   └── cloudflare <span style="color:#8A857D">worked with</span>
+└── <span style="color:#E0A33C">constants/</span>
+    ├── linux
+    └── git
 
-  <section class="row" aria-labelledby="l-playing" id="now-playing">
-    <h2 class="label" id="l-playing">Now playing</h2>
-    <div class="body">
-      <a class="well" href="https://open.spotify.com/user/1176862723" aria-label="Spotify profile">
-        <img src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&amp;cover_image=true&amp;theme=default&amp;show_offline=true&amp;background_color=161b21&amp;interchange=true&amp;bar_color=b8442a&amp;bar_color_cover=true" alt="What Marcin is listening to on Spotify" loading="lazy"
-             onerror="document.getElementById('now-playing').hidden = true">
-      </a>
-    </div>
-  </section>
+4 directories, 17 files</div>
+        </section>
 
-  <footer class="colophon">
-    <h2 class="label">Elsewhere</h2>
-    <div class="body">
-      <div class="meta">
-        <a href="https://stackoverflow.com/users/13347227/marcin-mozolewski">
-          <img id="so-flair" src="https://stackoverflow.com/users/flair/13347227.png?theme=clean" width="208" height="58" alt="Marcin Mozolewski on Stack Overflow" loading="lazy">
-        </a>
-        <img src="https://komarev.com/ghpvc/?username=marcjanek&amp;label=VIEWS&amp;color=666f78&amp;style=flat&amp;abbreviated=true" alt="Profile view count" loading="lazy">
-      </div>
-      <p class="fine">Set in system serif, sans and mono. No trackers, no cookies.</p>
-    </div>
-  </footer>
+        <section aria-labelledby="h-certs" id="certs" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
+            <h2 class="sr" id="h-certs">Certifications</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/certs</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] {{ certOk }}</div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~/certs</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">ls -l</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <sc-if hint-placeholder-val="{{ true }}" value="{{ certsOk }}">
+                <div class="ls" style="display:grid;grid-template-columns:max-content max-content max-content minmax(0,1fr);column-gap:2ch;font-size:13.5px;line-height:1.9;color:#C5C0B8">
+                    <span style="grid-column:1/-1">{{ certTotal }}</span>
+                    <sc-for as="c" hint-placeholder-count="10" list="{{ certLines }}">
+                        <div style="display:contents"><span class="ls-dim {{ c.cls }}">-rw-r--r--</span><span class="ls-dim {{ c.cls }}">1 marcin</span><span class="{{ c.cls }}" style="white-space:nowrap">{{ c.issued }}</span><span class="{{ c.cls }}">{{ c.name }} {{ c.note }}</span></div>
+                    </sc-for>
+                </div>
+            </sc-if>
+            <div style="color:#8A857D">verify: <a href="https://www.credly.com/users/marcin-mozolewski">credly.com/users/marcin-mozolewski</a> — everything except the <span style="color:#C5C0B8">microsoft-*</span> entries, which are held on Microsoft Learn</div>
+        </section>
 
-</main>
 
-<script>
-  (function () {
-    var btn = document.getElementById('theme');
-    var root = document.documentElement;
+        <section aria-labelledby="h-visitor" id="visitor" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
+            <h2 class="sr" id="h-visitor">What this page can see about you</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/visitor</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Read <span style="color:#F3EFE9">local environment</span></div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">whois $REMOTE_ADDR</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> every site can do this without asking. this one asks.</div>
+            <div style="color:#8A857D;font-size:12px">{{ vNote }}</div>
+            <button aria-disabled="{{ whoisDisabled }}" sc-camel-on-click="{{ runWhois }}" style="align-self:flex-start;font:inherit;font-size:13px;color:#0C0C0C;background:#7FC8A9;border:0;padding:11px 18px;cursor:pointer;min-height:44px" style-focus-visible="outline:2px solid #F3EFE9;outline-offset:2px" style-hover="background:#E0A33C" type="button">run the lookup</button>
+            <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+                <div style="min-width:min(100%,320px);flex:1;font-size:13.5px;display:flex;flex-direction:column;gap:12px;align-content:start">
+                    <div style="display:grid;grid-template-columns:10ch minmax(0,1fr);column-gap:8px;row-gap:2px">
+                        <span style="grid-column:1/-1;color:#8A857D;font-size:12px">read from your browser</span>
+                        <span style="color:#E0A33C">timezone</span><span>{{ vTz }}</span>
+                        <span style="color:#E0A33C">browser</span><span>{{ vClient }}</span>
+                    </div>
+                    <div aria-live="polite" style="display:grid;grid-template-columns:10ch minmax(0,1fr);column-gap:8px;row-gap:2px">
+                        <span style="grid-column:1/-1;color:#8A857D;font-size:12px">read from ipapi.co / ipwho.is</span>
+                        <span style="color:#E0A33C">ip</span><span>{{ vIp }}</span>
+                        <span style="color:#E0A33C">city</span><span>{{ vCity }}</span>
+                        <span style="color:#E0A33C">network</span><span>{{ vNet }}</span>
+                    </div>
+                </div>
+                <div style="flex:none;width:min(100%,420px)">
+                    <sc-if hint-placeholder-val="{{ false }}" value="{{ notRan }}">
+                        <div style="border:1px dashed #2A2724;background:#111110;padding:6px">
+                            <div style="width:100%;height:214px;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">the map is drawn from openstreetmap.org<br>once you run the lookup</div>
+                        </div>
+                        <div style="color:#8A857D;font-size:11.5px;margin-top:6px">no tiles requested yet</div>
+                    </sc-if>
+                    <sc-if hint-placeholder-val="{{ true }}" value="{{ hasGeo }}">
+                        <div style="border:1px solid #2A2724;background:#111110;padding:6px">
+                            <div ref="{{ mapRef }}" style="width:100%;height:214px;background:#111110;filter:grayscale(1) invert(0.92) contrast(0.92) brightness(0.95) sepia(0.35) hue-rotate(96deg)"></div>
+                        </div>
+                        <div style="color:#8A857D;font-size:11.5px;margin-top:6px">openstreetmap tiles · approximate</div>
+                    </sc-if>
+                    <sc-if hint-placeholder-val="{{ false }}" value="{{ noGeo }}">
+                        <div style="width:100%;height:220px;border:1px dashed #2A2724;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">location unavailable — no coordinates to plot</div>
+                    </sc-if>
+                </div>
+            </div>
+        </section>
 
-    function current() {
-      var set = root.getAttribute('data-theme');
-      if (set) return set;
-      return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+        <section aria-labelledby="h-contact" id="contact" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:16px">
+            <h2 class="sr" id="h-contact">Contact</h2>
+            <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/contact</span></div>
+            <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Listening on <span style="color:#F3EFE9">mailto:contact@mozolewski.eu</span></div>
+            <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">cat contact.txt</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
+            <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> write in English or Polish, whichever is easier.</div>
+            <div style="display:flex;flex-direction:column;font-size:13.5px">
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">email</span><a href="mailto:contact@mozolewski.eu" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">contact@mozolewski.eu</a></div>
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">github</span><a href="https://github.com/marcjanek" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">github.com/marcjanek</a></div>
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">linkedin</span><a href="https://www.linkedin.com/in/marcin-mozolewski" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">linkedin.com/in/marcin-mozolewski</a></div>
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">stackoverflow</span><a href="https://stackoverflow.com/users/13347227/marcin-mozolewski" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">stackoverflow.com/users/13347227/marcin-mozolewski</a></div>
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center"><span style="color:#E0A33C;padding:9px 0">credly</span><a href="https://www.credly.com/users/marcin-mozolewski" rel="me" style="display:inline-block;padding:9px 0;color:#6FA8FF;text-decoration:none;width:fit-content" style-focus-visible="color:#E0A33C;text-decoration:underline;outline:2px solid #7FC8A9;outline-offset:3px" style-hover="color:#E0A33C;text-decoration:underline">credly.com/users/marcin-mozolewski</a></div>
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center;padding-top:9px"><span style="color:#E0A33C">location</span><span style="color:#C5C0B8">Warsaw, Poland</span></div>
+                <div style="display:grid;grid-template-columns:minmax(0,14ch) minmax(0,1fr);column-gap:16px;align-items:center;padding-top:4px"><span style="color:#E0A33C">languages</span><span style="color:#C5C0B8">Polish (native) · English (professional)</span></div>
+            </div>
+        </section>
 
-    // The Stack Overflow flair is a raster image with baked-in colours, so it
-    // has to be re-requested in the matching variant whenever the theme changes.
-    var flair = document.getElementById('so-flair');
+        <section aria-labelledby="h-shell" id="shell" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:12px;border:1px solid #2A2724;background:#0E0E0D;padding:16px 18px 18px">
+            <h2 class="sr" id="h-shell">Interactive shell</h2>
+            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:#8A857D;font-size:12.5px;border-bottom:1px solid #2A2724;padding-bottom:10px">
+                <span><span style="color:#7FC8A9">●</span> bash — interactive</span>
+                <span>try: help · ls · cd work · sudo hire marcin</span>
+            </div>
+            <div role="presentation" sc-camel-on-click="{{ focusShell }}" style="display:flex;flex-direction:column;gap:8px;min-height:200px;cursor:text;font-size:13.5px">
+                <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> this prompt works. <span style="color:#C5C0B8">up</span> recalls, <span style="color:#C5C0B8">tab</span> completes, <span style="color:#C5C0B8">help</span> lists everything.</div>
+                <div aria-atomic="false" aria-live="polite" role="log" style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for as="h" hint-placeholder-count="2" list="{{ hist }}">
+                        <div style="display:flex;flex-direction:column;gap:2px">
+                            <div style="display:flex;gap:0;flex-wrap:wrap"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span style="margin-left:1ch">{{ h.cmd }}</span></div>
+                            <div style="white-space:pre-wrap;color:#C5C0B8">{{ h.out }}</div>
+                        </div>
+                    </sc-for>
+                </div>
+                <div style="display:flex;gap:0;flex-wrap:wrap;align-items:center">
+                    <span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span>
+                    <input aria-label="terminal input" autocomplete="off" ref="{{ inputRef }}" sc-camel-on-change="{{ onChange }}" sc-camel-on-key-down="{{ onKey }}" spellcheck="false" style="margin-left:1ch;flex:1;min-width:140px;background:transparent;border:0;outline:none;color:#F3EFE9;font-family:inherit;font-size:inherit;line-height:1.7;caret-color:#7FC8A9;padding:2px 0" value="{{ line }}">
+                </div>
+            </div>
+        </section>
+    </main>
 
-    function sync() {
-      var now = current();
-      var next = now === 'dark' ? 'light' : 'dark';
-      btn.setAttribute('aria-label', 'Switch to ' + next + ' theme');
-      if (flair) {
-        flair.src = 'https://stackoverflow.com/users/flair/13347227.png?theme='
-          + (now === 'dark' ? 'dark' : 'clean');
-      }
-    }
+    <footer style="position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;gap:12px;background:#151513;border-top:1px solid #2A2724;padding:0 12px;height:30px;align-items:center;font-size:12px;color:#8A857D;overflow:hidden">
+        <span style="white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis;max-width:clamp(0px,(100vw - 380px)*999,420px)"><span style="color:#7FC8A9">-- NORMAL --</span> mozolewski.eu</span>
+        <span style="display:flex;gap:14px;white-space:nowrap;flex:none"><span style="display:flex;gap:14px;overflow:hidden;max-width:clamp(0px,(100vw - 700px)*999,320px)"><span style="color:#7FC8A9">{{ rttShort }}</span><span>session {{ session }}</span></span><span>{{ trackNote }}</span></span>
+    </footer>
+</x-dc>
+<script data-dc-script="" data-props="{&quot;intro&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Intro&quot;},&quot;visitorLookup&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Visitor panel&quot;}}" type="text/x-dc">
+    class Component extends DCLogic {
+    state = {
+        now: "", session: "00:00", line: "", hist: [], cmds: [], histIdx: -1,
+        vIp: "—", vCity: "—", vNet: "—", vTz: "reading…", vClient: "reading…",
+        vRan: false, vFailed: false, hasGeo: null,
+        vNote: "# nothing has been sent yet. this asks ipapi.co (Kloudend, Inc., USA) — or ipwho.is if it does not answer — where your IP is, and loads tiles from openstreetmap.org. all three would see it.",
+        certLines: [], certTotal: "", certOk: "", certFill: "", certEmpty: "░░░░░░░░░░", certGauge: "",
+        rttLine: "pinging…", colo: "", rttShort: "rtt …", svcLines: [], svcNote: "",
+        certsOk: false
+    };
 
-    btn.addEventListener('click', function () {
-      var next = current() === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      try { localStorage.setItem('theme', next); } catch (e) {}
-      sync();
+    // COMMANDS is both what `help` lists and what Tab completes. ALIASES are
+    // answered by run() and completable too, but stay out of help so the listing
+    // reads as a menu rather than a changelog. Everything run() answers to sits
+    // in one of the two lists, so the shell and its own documentation cannot drift.
+    SECTIONS = ["whoami", "work", "career", "expertise", "stack", "certs", "visitor", "contact", "shell"];
+    COMMANDS = ["cat", "cd", "clear", "date", "echo", "help", "ls", "mail", "neofetch", "ping", "pwd", "systemctl", "uptime", "whoami", "whois", "xdg-open"];
+    ALIASES = ["goto", "contact", "ip", "open", "curl", "sudo", "rm", "exit", "logout"];
+    PROBING = "probing…";
+
+    // The argument data lives on the instance so run() and complete() read the
+    // same tables. Null prototypes on purpose: `cat constructor` and
+    // `xdg-open __proto__` must miss rather than resolve through Object.prototype.
+    LINK = Object.assign(Object.create(null), {
+        github: "https://github.com/marcjanek",
+        linkedin: "https://www.linkedin.com/in/marcin-mozolewski",
+        stackoverflow: "https://stackoverflow.com/users/13347227/marcin-mozolewski",
+        credly: "https://www.credly.com/users/marcin-mozolewski"
+    });
+    CAT = Object.assign(Object.create(null), {
+        "sys-01": "A network foundation shared by two clouds and a data center.\nRedundant interconnect with geo-redundant failover; spokes attach to it without one-off engineering.\ntags: cloud-interconnect cloud-router vpc terraform",
+        "sys-02": "Egress policy that runs inside the request, not beside it.\nPer-consumer allow/deny resolved in-process inside the proxy, fail-closed, no round trip.\ntags: envoy rust-wasm go postgresql kubernetes flux",
+        "sys-03": "One path for every new project.\nCreation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it.\ntags: terraform terraform-cloud google-cloud open-policy-agent"
     });
 
-    sync();
-  })();
+    // Which commands have a completable argument. Free-text commands (echo) are
+    // absent on purpose — Tab must not guess at prose.
+    ARGS = Object.assign(Object.create(null), {
+        cd: this.SECTIONS,
+        goto: this.SECTIONS,
+        cat: Object.keys(this.CAT),
+        "xdg-open": Object.keys(this.LINK),
+        open: Object.keys(this.LINK),
+        curl: Object.keys(this.LINK)
+    });
+
+    // Bound once. renderVals() runs on every clock tick, so fresh closures here
+    // would make React detach and reattach both refs once a second.
+    handlers = {
+        runWhois: () => this.runWhois(),
+        mapRef: (el) => {
+            this._map = el;
+        },
+        inputRef: (el) => {
+            this._input = el;
+        },
+        focusShell: () => {
+            if (this._input) this._input.focus();
+        },
+        onChange: (e) => this.setState({line: e.target.value}),
+        onKey: (e) => this.keyDown(e)
+    };
+
+    reduced() {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    jump(id) {
+        const el = document.getElementById(id);
+        if (!el) return false;
+        window.scrollTo({
+            top: el.getBoundingClientRect().top + window.scrollY - 56,
+            behavior: this.reduced() ? "auto" : "smooth"
+        });
+        return true;
+    }
+
+    // What date(1) prints: `Tue Sep  8 14:23:11 CEST 2026`. The zone abbreviation
+    // is only in CLDR for some locale/zone pairs, so try two and fall back to the
+    // numeric offset — which is exactly what date(1) prints when the zone has no
+    // abbreviation of its own (`+0530`).
+    dateLine(d) {
+        const p = (n) => String(n).padStart(2, "0");
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const mons = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const named = (loc) => {
+            try {
+                const part = new Intl.DateTimeFormat(loc, {timeZoneName: "short"})
+                    .formatToParts(d).filter((x) => x.type === "timeZoneName")[0];
+                const v = part ? part.value : "";
+                return /^(GMT|UTC)[+\-−]/.test(v) ? "" : v;
+            } catch (e) {
+                return "";
+            }
+        };
+        let zone = named("en-GB") || named("en-US");
+        if (!zone) {
+            const off = -d.getTimezoneOffset();
+            const abs = Math.abs(off);
+            zone = (off < 0 ? "-" : "+") + p(Math.floor(abs / 60)) + (abs % 60 ? p(abs % 60) : "");
+        }
+        return days[d.getDay()] + " " + mons[d.getMonth()] + " " + String(d.getDate()).padStart(2, " ") +
+            " " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds()) +
+            " " + zone + " " + d.getFullYear();
+    }
+
+    run(raw) {
+        const cmd = raw.trim();
+        if (!cmd) return "";
+        const parts = cmd.split(/\s+/);
+        const c = parts[0].toLowerCase();
+        const arg = (parts[1] || "").toLowerCase().replace(/\.md$/, "");
+        const rest = parts.slice(1).join(" ");
+        const SEC = this.SECTIONS;
+        const LINK = this.LINK;
+        const CAT = this.CAT;
+
+        if (c === "help") {
+            // rendered inside white-space:pre-wrap, so the columns have to be built
+            const row = (name, what) => "  " + name.padEnd(20) + what;
+            return ["available:",
+                row("ls", "list the sections of this page"),
+                row("cd <section>", "jump to a section"),
+                row("cat sys-01|02|03", "read one of the case studies"),
+                row("whoami", "one line about me"),
+                row("neofetch", "jump to the profile at the top"),
+                row("uptime", "how long I have been doing this"),
+                row("pwd", "print the working directory"),
+                row("date", "the current date"),
+                row("echo <text>", "print <text> back"),
+                row("ping", "round-trip time to this page"),
+                row("whois", "resolve where you are reading from"),
+                row("systemctl", "check my services (contacts github.com from your browser)"),
+                row("xdg-open <target>", "github, linkedin, stackoverflow, credly"),
+                row("mail", "write to me"),
+                row("clear", "this shell"),
+                row("help", "this list"),
+                "",
+                row("up / down", "previous commands"),
+                row("tab", "complete a command")].join("\n");
+        }
+        if (c === "ls") return SEC.join("  ");
+        if (c === "pwd") return "/home/guest";
+        if (c === "cd" || c === "goto") {
+            if (!arg) return "usage: cd <section> — " + SEC.join(", ");
+            if (SEC.indexOf(arg) === -1) return "cd: " + arg + ": no such section";
+            this.jump(arg);
+            return "-> " + arg;
+        }
+        if (c === "cat") {
+            if (CAT[arg]) {
+                this.jump("work");
+                return CAT[arg];
+            }
+            if (!arg) return "usage: cat " + Object.keys(CAT).join("|");
+            return "cat: " + parts[1] + ": no such file — try " + Object.keys(CAT).join(", ");
+        }
+        if (c === "whois" || c === "ip") {
+            this.jump("visitor");
+            return this.state.vRan
+                ? "-> visitor: " + this.state.vIp + " · " + this.state.vCity
+                : "-> visitor: not resolved. Run it in that section — the request leaves your browser, so the decision is yours.";
+        }
+        if (c === "whoami") return "you are guest. I am marcin — Senior Cloud Platform Engineer at Procter & Gamble, Warsaw. I build the layer other engineers build on.";
+        if (c === "neofetch") {
+            this.jump("whoami");
+            return "-> whoami";
+        }
+        if (c === "uptime") return "commercial since 2021 · five years self-taught before that";
+        if (c === "ping") return this.state.rttLine + (this.state.colo ? "\nserved from cloudflare edge " + this.state.colo : "");
+        if (c === "systemctl") {
+            // every run probes for real, and probeServices() rewrites this row in
+            // place when the answers land — no "try again in a moment", no stale
+            // timings from an earlier run
+            this.probeServices();
+            return this.PROBING;
+        }
+        if (c === "date") return this.dateLine(new Date());
+        if (c === "echo") return rest;
+        if (c === "xdg-open" || c === "open" || c === "curl") {
+            if (LINK[arg]) {
+                window.open(LINK[arg], "_blank", "noopener,noreferrer");
+                return "opening " + LINK[arg];
+            }
+            return "usage: xdg-open " + Object.keys(LINK).join("|");
+        }
+        if (c === "mail" || c === "contact") {
+            window.location.href = "mailto:contact@mozolewski.eu";
+            return "To: contact@mozolewski.eu";
+        }
+        if (c === "clear") return null;
+        if (c === "sudo") {
+            if (/hire\s+marcin/i.test(cmd)) return "[sudo] password for recruiter: ********\nAccess granted. contact@mozolewski.eu";
+            return "guest is not in the sudoers file. This incident will be reported.";
+        }
+        if (c === "rm" && /-rf/.test(cmd)) return "nice try.";
+        if (c === "exit" || c === "logout") return "there is no exit — this is a business card.";
+        return "bash: " + c + ": command not found — try 'help'";
+    }
+
+    // Up and down walk previously entered commands. A prompt that ignores the
+    // arrow keys is the first thing an engineer notices, and this page is read
+    // by engineers.
+    recall(step) {
+        const cmds = this.state.cmds;
+        if (!cmds.length) return;
+        const from = this.state.histIdx < 0 ? cmds.length : this.state.histIdx;
+        const i = Math.min(cmds.length, Math.max(0, from + step));
+        this.setState({histIdx: i, line: i >= cmds.length ? "" : cmds[i]});
+    }
+
+    // Tab completes the first word against everything the shell answers to, and
+    // an argument against that command's own pool — sections for cd, case study
+    // ids for cat, link targets for xdg-open. Several candidates print the list
+    // instead of guessing.
+    complete() {
+        const line = this.state.line.replace(/^\s+/, "");
+        const parts = line.split(/\s+/);
+        const last = (parts[parts.length - 1] || "").toLowerCase();
+        const pool = parts.length > 1
+            ? (this.ARGS[parts[0].toLowerCase()] || [])
+            : this.COMMANDS.concat(this.ALIASES);
+        const hits = pool.filter((name) => name.indexOf(last) === 0);
+        if (!hits.length) return;
+        if (hits.length === 1) {
+            parts[parts.length - 1] = hits[0];
+            this.setState({line: parts.join(" ") + " "});
+            return;
+        }
+        // repeated Tab on the same prefix would otherwise push the same listing
+        // again and again, evicting real output from the 14-entry window
+        const out = hits.join("  ");
+        this.setState((st) => {
+            const prev = st.hist[st.hist.length - 1];
+            if (prev && prev.cmd === line && prev.out === out) return {};
+            return {hist: st.hist.concat([{cmd: line, out: out}]).slice(-14)};
+        });
+    }
+
+    tick() {
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, "0");
+        const s = Math.floor((Date.now() - this._start) / 1000);
+        this.setState({
+            now: p(d.getHours()) + ":" + p(d.getMinutes()),
+            session: p(Math.floor(s / 60)) + ":" + p(s % 60)
+        });
+    }
+
+    componentDidMount() {
+        this._start = Date.now();
+        this._dead = false;
+        this._timers = [];
+        this._acs = [];
+        this._injected = [];
+        this.tick();
+        this._t = setInterval(() => this.tick(), 1000);
+        this._boot = setTimeout(() => this.setupTypers(), 60);
+        this.prepareVisitor();
+        this.certificates();
+        this._timers.push(setTimeout(() => this.probeNetwork(), 600));
+        this._timers.push(setTimeout(() => this.watchVisitor(), 60));
+    }
+
+    // One AbortController per in-flight request, so componentWillUnmount can
+    // cancel them and no handler runs against a torn-down instance. Every
+    // request also gets a deadline: a blackholed host must not leave the page
+    // waiting on a promise that will never settle.
+    deadline(ms) {
+        const ac = new AbortController();
+        const t = setTimeout(() => ac.abort(), ms);
+        this._acs.push(ac);
+        return {
+            signal: ac.signal,
+            done: () => {
+                clearTimeout(t);
+                const i = this._acs.indexOf(ac);
+                if (i > -1) this._acs.splice(i, 1);
+            }
+        };
+    }
+
+    baked() {
+        if (this._baked) return this._baked;
+        try {
+            const el = document.getElementById("mz-baked");
+            this._baked = el ? JSON.parse(el.textContent) : {};
+        } catch (e) {
+            this._baked = {};
+        }
+        return this._baked;
+    }
+
+    // ~/certs renders whatever scripts/build.mjs derived. Nothing here is typed
+    // by hand, so a certificate whose expiry date has passed marks itself.
+    certificates() {
+        const certs = (this.baked().certs || []).filter((c) => c && c.file);
+        if (!certs.length) {
+            this.setState({certLines: [], certsOk: false, certTotal: "", certOk: "", certFill: "", certEmpty: "░░░░░░░░░░", certGauge: "no certificate data"});
+            return;
+        }
+        const today = new Date().toISOString().slice(0, 10);
+        const lines = certs.map((c) => {
+            const dead = c.expires && c.expires < today;
+            return {
+                issued: c.issued,
+                name: c.file + ".cert" + (dead ? ".expired" : ""),
+                note: dead ? "# expired " + c.expires : "",
+                cls: dead ? "cert-old" : "cert-ok"
+            };
+        });
+        const expired = lines.filter((l) => l.note).length;
+        // The ~/whoami gauge reads off the same array, so it cannot disagree
+        // with the listing below it, and it re-fills itself as dates pass.
+        const valid = lines.length - expired;
+        const fill = Math.max(0, Math.min(10, Math.round((valid / lines.length) * 10)));
+        this.setState({
+            certLines: lines,
+            certsOk: true,
+            certTotal: "total " + lines.length,
+            // nothing is verified at page load — scripts/build.mjs baked this list
+            // from credly, plus the two Microsoft Learn entries credly does not carry
+            certOk: "Baked " + lines.length + " certificates from credly and microsoft learn, " + expired + " expired",
+            certFill: "█".repeat(fill),
+            certEmpty: "░".repeat(10 - fill),
+            certGauge: valid + " of " + lines.length + " still valid"
+        });
+    }
+
+    // Leaflet is 44.9 KB and the page's whole budget is 150 KB, so warming it for
+    // everyone puts the first view over the ceiling for the majority who never
+    // open the map. Warm it only once ~/visitor is about to come into view: by
+    // then the visitor is at least reading the panel the button lives in, and the
+    // bytes are there if they press it.
+    watchVisitor() {
+        const el = document.getElementById("visitor");
+        if (!el || !window.IntersectionObserver) return;
+        const io = new IntersectionObserver((entries) => {
+            if (!entries.some((e) => e.isIntersecting)) return;
+            io.disconnect();
+            this._vio = null;
+            this.prefetchLeaflet();
+        }, {rootMargin: "300px 0px", threshold: 0});
+        io.observe(el);
+        this._vio = io;
+    }
+
+    // Leaflet is a first-party file, so warming it changes nothing about the
+    // privacy model — ipapi.co and tile.openstreetmap.org are still only reached
+    // after the visitor presses the button in ~/visitor. rel=prefetch stores the
+    // bytes without parsing or executing them, so this costs bandwidth and no
+    // main-thread time.
+    prefetchLeaflet() {
+        if (this._leafletLoading || this._prefetched) return;
+        /** @type {{saveData?: boolean, effectiveType?: string}} */
+        const c = navigator.connection || {};
+        if (c.saveData || /2g$/.test(c.effectiveType || "")) return;
+        this._prefetched = true;
+        const warm = () => {
+            this._idle = null;
+            [["assets/vendor/leaflet.js", "script"], ["assets/leaflet.css", "style"]].forEach(([href, as]) => {
+                const l = document.createElement("link");
+                l.rel = "prefetch";
+                l.as = as;
+                l.href = href;
+                document.head.appendChild(l);
+                this._injected.push(l);
+            });
+        };
+        if (window.requestIdleCallback) this._idle = window.requestIdleCallback(warm, {timeout: 1500});
+        else this._timers.push(setTimeout(warm, 0));
+    }
+
+    probeNetwork() {
+        const url = window.location.href.split("#")[0];
+        const samples = [];
+        const one = () => {
+            const d = this.deadline(4000);
+            return fetch(url + (url.indexOf("?") > -1 ? "&" : "?") + "p=" + Math.random(), {method: "HEAD", cache: "no-store", signal: d.signal})
+                .then((r) => {
+                    d.done();
+                    return r.ok ? r : null;
+                })
+                .catch(() => {
+                    d.done();
+                    return null;
+                });
+        };
+        const runs = [];
+        for (let i = 0; i < 5; i++) {
+            runs.push(() => {
+                const t0 = performance.now();
+                return one().then((r) => {
+                    if (r) samples.push(performance.now() - t0);
+                });
+            });
+        }
+        runs.reduce((p, fn) => p.then(fn), Promise.resolve()).then(() => {
+            if (this._dead) return;
+            if (!samples.length) {
+                this.setState({rttLine: "ping: blocked by the browser from this context", rttShort: "rtt n/a"});
+                return;
+            }
+            samples.sort((a, b) => a - b);
+            const r = (x) => Math.round(x);
+            const avg = r(samples.reduce((a, b) => a + b, 0) / samples.length);
+            this.setState({
+                rttLine: "5 packets transmitted, " + samples.length + " received — rtt min/avg/max = " +
+                    r(samples[0]) + "/" + avg + "/" + r(samples[samples.length - 1]) + " ms",
+                rttShort: "rtt " + avg + "ms"
+            });
+        });
+
+        // /cdn-cgi/trace only exists in front of Cloudflare. Asking for it from a
+        // local server or from the github.io mirror is a guaranteed 404 in the
+        // console, which is the first thing an engineer opening devtools sees.
+        if (!/(^|\.)mozolewski\.eu$/.test(location.hostname) && !/\.pages\.dev$/.test(location.hostname)) return;
+
+        // the colo lands in its own key: the ping chain above is five sequential
+        // HEADs and always writes rttShort last, so composing the two strings here
+        // would lose whichever arrived first. renderVals() joins them instead.
+        const trace = this.deadline(4000);
+        fetch("/cdn-cgi/trace", {cache: "no-store", signal: trace.signal})
+            .then((r) => {
+                trace.done();
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                return r.text();
+            })
+            .then((t) => {
+                const colo = (t.match(/colo=(\w+)/) || [])[1];
+                if (colo && !this._dead) this.setState({colo: colo});
+            })
+            .catch(() => {
+                trace.done();
+            });
+
+    }
+
+    probeServices() {
+        if (this._svc) return;
+        this._svc = true;
+        const svc = [
+            ["mozolewski.eu", "https://mozolewski.eu/"],
+            ["rysinder.mozolewski.eu", "https://rysinder.mozolewski.eu/"],
+            ["github.com/marcjanek", "https://github.com/marcjanek"]
+        ];
+        // allSettled and a per-host deadline: one host that never answers must not
+        // withhold the other two, and the guard has to come back off afterwards or
+        // the "run systemctl again in a moment" the empty result prints is a lie.
+        Promise.allSettled(svc.map(([name, u]) => {
+            const t0 = performance.now();
+            const d = this.deadline(4000);
+            // no-cors, so the response is opaque: this can see that the host
+            // answered, never which status it answered with
+            return fetch(u, {mode: "no-cors", cache: "no-store", signal: d.signal})
+                .then(() => {
+                    d.done();
+                    return {badge: "[  OK  ]", name: name, detail: "answered in " + Math.round(performance.now() - t0) + " ms"};
+                })
+                .catch(() => {
+                    d.done();
+                    return {badge: "[ FAIL ]", name: name, detail: "no answer in " + Math.round(performance.now() - t0) + " ms"};
+                });
+        })).then((results) => {
+            this._svc = false;
+            if (this._dead) return;
+            const lines = results.map((r, i) => r.status === "fulfilled"
+                ? r.value
+                : {badge: "[ FAIL ]", name: svc[i][0], detail: "no answer from this browser"});
+            this.setState({
+                svcLines: lines,
+                svcNote: "# checked from your browser just now, because you asked. cross-origin, so this sees only that the host answered, not its status code"
+            });
+            // setState is synchronous here, so svcText() already reads the answers:
+            // fill them into whichever shell rows are still showing "probing…"
+            const text = this.svcText();
+            this.setState((st) => ({
+                hist: st.hist.map((h) => (h.out === this.PROBING ? {cmd: h.cmd, out: text} : h))
+            }));
+        });
+    }
+
+    svcText() {
+        const lines = (this.state.svcLines || []).map((s) => s.badge + " " + s.name + " — " + s.detail);
+        if (!lines.length) return this.PROBING;
+        return lines.concat([this.state.svcNote]).join("\n");
+    }
+
+    clientLine() {
+        const s = window.screen || {};
+        const dark = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        return (navigator.language || "?") + " · " + (s.width || "?") + "×" + (s.height || "?") + " · " + dark;
+    }
+
+    tzPoint(tz) {
+        const T = {
+            "Europe/Warsaw": [52.23, 21.01], "Europe/London": [51.51, -0.13], "Europe/Berlin": [52.52, 13.40],
+            "Europe/Paris": [48.86, 2.35], "Europe/Madrid": [40.42, -3.70], "Europe/Rome": [41.90, 12.50],
+            "Europe/Amsterdam": [52.37, 4.90], "Europe/Brussels": [50.85, 4.35], "Europe/Zurich": [47.37, 8.54],
+            "Europe/Vienna": [48.21, 16.37], "Europe/Prague": [50.08, 14.44], "Europe/Stockholm": [59.33, 18.07],
+            "Europe/Oslo": [59.91, 10.75], "Europe/Copenhagen": [55.68, 12.57], "Europe/Helsinki": [60.17, 24.94],
+            "Europe/Dublin": [53.35, -6.26], "Europe/Lisbon": [38.72, -9.14], "Europe/Kyiv": [50.45, 30.52],
+            "Europe/Bucharest": [44.43, 26.10], "Europe/Budapest": [47.50, 19.04], "Europe/Athens": [37.98, 23.73],
+            "Europe/Istanbul": [41.01, 28.98], "Europe/Moscow": [55.75, 37.62],
+            "America/New_York": [40.71, -74.01], "America/Chicago": [41.88, -87.63], "America/Denver": [39.74, -104.99],
+            "America/Los_Angeles": [34.05, -118.24], "America/Toronto": [43.65, -79.38], "America/Vancouver": [49.28, -123.12],
+            "America/Sao_Paulo": [-23.55, -46.63], "America/Mexico_City": [19.43, -99.13],
+            "Asia/Tokyo": [35.68, 139.69], "Asia/Shanghai": [31.23, 121.47], "Asia/Singapore": [1.35, 103.82],
+            "Asia/Hong_Kong": [22.32, 114.17], "Asia/Kolkata": [19.08, 72.88], "Asia/Dubai": [25.20, 55.27],
+            "Asia/Seoul": [37.57, 126.98], "Asia/Jerusalem": [31.78, 35.22],
+            "Australia/Sydney": [-33.87, 151.21], "Australia/Melbourne": [-37.81, 144.96], "Pacific/Auckland": [-36.85, 174.76],
+            "Africa/Johannesburg": [-26.20, 28.05], "Africa/Lagos": [6.52, 3.38], "Africa/Cairo": [30.04, 31.24],
+            "Africa/Nairobi": [-1.29, 36.82]
+        };
+        return T[tz] || null;
+    }
+
+    prepareVisitor() {
+        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || "unknown";
+        this.setState({vTz: tz, vClient: this.clientLine(), hasGeo: null, vRan: false, vFailed: false});
+    }
+
+    runWhois() {
+        // vRan means "something left this browser" and never goes back off — the
+        // footer's tracking claim reads off it. vFailed is the separate "you may
+        // try again" flag, so a retry is possible without unsaying what happened.
+        if (this.state.vRan && !this.state.vFailed) return;
+        this.setState({
+            vRan: true, vFailed: false, vIp: "resolving…", vCity: "resolving…", vNet: "resolving…",
+            vNote: "# in flight — your IP is going to ipapi.co, or to ipwho.is if that does not answer, and the map tiles are coming from openstreetmap.org."
+        });
+        this.lookupVisitor();
+    }
+
+    lookupVisitor() {
+        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || "unknown";
+        const pt = this.tzPoint(tz);
+        this.setState({vTz: tz, vClient: this.clientLine(), hasGeo: !!pt});
+
+        /** @type {{intro?: boolean, visitorLookup?: boolean}} */
+        const props = this.props || {};
+        if (props.visitorLookup === false) {
+            // no map on this build: every tile carries the visitor's IP to
+            // openstreetmap.org, and the sentence below promises it did not.
+            this.setState({
+                vIp: "not requested", vCity: pt ? tz.split("/").pop().replace(/_/g, " ") + " (from timezone)" : "unknown", vNet: "—",
+                hasGeo: false,
+                vNote: "# the lookup is switched off on this build. the city below is read from your own timezone, on your device — no map is drawn, so nothing left your browser"
+            });
+            return;
+        }
+
+        // only now, past the guard: this draws tiles from openstreetmap.org
+        if (pt) this.initMap(pt[0], pt[1], "approx. from your timezone", 7);
+
+        /** @param {{ip?: string, city?: string, region?: string, country_code?: string, country?: string,
+         *           org?: string, connection?: {org?: string}, timezone?: string | {id?: string},
+         *           latitude?: number, longitude?: number}} d
+         *  @param {string} host the endpoint that actually answered — the note has
+         *         to name that one, not whichever was tried first */
+        const apply = (d, host) => {
+            if (this._dead) return;
+            const city = [d.city, d.region, d.country_code || d.country].filter(Boolean).join(", ");
+            this.setState({
+                vIp: d.ip || "unknown",
+                vCity: city || "unknown",
+                vNet: d.org || d.connection && d.connection.org || "unknown",
+                vTz: d.timezone && d.timezone.id || d.timezone || tz,
+                vNote: "# you ran this. your IP address went to " + host + ", which logs queries for a limited time; the map tiles came from openstreetmap.org. nothing was written to your device, and nothing reached me."
+            });
+            const la = d.latitude, lo = d.longitude;
+            if (typeof la === "number" && typeof lo === "number") {
+                this.setState({hasGeo: true});
+                this.initMap(la, lo, d.city || "you", 10);
+            }
+        };
+
+        const fail = () => {
+            if (this._dead) return;
+            this.setState({
+                vIp: "resolution refused",
+                vCity: pt ? tz.split("/").pop().replace(/_/g, " ") + " (from timezone)" : "unknown",
+                vNet: "unknown",
+                // a second attempt is allowed from here; vRan stays true because the
+                // request did leave the browser whether or not anything came back
+                vFailed: true,
+                vNote: "# the lookup did not answer, so the map falls back to your own timezone. nothing was written to your device either way."
+            });
+        };
+
+        // a blackholed host neither resolves nor rejects, so every attempt carries
+        // its own deadline; without one the panel sticks on "resolving…" forever
+        const tryEndpoint = ([url, host]) => {
+            const d = this.deadline(4000);
+            return fetch(url, {signal: d.signal}).then((r) => {
+                d.done();
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                return r.json();
+            }, (e) => {
+                d.done();
+                throw e;
+            }).then((body) => {
+                if (!body || body.error === true || body.error) throw new Error("bad payload");
+                return {d: body, host: host};
+            });
+        };
+
+        tryEndpoint(["https://ipapi.co/json/", "ipapi.co (Kloudend, Inc., USA)"])
+            .catch(() => tryEndpoint(["https://ipwho.is/", "ipwho.is"]))
+            .then((r) => apply(r.d, r.host), fail);
+    }
+
+    loadLeaflet() {
+        if (this._leafletLoading) return;
+        this._leafletLoading = true;
+        const css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.href = "assets/leaflet.css";
+        document.head.appendChild(css);
+        this._injected.push(css);
+        const js = document.createElement("script");
+        js.src = "assets/vendor/leaflet.js";
+        // without this the boot loop below polls for six seconds and then gives up
+        // in silence, leaving an empty box captioned as if it held a map
+        js.onerror = () => {
+            this._leafletFailed = true;
+            this._booting = false;
+            if (!this._dead) this.setState({hasGeo: false});
+        };
+        document.head.appendChild(js);
+        this._injected.push(js);
+    }
+
+    // The timezone guess and the real ipapi position both come through here, and
+    // Leaflet usually loads slower than the lookup, so the second call used to
+    // start a second boot loop and lose. The position lives on the instance and
+    // one loop reads it, so whichever arrived last is the one that gets drawn.
+    initMap(lat, lon, label, zoom) {
+        this._want = {lat: lat, lon: lon, label: label, zoom: zoom || 9};
+        this.loadLeaflet();
+        if (this._leaflet) {
+            this.placeMarker();
+            return;
+        }
+        if (this._booting) return;
+        this._booting = true;
+        let tries = 0;
+        const boot = () => {
+            if (this._leafletFailed || this._dead) {
+                this._booting = false;
+                return;
+            }
+            if (!this._map || !window.L) {
+                if (tries++ < 40) this._timers.push(setTimeout(boot, 150));
+                else this._booting = false;
+                return;
+            }
+            this._booting = false;
+            if (this._leaflet) {
+                this.placeMarker();
+                return;
+            }
+            const w = this._want;
+            const map = window.L.map(this._map, {zoomControl: false, attributionControl: true, scrollWheelZoom: false}).setView([w.lat, w.lon], w.zoom);
+            window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {attribution: "© OpenStreetMap contributors", maxZoom: 14}).addTo(map);
+            this._marker = window.L.circleMarker([w.lat, w.lon], {radius: 7, color: "#E0A33C", weight: 2, fillColor: "#E0A33C", fillOpacity: 0.35}).addTo(map).bindTooltip(w.label);
+            this._leaflet = map;
+            this._timers.push(setTimeout(() => map.invalidateSize(), 400));
+        };
+        boot();
+    }
+
+    placeMarker() {
+        const w = this._want;
+        if (!this._leaflet || !w) return;
+        this._leaflet.setView([w.lat, w.lon], w.zoom);
+        if (this._marker) {
+            this._marker.setLatLng([w.lat, w.lon]);
+            this._marker.bindTooltip(w.label);
+        }
+    }
+
+    setupTypers() {
+        const rows = Array.from(document.querySelectorAll("[data-prompt]"));
+        if (!rows.length) return;
+        if (this.reduced()) return;
+
+        // opacity:0 alone would leave every link, and the button that sends the
+        // visitor's IP to a third party, invisibly focusable and invisibly
+        // clickable. visibility:hidden takes them out of the tab order and out of
+        // hit testing while keeping the layout — and the transition still animates,
+        // because visibility flips discretely at the start of the reveal.
+        rows.forEach((row) => {
+            const cmd = row.querySelector("[data-cmd]");
+            const caret = row.querySelector("[data-caret]");
+            if (cmd) cmd.style.clipPath = "inset(0 100% 0 0)";
+            if (caret) caret.style.opacity = "0";
+            const sec = row.parentElement;
+            const kids = Array.from(sec.children);
+            kids.slice(kids.indexOf(row) + 1).forEach((el) => {
+                el.style.opacity = "0";
+                el.style.visibility = "hidden";
+                el.style.transition = "opacity .4s ease";
+            });
+            const ok = sec.querySelector("[data-ok]");
+            if (ok) {
+                ok.style.opacity = "0";
+                ok.style.visibility = "hidden";
+                ok.style.transition = "opacity .2s linear";
+            }
+        });
+
+        this._pending = new Set(rows);
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (!e.isIntersecting) return;
+                io.unobserve(e.target);
+                this.typeRow(e.target);
+            });
+        }, {rootMargin: "-8% 0px -22% 0px", threshold: 0});
+        rows.forEach((r) => io.observe(r));
+        this._io = io;
+
+        // a fast jump (End, PageDown, scrollbar drag) never intersects the band —
+        // sweep on scroll idle so no section can be skipped past and left invisible
+        this._sweep = () => {
+            clearTimeout(this._sweepT);
+            this._sweepT = setTimeout(() => {
+                Array.from(this._pending).forEach((row) => {
+                    const r = row.getBoundingClientRect();
+                    if (r.top > window.innerHeight * 0.9) return;
+                    io.unobserve(row);
+                    if (r.bottom < 0) this.revealNow(row); else this.typeRow(row);
+                });
+            }, 140);
+        };
+        window.addEventListener("scroll", this._sweep, {passive: true});
+
+        // tabbing into a section that has not been typed yet must show it at once,
+        // rather than moving focus onto something the reader cannot see
+        this._focusIn = (e) => {
+            if (!this._pending || !this._pending.size) return;
+            const t = e.target;
+            const sec = t && t.closest ? t.closest("section") : null;
+            if (!sec) return;
+            Array.from(this._pending).forEach((row) => {
+                if (row.parentElement !== sec) return;
+                if (this._io) this._io.unobserve(row);
+                this.revealNow(row);
+            });
+        };
+        document.addEventListener("focusin", this._focusIn);
+    }
+
+    // Once every row is typed there is nothing left for the observer, the scroll
+    // sweep or the focus listener to do.
+    settleIfDone() {
+        if (!this._pending || this._pending.size) return;
+        if (this._io) {
+            this._io.disconnect();
+            this._io = null;
+        }
+        if (this._sweep) {
+            window.removeEventListener("scroll", this._sweep);
+            this._sweep = null;
+        }
+        if (this._focusIn) {
+            document.removeEventListener("focusin", this._focusIn);
+            this._focusIn = null;
+        }
+    }
+
+    // Reveal is opacity + visibility together, always: they were hidden together.
+    show(el) {
+        el.style.opacity = "1";
+        el.style.visibility = "visible";
+    }
+
+    revealNow(row) {
+        if (this._pending) this._pending.delete(row);
+        this.settleIfDone();
+        const cmd = row.querySelector("[data-cmd]");
+        const caret = row.querySelector("[data-caret]");
+        const sec = row.parentElement;
+        const ok = sec.querySelector("[data-ok]");
+        if (ok) this.show(ok);
+        if (cmd) cmd.style.clipPath = "none";
+        if (caret) {
+            caret.style.opacity = "1";
+            caret.style.transform = "none";
+        }
+        const kids = Array.from(sec.children);
+        kids.slice(kids.indexOf(row) + 1).forEach((el) => {
+            this.show(el);
+        });
+    }
+
+    typeRow(row) {
+        if (this._pending) {
+            if (!this._pending.has(row)) return;
+            this._pending.delete(row);
+            this.settleIfDone();
+        }
+        const cmd = row.querySelector("[data-cmd]");
+        const caret = row.querySelector("[data-caret]");
+        const sec = row.parentElement;
+        const ok = sec.querySelector("[data-ok]");
+        if (ok) this.show(ok);
+        const reveal = () => {
+            const kids = Array.from(sec.children);
+            kids.slice(kids.indexOf(row) + 1).forEach((el, i) => {
+                this._timers.push(setTimeout(() => {
+                    this.show(el);
+                }, 140 + i * 80));
+            });
+        };
+        if (!cmd) {
+            reveal();
+            return;
+        }
+
+        const n = Math.max(4, (cmd.textContent || "").trim().length);
+        const w = cmd.getBoundingClientRect().width;
+        const pace = Math.min(32, Math.max(11, 700 / n));
+        let k = 0;
+        const step = () => {
+            k++;
+            const p = k / n;
+            cmd.style.clipPath = "inset(0 " + (100 - p * 100) + "% 0 0)";
+            if (caret) caret.style.transform = "translateX(" + (-(1 - p) * w) + "px)";
+            if (k < n) {
+                this._timers.push(setTimeout(step, pace + Math.random() * pace * 0.7));
+            } else {
+                cmd.style.clipPath = "none";
+                if (caret) caret.style.transform = "none";
+                reveal();
+            }
+        };
+        if (caret) caret.style.opacity = "1";
+        this._timers.push(setTimeout(step, 220));
+    }
+
+    // The page never unmounts in production, but dc-runtime swaps the logic
+    // instance on a hot reload, and a Leaflet map left behind throws
+    // "Map container is already initialized" over the whole page.
+    componentWillUnmount() {
+        this._dead = true;
+        clearInterval(this._t);
+        clearTimeout(this._boot);
+        clearTimeout(this._sweepT);
+        (this._timers || []).forEach(clearTimeout);
+        if (this._idle && window.cancelIdleCallback) window.cancelIdleCallback(this._idle);
+        this._idle = null;
+        if (this._io) this._io.disconnect();
+        if (this._vio) this._vio.disconnect();
+        this._io = null;
+        this._vio = null;
+        if (this._sweep) window.removeEventListener("scroll", this._sweep);
+        if (this._focusIn) document.removeEventListener("focusin", this._focusIn);
+        this._sweep = null;
+        this._focusIn = null;
+        (this._acs || []).forEach((ac) => ac.abort());
+        this._acs = [];
+        if (this._leaflet) {
+            try {
+                this._leaflet.remove();
+            } catch (e) {
+                console.error(e);
+            }
+            this._leaflet = null;
+            this._marker = null;
+        }
+        (this._injected || []).forEach((el) => el.remove());
+        this._injected = [];
+        this._leafletLoading = false;
+        this._leafletFailed = false;
+        this._prefetched = false;
+        this._booting = false;
+    }
+
+    // The shell input is the last focusable element in <main>, so swallowing every
+    // Tab left keyboard users with no way out of it: Tab only completes when there
+    // is a word to complete, Shift+Tab is never intercepted, and Escape leaves.
+    keyDown(e) {
+        if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+            e.preventDefault();
+            this.recall(e.key === "ArrowUp" ? -1 : 1);
+            return;
+        }
+        if (e.key === "Tab" && !e.shiftKey && this.state.line.trim()) {
+            e.preventDefault();
+            this.complete();
+            return;
+        }
+        if (e.key === "Escape") {
+            if (e.target && e.target.blur) e.target.blur();
+            return;
+        }
+        if (e.key !== "Enter") return;
+        const raw = this.state.line;
+        if (!raw.trim()) {
+            this.setState({line: "", histIdx: -1});
+            return;
+        }
+        const out = this.run(raw);
+        this.setState((s) => ({
+            line: "",
+            histIdx: -1,
+            cmds: s.cmds.concat([raw]).slice(-50),
+            hist: out === null ? [] : s.hist.concat([{cmd: raw, out: out}]).slice(-14)
+        }));
+    }
+
+    renderVals() {
+        return {
+            intro: this.props.intro ?? true,
+            clock: this.state.now,
+            session: this.state.session,
+            vIp: this.state.vIp,
+            vCity: this.state.vCity,
+            vNet: this.state.vNet,
+            vTz: this.state.vTz,
+            vClient: this.state.vClient,
+            vNote: this.state.vNote,
+            certLines: this.state.certLines,
+            certTotal: this.state.certTotal,
+            certOk: this.state.certOk,
+            certFill: this.state.certFill,
+            certEmpty: this.state.certEmpty,
+            certGauge: this.state.certGauge,
+            certsOk: this.state.certsOk,
+            rttLine: this.state.rttLine,
+            // the ping chain and the trace land in either order, so the two halves
+            // of the footer's rtt are joined here rather than overwriting each other
+            rttShort: this.state.rttShort + (this.state.colo ? " · " + this.state.colo : ""),
+            svcLines: this.state.svcLines,
+            svcNote: this.state.svcNote,
+            hasGeo: this.state.hasGeo === true,
+            vRan: this.state.vRan === true,
+            notRan: this.state.vRan !== true,
+            // the whois button stays mounted and carries aria-disabled: true only
+            // while a lookup stands. A lookup that failed may be run again, so this
+            // is the honest binding for that attribute — vRan alone would keep
+            // announcing "disabled" over a button that works.
+            whoisDisabled: this.state.vRan === true && this.state.vFailed !== true,
+            trackNote: this.state.vRan ? "1 lookup, on your command · utf-8" : "no trackers · no cookies · utf-8",
+            noGeo: this.state.hasGeo === false,
+            line: this.state.line,
+            hist: this.state.hist,
+            ...this.handlers
+        };
+    }
+}
 </script>
+
 
 </body>
 </html>

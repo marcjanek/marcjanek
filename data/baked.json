@@ -1,0 +1,98 @@
+{
+ "credly": {
+  "badges": [
+   {
+    "issued": "2024-09-22",
+    "expires": "2027-09-22",
+    "name": "Associate Cloud Engineer Certification"
+   },
+   {
+    "issued": "2020-07-17",
+    "expires": "2022-01-17",
+    "name": "Oracle Cloud Infrastructure Foundations 2020 Certified Associate"
+   },
+   {
+    "issued": "2025-06-30",
+    "expires": "2028-06-30",
+    "name": "GitHub Actions"
+   },
+   {
+    "issued": "2025-06-29",
+    "expires": "2028-06-29",
+    "name": "GitHub Advanced Security"
+   },
+   {
+    "issued": "2025-06-24",
+    "expires": "2029-06-24",
+    "name": "GitHub Administration"
+   },
+   {
+    "issued": "2025-06-21",
+    "expires": "2028-06-21",
+    "name": "GitHub Copilot"
+   },
+   {
+    "issued": "2025-06-19",
+    "expires": "2028-06-19",
+    "name": "GitHub Foundations"
+   },
+   {
+    "issued": "2024-12-29",
+    "expires": "2026-12-29",
+    "name": "HashiCorp Certified: Terraform Associate (003)"
+   }
+  ]
+ },
+ "certs": [
+  {
+   "issued": "2025-06-30",
+   "expires": "2028-06-30",
+   "file": "github-actions"
+  },
+  {
+   "issued": "2025-06-29",
+   "expires": "2028-06-29",
+   "file": "github-advanced-security"
+  },
+  {
+   "issued": "2025-06-24",
+   "expires": "2029-06-24",
+   "file": "github-administration"
+  },
+  {
+   "issued": "2025-06-21",
+   "expires": "2028-06-21",
+   "file": "github-copilot"
+  },
+  {
+   "issued": "2025-06-19",
+   "expires": "2028-06-19",
+   "file": "github-foundations"
+  },
+  {
+   "issued": "2024-12-29",
+   "expires": "2026-12-29",
+   "file": "hashicorp-terraform-associate-003"
+  },
+  {
+   "issued": "2024-09-22",
+   "expires": "2027-09-22",
+   "file": "google-associate-cloud-engineer"
+  },
+  {
+   "issued": "2021",
+   "expires": "2022",
+   "file": "microsoft-az-204"
+  },
+  {
+   "issued": "2021",
+   "expires": null,
+   "file": "microsoft-az-900"
+  },
+  {
+   "issued": "2020-07-17",
+   "expires": "2022-01-17",
+   "file": "oracle-oci-foundations"
+  }
+ ]
+}
