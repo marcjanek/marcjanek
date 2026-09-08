@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <link as="font" crossorigin href="assets/fonts/jetbrains-mono-latin.woff2" rel="preload" type="font/woff2">
     <link href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='5'%20fill='%230C0C0C'/%3E%3Cpath%20d='M8%2011l5.5%205-5.5%205'%20stroke='%237FC8A9'%20stroke-width='3'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Crect%20x='16.5'%20y='19.5'%20width='9'%20height='3'%20rx='1.5'%20fill='%237FC8A9'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml">
-    <meta content="#151513" name="theme-color">
+    <meta content="#0C0C0C" name="theme-color">
     <script>window.__resources = {
         "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "assets/vendor/react.js",
         "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "assets/vendor/react-dom.js"
@@ -62,11 +62,11 @@
            until app.js has the stylesheet and the font, then everything starts from zero
            together. This has to stay inline in <head> — a stylesheet cannot fix a race
            it is the other half of. */
-        /* The canvas — what iOS Safari paints around the page, under the fixed footer
-           and above the nav while the toolbar animates. #0C0C0C left a dark band under
-           the status line for a moment on a phone; both bars are #151513, so the canvas
-           is too, and the body's own #0C0C0C covers everything between them. */
-        html { background: #151513 }
+        /* The canvas, and it must be the same colour as body. Giving html the bar
+           colour instead was tried, to fill the strip iOS Safari paints under the fixed
+           footer: it put a lighter band across the middle of the page wherever Safari
+           had not repainted the body box. One dark, everywhere. */
+        html { background: #0C0C0C }
         html.js #boot-cover { position: fixed; inset: 0; z-index: 80; background: #000 }
         /* the template is in the document and makes it tall, so without this the cover
            has a scrollbar beside it and the page can be scrolled while it is up */
