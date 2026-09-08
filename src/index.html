@@ -39,21 +39,46 @@
     </helmet>
 
     <sc-if hint-placeholder-val="{{ true }}" value="{{ intro }}">
-        <div aria-hidden="true" style="position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:clamp(20px,6vh,64px) clamp(14px,4vw,56px);overflow:hidden;font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .7s cubic-bezier(.7,0,.3,1) 3.1s forwards">
-            <div style="animation:fadeIn .01s linear .05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
-            <div style="animation:fadeIn .01s linear .3s both"><span style="color:#8A857D">[    0.184213]</span> Loading Linux kernel modules ... done</div>
-            <div style="animation:fadeIn .01s linear .55s both"><span style="color:#8A857D">[    0.612907]</span> systemd 255 running in system mode</div>
-            <div style="height:10px"></div>
-            <div style="animation:fadeIn .01s linear .8s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">network-online.target</span></div>
-            <div style="animation:fadeIn .01s linear 1.05s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">interconnect.service</span> — two clouds &lt;-&gt; on-premises, geo-redundant</div>
-            <div style="animation:fadeIn .01s linear 1.3s both">[<span style="color:#7FC8A9">  OK  </span>] Mounted <span style="color:#F3EFE9">/srv/providers</span> — google-cloud daily, seven more worked with</div>
-            <div style="animation:fadeIn .01s linear 1.55s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">egress-policy.service</span> — in-process, fail-closed</div>
-            <div style="animation:fadeIn .01s linear 1.8s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">provisioning-path.service</span> — one route, no side entrance</div>
-            <div style="animation:fadeIn .01s linear 2.05s both">[<span style="color:#E0A33C"> INFO </span>] terraform: hundreds of applications reconciled</div>
-            <div style="animation:fadeIn .01s linear 2.3s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">multi-user.target</span></div>
-            <div style="height:14px"></div>
-            <div style="position:absolute;left:clamp(14px,4vw,56px);bottom:clamp(20px,6vh,64px);color:#8A857D;animation:fadeIn .01s linear .8s both">press any key or tap to skip</div>
-            <div style="animation:fadeIn .01s linear 2.6s both">mozolewski.eu login: <span style="color:#F3EFE9">guest</span><span style="background:#D6D2CB;color:#000;animation:caret 1.05s steps(1) infinite">&nbsp;</span></div>
+        <div>
+        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#000;overflow:hidden;padding:clamp(20px,6vh,64px) clamp(14px,4vw,56px);font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
+            <div id="boot-log" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
+                <div style="animation:fadeIn .01s linear 0.05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
+                <div style="animation:fadeIn .01s linear 0.11s both"><span style="color:#8A857D">[    0.031418]</span> Command line: ro quiet net.ifnames=0</div>
+                <div style="animation:fadeIn .01s linear 0.17s both"><span style="color:#8A857D">[    0.184213]</span> Loading Linux kernel modules ... done</div>
+                <div style="animation:fadeIn .01s linear 0.23s both"><span style="color:#8A857D">[    0.256004]</span> Detected 8 cloud providers, 1 in daily use</div>
+                <div style="animation:fadeIn .01s linear 0.29s both"><span style="color:#8A857D">[    0.418772]</span> Mounting /home/marcin ... done</div>
+                <div style="animation:fadeIn .01s linear 0.35s both"><span style="color:#8A857D">[    0.612907]</span> systemd 255 running in system mode</div>
+                <div style="height:10px"></div>
+                <div style="animation:fadeIn .01s linear 0.41s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">network-online.target</span></div>
+                <div style="animation:fadeIn .01s linear 0.47s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">interconnect.service</span> — two clouds &lt;-&gt; on-premises, geo-redundant</div>
+                <div style="animation:fadeIn .01s linear 0.53s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">cloud-router.service</span> — spokes attach without one-off engineering</div>
+                <div style="animation:fadeIn .01s linear 0.59s both">[<span style="color:#7FC8A9">  OK  </span>] Mounted <span style="color:#F3EFE9">/srv/providers</span> — google-cloud daily, seven more worked with</div>
+                <div style="animation:fadeIn .01s linear 0.65s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">egress-policy.service</span> — in-process, fail-closed</div>
+                <div style="animation:fadeIn .01s linear 0.71s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">envoy.service</span> — rust-wasm filter loaded, two regions</div>
+                <div style="animation:fadeIn .01s linear 0.77s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">provisioning-path.service</span> — one route, no side entrance</div>
+                <div style="animation:fadeIn .01s linear 0.83s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">open-policy-agent.service</span> — policy as code</div>
+                <div style="animation:fadeIn .01s linear 0.89s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">flux.service</span> — reconciling from git</div>
+                <div style="animation:fadeIn .01s linear 0.95s both">[<span style="color:#E0A33C"> INFO </span>] terraform: hundreds of applications reconciled</div>
+                <div style="animation:fadeIn .01s linear 1.01s both">[<span style="color:#E0A33C"> INFO </span>] certs: baked from credly and microsoft learn</div>
+                <div style="animation:fadeIn .01s linear 1.07s both">[<span style="color:#7FC8A9">  OK  </span>] Started <span style="color:#F3EFE9">sailing.timer</span> — weekends, weather permitting</div>
+                <div style="animation:fadeIn .01s linear 1.13s both">[<span style="color:#E0A33C"> INFO </span>] telemetry: no cookies; page counts from cloudflare only</div>
+                <div style="animation:fadeIn .01s linear 1.19s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">multi-user.target</span></div>
+                <div style="height:14px"></div>
+                <div style="animation:fadeIn .01s linear 1.33s both">mozolewski.eu login: <span style="color:#F3EFE9">guest</span><span style="background:#D6D2CB;color:#000;animation:caret 1.05s steps(1) infinite">&nbsp;</span></div>
+            </div>
+        </div>
+
+        <!-- Sits behind the boot log at z-index 59, so the log's wipe uncovers a
+             wordmark already typing rather than cutting to it. It leaves by
+             dissolving; only the log wipes. -->
+        <div aria-hidden="true" style="position:fixed;inset:0;z-index:59;background:#000;display:grid;place-items:center;padding:0 clamp(14px,4vw,56px);animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
+            <div style="display:flex;align-items:center;font-size:clamp(28px,7vw,64px);line-height:1.1;white-space:nowrap;color:#7FC8A9;animation:wmOut .65s cubic-bezier(.33,0,.2,1) 2.97s forwards">
+                <span style="clip-path:inset(0 100% 0 0);animation:wmType .62s steps(13) 2s both">mozolewski.eu</span>
+                <span style="width:.58em;height:1.05em;margin-left:.14em;background:#7FC8A9;opacity:0;animation:wmCaretOn .01s linear 2s forwards, caret 1.05s steps(1) 2s infinite, wmCaretOff .01s linear 2.9s forwards"></span>
+            </div>
+        </div>
+
+        <div aria-hidden="true" style="position:fixed;left:clamp(14px,4vw,56px);bottom:clamp(20px,6vh,64px);z-index:66;color:#8A857D;font-size:clamp(11px,1.05vw,14px);animation:fadeIn .01s linear .6s both, stingOut .55s ease 2.9s forwards">press any key or tap to skip</div>
         </div>
     </sc-if>
 
@@ -89,10 +114,10 @@
             <div style="display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,48px);align-items:flex-start">
                 <div style="flex:none;display:flex;flex-direction:column;gap:8px;width:206px">
                     <div style="border:1px solid #2A2724;background:#111110;padding:6px">
-                        <img alt="Marcin Mozolewski" decoding="async" height="221" src="assets/img/marcin.webp" style="display:block;object-fit:cover;animation:decode 1.1s steps(14) both" width="192">
+                        <img alt="Marcin Mozolewski" data-decode="1" decoding="async" height="221" src="assets/img/marcin.webp" style="display:block;object-fit:cover;animation:decode 1.1s steps(14) both" width="192">
                     </div>
                     <div style="height:2px;background:#2A2724;overflow:hidden">
-                        <div style="height:100%;background:#7FC8A9;animation:bar 1.1s linear both"></div>
+                        <div data-decode="1" style="height:100%;background:#7FC8A9;animation:bar 1.1s linear both"></div>
                     </div>
                     <div style="color:#8A857D;font-size:11.5px">marcin.webp 100% 11KB</div>
                 </div>
@@ -166,7 +191,7 @@
             <div class="cgrid" style="display:grid;grid-template-columns:14px max-content minmax(0,1fr);column-gap:16px;row-gap:20px;align-items:start;font-size:13.5px">
                 <div style="display:contents">
                     <div style="position:relative;align-self:stretch;color:#E0A33C;line-height:1.7">*
-                        <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
+                        <div style="position:absolute;left:calc(.3em - .5px);top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
                     </div>
                     <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2023-05 — now</span><span class="d-short">05/23—now</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
@@ -176,7 +201,7 @@
                 </div>
                 <div style="display:contents">
                     <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*
-                        <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
+                        <div style="position:absolute;left:calc(.3em - .5px);top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
                     </div>
                     <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2021-07 — 2023-04</span><span class="d-short">07/21—04/23</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
@@ -186,7 +211,7 @@
                 </div>
                 <div style="display:contents">
                     <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*
-                        <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
+                        <div style="position:absolute;left:calc(.3em - .5px);top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
                     </div>
                     <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2019-08 — 2019-09</span><span class="d-short">08/19—09/19</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
@@ -260,7 +285,7 @@
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Read <span style="color:#F3EFE9">local environment</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">whois $REMOTE_ADDR</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
             <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> every site can do this without asking. this one asks.</div>
-            <div style="color:#8A857D;font-size:12px">{{ vNote }}</div>
+            <div data-note="1" style="color:#8A857D;font-size:12px">{{ vNote }}</div>
             <button aria-disabled="{{ whoisDisabled }}" sc-camel-on-click="{{ runWhois }}" style="align-self:flex-start;font:inherit;font-size:13px;color:#0C0C0C;background:#7FC8A9;border:0;padding:11px 18px;cursor:pointer;min-height:44px" style-focus-visible="outline:2px solid #F3EFE9;outline-offset:2px" style-hover="background:#E0A33C" type="button">run the lookup</button>
             <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
                 <div style="min-width:min(100%,320px);flex:1;font-size:13.5px;display:flex;flex-direction:column;gap:12px;align-content:start">

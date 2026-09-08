@@ -231,6 +231,31 @@ Cost: 2.4 KB gzipped of the 20.1 KB headroom. Re-verified in headless Chrome at 
 gauges measure identically, no link or button has a target under 24 px, the shell's status dot is a
 6.9 px CSS circle, and the build still exits 0.
 
+### Second pass — the boot sequence, and three things it exposed
+
+A further round, taken whole. The intro was rebuilt: twenty-one log lines at a 0.06 s cadence instead
+of thirteen at 0.25 s, the log wiping at 1.72 s, and a full-screen `mozolewski.eu` typing at 2 s from
+`z-index` 59 — behind the log, so the wipe uncovers a wordmark already running rather than cutting to
+one — before dissolving from 2.95 s. Every added log line restates something the page already claims:
+`cloud-router` and `envoy`/`rust-wasm`/two regions come from `~/work`'s sys-01 and sys-02, the eight
+providers from `~/whoami`, the `certs` line from the baked list, `sailing.timer` from Off-clock.
+
+Three defects the longer intro made visible, all fixed in the same pass:
+
+| Defect | Fix |
+|---|---|
+| A scroll behind the overlay swept sections past the reveal band, so the visitor landed mid-page with the typewriter already spent | `lockScroll()` freezes the page while the intro is up and releases on the skip, on a 3.9 s timer and on unmount — never engaging under `prefers-reduced-motion`, on a hashed URL, or with `intro:false` |
+| Twenty-one lines do not fit a short viewport | `bootScroll()` measures the overflow and steps the log up a line at a time: 2 steps at 1280×560, 4 at 390×640, none at 1280×900 |
+| The portrait's `decode` and the bar under it ran to completion behind the boot screen, so the photo simply appeared | `restartDecode()` replays them once when the row is uncovered |
+
+`~/visitor`'s note also reserves the tallest text it can hold, so the button above it stops jumping a
+line under the cursor that just pressed it; checked against all six note variants at four widths.
+
+Cost: 2.5 KB gzipped, which takes the first view to 134.7 KB and the headroom to 15.3 KB. Verified at
+320, 390, 768 and 1280 px: no horizontal scroll, nothing inside `main` overflowing, all nine sections
+reaching full length after a complete scroll, the console clean, and the scroll lock releasing on all
+three paths.
+
 ---
 
 ## 5. Open — needs a decision or work outside this repo
@@ -349,18 +374,18 @@ closed by eye in a headed browser: the caret is visible.
 
 ### Byte budget
 
-**132.2 KB gzipped on first view against a 150 KB ceiling — 17.8 KB of headroom**, measured from the
-eight resources requested before any scroll. The follow-up pass cost 2.4 KB of the headroom.
+**134.7 KB gzipped on first view against a 150 KB ceiling — 15.3 KB of headroom**, measured from the
+eight resources requested before any scroll. The two review passes cost 4.8 KB of the headroom.
 
 | Resource | raw | gz | |
 |---|---|---|---|
-| `index.html` | 93,703 | 22,889 | +1,455 |
+| `index.html` | 102,880 | 25,208 | +3,774 |
 | `react-dom.js` | 131,835 | 42,897 | |
 | `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) | |
 | `dc-runtime.js` | 69,150 | 19,017 | |
 | `marcin.webp` | 11,592 | 11,627 (raw counted) | |
 | `react.js` | 10,751 | 4,272 | |
-| `page.css` | 5,827 | 2,518 | +1,061 |
+| `page.css` | 6,534 | 2,762 | +1,305 |
 | `fonts.css` | 2,061 | 809 | −134 |
 
 Leaflet's 45,961 B is what moved: deferring it is what brings 168.8 KB back under the ceiling.

@@ -7,6 +7,16 @@ html { scroll-behavior: smooth; }
   @keyframes introOut { to { clip-path: inset(0 0 100% 0); opacity: 0; visibility: hidden } }
   @keyframes decode { from { clip-path: inset(0 0 100% 0) } to { clip-path: inset(0 0 0 0) } }
   @keyframes bar { from { width: 0 } to { width: 100% } }
+  /* The boot log scrolls only as far as it overflows; app.js measures that and
+     sets --boot-shift. Untouched, this animation moves nothing. */
+  @keyframes bootScroll { to { transform: translateY(var(--boot-shift, 0px)) } }
+  @keyframes wmType { to { clip-path: inset(0 0 0 0) } }
+  @keyframes wmCaretOn { to { opacity: 1 } }
+  @keyframes wmCaretOff { to { opacity: 0 } }
+  /* The wordmark hands over to the page by dissolving, not by the hard clip the
+     boot log uses — the log is a machine wiping its own output, this is not. */
+  @keyframes stingOut { to { opacity: 0; visibility: hidden } }
+  @keyframes wmOut { to { opacity: 0; transform: translateY(-10px) scale(1.03); filter: blur(4px) } }
   ::selection { background: #7FC8A9; color: #0C0C0C }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important }

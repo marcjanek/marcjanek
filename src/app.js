@@ -257,6 +257,18 @@ class Component extends DCLogic {
         this._t = setInterval(() => this.tick(), 1000);
         this._boot = setTimeout(() => this.setupTypers(), 60);
         this.armIntroSkip();
+        this.lockScroll();
+        this.bootScroll();
+        this.reserveNote();
+        this._noteResize = () => this.reserveNote();
+        window.addEventListener("resize", this._noteResize);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
+            if (!this._dead) {
+                this.bootScroll();
+                this._noteW = 0;
+                this.reserveNote();
+            }
+        }).catch(() => {});
         this.watchNav();
         this.prepareVisitor();
         this.certificates();
@@ -363,8 +375,36 @@ class Component extends DCLogic {
         return cells;
     }
 
-    // The boot screen runs 3.1s whether or not the visitor wants it. Any key,
-    // click or tap ends it, and the listeners come straight back off.
+    // The boot log and the wordmark stand in front of the page for about four
+    // seconds. A scroll behind them sweeps sections past the band that reveals
+    // them, so the visitor arrives mid-page having skipped what they came for —
+    // and never knows it. Freeze the page while the intro is up, and always let
+    // go: on skip, on a timer that outlives the animation, and on unmount.
+    // Not locked at all when the visitor asked for a section by URL, when the
+    // intro is off, or when they have asked the OS for less motion.
+    lockScroll() {
+        if (this.props.intro === false || this.reduced() || window.location.hash) return;
+        const el = document.documentElement;
+        this._scrollLocked = {html: el.style.overflow, body: document.body.style.overflow, touch: el.style.touchAction};
+        el.style.overflow = "hidden";
+        el.style.touchAction = "none";
+        document.body.style.overflow = "hidden";
+        this._timers.push(setTimeout(() => this.unlockScroll(), 3900));
+    }
+
+    unlockScroll() {
+        const prev = this._scrollLocked;
+        if (!prev) return;
+        this._scrollLocked = null;
+        document.documentElement.style.overflow = prev.html;
+        document.documentElement.style.touchAction = prev.touch;
+        document.body.style.overflow = prev.body;
+    }
+
+    // The boot screen runs about 3.9s whether or not the visitor wants it: the
+    // log wipes at 1.72s, the wordmark types at 2s and dissolves from 2.95s. Any
+    // key, click or tap ends the whole sequence, releases the scroll lock, and
+    // the listeners come straight back off.
     armIntroSkip() {
         if (this.props.intro === false) return;
         const names = ["pointerdown", "keydown", "touchstart"];
@@ -374,6 +414,7 @@ class Component extends DCLogic {
         };
         const skip = () => {
             off();
+            this.unlockScroll();
             if (!this._dead) this.setState({introSkipped: true});
         };
         names.forEach((n) => window.addEventListener(n, skip, {passive: true}));
@@ -842,6 +883,78 @@ class Component extends DCLogic {
     show(el) {
         el.style.opacity = "1";
         el.style.visibility = "visible";
+        this.restartDecode(el);
+    }
+
+    // The photo's decode and the transfer bar under it are CSS animations that
+    // start at page load — which is behind the boot screen and the wordmark, so
+    // both had finished before anyone could see them and the photo simply
+    // appeared. Restart them when their row is uncovered, once each.
+    restartDecode(el) {
+        if (!el || !el.querySelectorAll) return;
+        const nodes = el.matches && el.matches("[data-decode]") ? [el] : Array.from(el.querySelectorAll("[data-decode]"));
+        nodes.forEach((n) => {
+            if (n.dataset.decoded) return;
+            n.dataset.decoded = "1";
+            const orig = n.style.animation;
+            n.style.animation = "none";
+            void n.offsetWidth;
+            n.style.animation = orig;
+        });
+    }
+
+    // Twenty-one boot lines do not fit a short viewport, so the log scrolls the
+    // way a real one does: a line at a time, only as far as it overflows, and
+    // not at all when it fits. Measured rather than guessed, because the line
+    // height is a clamp() of the viewport and the font swaps in late.
+    // The note under ~/visitor is a different length before, during and after
+    // the lookup, so the button above it — the one the visitor just pressed —
+    // used to jump down a line under their cursor, and the map with it. Reserve
+    // the tallest of the notes at the real width, and again when that changes.
+    NOTE_TEXTS = [
+        "# nothing has been sent yet. this asks ipapi.co (Kloudend, Inc., USA) — or ipwho.is if it does not answer — where your IP is, and loads tiles from openstreetmap.org. all three would see it.",
+        "# you ran this. your IP address went to ipapi.co (Kloudend, Inc., USA), which logs queries for a limited time; the map tiles came from openstreetmap.org. nothing was written to your device, and the only thing that reaches me is a page count, from cloudflare."
+    ];
+
+    reserveNote() {
+        const el = document.querySelector("[data-note]");
+        if (!el) return;
+        const w = el.getBoundingClientRect().width;
+        if (!w || w === this._noteW) return;
+        this._noteW = w;
+        const cs = window.getComputedStyle(el);
+        const probe = document.createElement("div");
+        probe.setAttribute("aria-hidden", "true");
+        probe.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden;pointer-events:none";
+        probe.style.width = w + "px";
+        probe.style.font = cs.font;
+        probe.style.fontFamily = cs.fontFamily;
+        probe.style.fontSize = cs.fontSize;
+        probe.style.lineHeight = cs.lineHeight;
+        document.body.appendChild(probe);
+        let max = 0;
+        this.NOTE_TEXTS.forEach((t) => {
+            probe.textContent = t;
+            max = Math.max(max, probe.getBoundingClientRect().height);
+        });
+        probe.remove();
+        el.style.minHeight = Math.ceil(max) + "px";
+    }
+
+    bootScroll() {
+        if (this.props.intro === false) return;
+        const box = document.getElementById("boot");
+        const logEl = document.getElementById("boot-log");
+        if (!box || !logEl || !logEl.firstElementChild) return;
+        const style = window.getComputedStyle(box);
+        const room = box.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+        const over = logEl.scrollHeight - room;
+        if (over <= 0) return;
+        const lh = logEl.firstElementChild.getBoundingClientRect().height + 2;
+        const steps = Math.max(1, Math.ceil(over / lh));
+        const dur = steps * 0.06;
+        logEl.style.setProperty("--boot-shift", -(steps * lh) + "px");
+        logEl.style.animation = "bootScroll " + dur + "s steps(" + steps + ") " + Math.max(0.05, 1.33 - dur) + "s both";
     }
 
     revealNow(row) {
@@ -933,6 +1046,11 @@ class Component extends DCLogic {
             this._navSync = null;
             this._navEl = null;
         }
+        if (this._noteResize) {
+            window.removeEventListener("resize", this._noteResize);
+            this._noteResize = null;
+        }
+        this.unlockScroll();
         if (this._introOff) this._introOff();
         if (this._sweep) window.removeEventListener("scroll", this._sweep);
         if (this._focusIn) document.removeEventListener("focusin", this._focusIn);
