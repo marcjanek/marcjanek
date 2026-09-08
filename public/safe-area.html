@@ -65,11 +65,22 @@
     document.getElementById('out').textContent = lines.join('\n');
 
     var secs = parseFloat((location.search.match(/overlay=([\d.]+)/) || [])[1] || 0);
+    var edge = parseFloat((location.search.match(/edge=([\d.]+)/) || [])[1] || 0);
     if (secs > 0) {
         var sheet = document.createElement('div');
-        sheet.style.cssText = 'position:fixed;inset:0;z-index:99;background:#0C0C0C;color:#8A857D;' +
-            'display:grid;place-items:center;font:14px/1.6 ui-monospace,Menlo,monospace';
-        sheet.textContent = 'boot-screen stand-in — ' + secs + 's';
+        sheet.style.cssText = 'position:fixed;inset:0;z-index:99;color:#8A857D;' +
+            'display:grid;place-items:center;text-align:center;font:14px/1.6 ui-monospace,Menlo,monospace';
+        // edge=N paints an N-pixel strip of the bar colours along the top and bottom of
+        // the sheet, leaving the middle the page colour. If Safari's bands take those
+        // colours, it samples the pixels at the very edge and N is thick enough — which
+        // is the whole question, because a thin strip is invisible against a boot screen.
+        sheet.style.background = edge > 0
+            ? 'linear-gradient(#C0308A 0 ' + edge + 'px, #0C0C0C ' + edge + 'px calc(100% - ' +
+              edge + 'px), #2F7F8F calc(100% - ' + edge + 'px) 100%)'
+            : '#0C0C0C';
+        sheet.textContent = edge > 0
+            ? secs + 's sheet with a ' + edge + 'px strip at each end\ndo the Safari bands take the strip colours?'
+            : 'boot-screen stand-in — ' + secs + 's';
         document.body.appendChild(sheet);
         setTimeout(function () { sheet.remove(); }, secs * 1000);
     }
