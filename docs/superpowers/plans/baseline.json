@@ -1,0 +1,94 @@
+[
+  {
+    "width": 320,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "overflow": [],
+    "clipped": [],
+    "small": [],
+    "sizes": {
+      "body": "14px",
+      "h2": "21px",
+      "prompt": "14px",
+      "workTitle": "14px",
+      "workCopy": "14px",
+      "neofetchName": "13.5px",
+      "careerGrid": "13.5px",
+      "okLine": "12.5px",
+      "bar": "12px"
+    },
+    "headings": {
+      "total": 9,
+      "visible": 0
+    }
+  },
+  {
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "overflow": [],
+    "clipped": [],
+    "small": [],
+    "sizes": {
+      "body": "14px",
+      "h2": "21px",
+      "prompt": "14px",
+      "workTitle": "14px",
+      "workCopy": "14px",
+      "neofetchName": "13.5px",
+      "careerGrid": "13.5px",
+      "okLine": "12.5px",
+      "bar": "12px"
+    },
+    "headings": {
+      "total": 9,
+      "visible": 0
+    }
+  },
+  {
+    "width": 768,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "overflow": [],
+    "clipped": [],
+    "small": [],
+    "sizes": {
+      "body": "14px",
+      "h2": "21px",
+      "prompt": "14px",
+      "workTitle": "14px",
+      "workCopy": "14px",
+      "neofetchName": "13.5px",
+      "careerGrid": "13.5px",
+      "okLine": "12.5px",
+      "bar": "12px"
+    },
+    "headings": {
+      "total": 9,
+      "visible": 0
+    }
+  },
+  {
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "overflow": [],
+    "clipped": [],
+    "small": [],
+    "sizes": {
+      "body": "14px",
+      "h2": "21px",
+      "prompt": "14px",
+      "workTitle": "14px",
+      "workCopy": "14px",
+      "neofetchName": "13.5px",
+      "careerGrid": "13.5px",
+      "okLine": "12.5px",
+      "bar": "12px"
+    },
+    "headings": {
+      "total": 9,
+      "visible": 0
+    }
+  }
+]
