@@ -373,8 +373,10 @@ dependency), or replace the box characters with CSS borders. **Untested on Windo
 gap worth closing first.
 
 **4. Content questions only Marcin can answer.**
-- `rysinder.mozolewski.eu` is probed by `systemctl` and printed verbatim, and nothing on the page says
-  what it is. It reads as a leak rather than a feature.
+- ~~`rysinder.mozolewski.eu` is probed by `systemctl` and printed verbatim, and nothing on the page
+  says what it is. It reads as a leak rather than a feature.~~ **RESOLVED 2026-09-08** — the host was
+  removed from `probeServices()` and from `connect-src`, rather than explained. `systemctl` now probes
+  two hosts, this site and `github.com`.
 - "commercial since 2021 · five years self-taught before that" sits on the same page as a 2019
   commercial internship at eService. His wording, and not verifiable from the repo — but a reader
   scrolling from `~/whoami` to `~/career` sees paid work before 2021.

@@ -574,14 +574,16 @@ class Component extends DCLogic {
     probeServices() {
         if (this._svc) return;
         this._svc = true;
+        // Every host here is also named in ~/privacy and allowed by connect-src in
+        // public/_headers. Add one and all three change together, or the notice is
+        // wrong. A third was dropped 2026-09-08 — see CLAUDE.md.
         const svc = [
             ["mozolewski.eu", "https://mozolewski.eu/"],
-            ["rysinder.mozolewski.eu", "https://rysinder.mozolewski.eu/"],
             ["github.com/marcjanek", "https://github.com/marcjanek"]
         ];
         // allSettled and a per-host deadline: one host that never answers must not
-        // withhold the other two, and the guard has to come back off afterwards or
-        // the "run systemctl again in a moment" the empty result prints is a lie.
+        // withhold the other, and the guard has to come back off afterwards or the
+        // "run systemctl again in a moment" the empty result prints is a lie.
         Promise.allSettled(svc.map(([name, u]) => {
             const t0 = performance.now();
             const d = this.deadline(4000);
