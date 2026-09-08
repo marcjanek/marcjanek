@@ -146,6 +146,30 @@ html { scroll-behavior: smooth; }
      Padding, not a bigger font, so the neofetch grid keeps its rhythm. */
   a.tap { display: inline-block; padding-block: 3px }
 
+  /* A wrapped prompt used to start its second line one character in. The 1ch
+     that separates `$` from the command is a margin-left on the command, so when
+     the row wraps between them — `~/work$ head sys-0*.md` is 42 characters and
+     339px of room holds 38 — the indent goes with it and the line hangs. Moving
+     the same 1ch to the right edge of `$` puts it at the end of the line above,
+     where it costs nothing, and the command starts at column 0 the way a
+     terminal would. `$` is third from the end in all nine prompts: `$`, the
+     command, the caret. */
+  @media (max-width: 720px) {
+    [data-prompt] > [data-cmd] { margin-left: 0 !important }
+    [data-prompt] > span:nth-last-child(3) { margin-right: 1ch }
+  }
+
+  /* ~/work is the only long-form prose on the page and the narrowest place to
+     read it: 15px monospace in 339px is 38 characters a line, half the measure
+     the type wants, and at line-height 1.7 that made each body a 16-line, 408px
+     block. 1.55 is the leading a 38-character measure asks for, and the 18px
+     indent gives back 8px — a character — without letting the rule go.
+     The `#` heading keeps its own 1.45; it is an inline style and wins. */
+  @media (max-width: 720px) {
+    .case { padding-left: 10px !important }
+    .case > div { line-height: 1.55 }
+  }
+
   /* ~/whoami's neofetch row wraps below ~734px — 206px of portrait and the data
      block's 420px minimum stop fitting side by side. Stacked, the portrait is
      235px tall on a 320px screen: measured, `marcin@mozolewski` began at y=1030
