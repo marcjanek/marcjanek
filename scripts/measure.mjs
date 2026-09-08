@@ -217,6 +217,35 @@ async function measure(cdp, width) {
     return out;
 }
 
+// Times the gap a reader actually feels: from a section entering the viewport
+// to its last child being fully shown. 1280px, because the complaint was made
+// on a desktop and #work is the densest section.
+async function revealTiming(cdp) {
+    await cdp.send("Emulation.setDeviceMetricsOverride", {
+        width: 1280, height: 900, deviceScaleFactor: 1, mobile: false,
+    });
+    await cdp.send("Page.navigate", {url: ORIGIN + "/?r=1"});
+    await sleep(300);
+    if (!await waitForBoot(cdp)) throw new Error("boot-go never arrived");
+    await cdp.send("Input.dispatchKeyEvent", {type: "keyDown", key: "Escape"});
+    await cdp.send("Input.dispatchKeyEvent", {type: "keyUp", key: "Escape"});
+    await sleep(300);
+    return await cdp.eval(`(async () => {
+        const sec = document.getElementById("work");
+        const last = sec.lastElementChild;
+        const t0 = performance.now();
+        sec.scrollIntoView({behavior: "instant", block: "start"});
+        for (let i = 0; i < 400; i++) {
+            const cs = getComputedStyle(last);
+            if (cs.opacity === "1" && cs.visibility === "visible") {
+                return Math.round(performance.now() - t0);
+            }
+            await new Promise((r) => setTimeout(r, 25));
+        }
+        return -1;
+    })()`);
+}
+
 const outFlag = process.argv.indexOf("--out");
 const outFile = outFlag > -1 ? process.argv[outFlag + 1] : null;
 
@@ -226,28 +255,35 @@ try {
     cdp = await connect();
     await cdp.send("Page.enable");
     await cdp.send("Runtime.enable");
-    const results = [];
-    for (const w of WIDTHS) results.push(await measure(cdp, w));
-    const json = JSON.stringify(results, null, 2);
-    if (outFile) writeFileSync(outFile, json + "\n");
-    else console.log(json);
-    const bad = results.filter((r) => r.scrollWidth !== r.clientWidth
-        || r.overflow.length || r.clipped.length || r.small.length
-        || Object.values(r.sizes).some((v) => v === null));
-    if (bad.length) {
-        console.error("FAIL at widths: " + bad.map((r) => r.width).join(", "));
-        // A null probe passes the four checks above silently — name it, or a
-        // later task goes hunting at the wrong width for the wrong reason.
-        for (const r of bad) {
-            const nullProbes = Object.keys(r.sizes).filter((k) => r.sizes[k] === null);
-            if (nullProbes.length) {
-                console.error("FAIL: probe(s) returned null at " + r.width
-                    + ": " + nullProbes.join(", "));
-            }
-        }
-        process.exitCode = 1;
+    if (process.argv.includes("--reveal")) {
+        const ms = await revealTiming(cdp);
+        console.log(JSON.stringify({revealMs: ms}));
+        if (ms < 0) { console.error("FAIL: never fully revealed"); process.exitCode = 1; }
+        else console.error("reveal " + ms + "ms");
     } else {
-        console.error("OK at " + WIDTHS.join(", "));
+        const results = [];
+        for (const w of WIDTHS) results.push(await measure(cdp, w));
+        const json = JSON.stringify(results, null, 2);
+        if (outFile) writeFileSync(outFile, json + "\n");
+        else console.log(json);
+        const bad = results.filter((r) => r.scrollWidth !== r.clientWidth
+            || r.overflow.length || r.clipped.length || r.small.length
+            || Object.values(r.sizes).some((v) => v === null));
+        if (bad.length) {
+            console.error("FAIL at widths: " + bad.map((r) => r.width).join(", "));
+            // A null probe passes the four checks above silently — name it, or a
+            // later task goes hunting at the wrong width for the wrong reason.
+            for (const r of bad) {
+                const nullProbes = Object.keys(r.sizes).filter((k) => r.sizes[k] === null);
+                if (nullProbes.length) {
+                    console.error("FAIL: probe(s) returned null at " + r.width
+                        + ": " + nullProbes.join(", "));
+                }
+            }
+            process.exitCode = 1;
+        } else {
+            console.error("OK at " + WIDTHS.join(", "));
+        }
     }
 } finally {
     chrome.kill();
