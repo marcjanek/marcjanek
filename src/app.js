@@ -295,6 +295,10 @@ class Component extends DCLogic {
         this.certificates();
         this._timers.push(setTimeout(() => this.probeNetwork(), 600));
         this._timers.push(setTimeout(() => this.watchVisitor(), 60));
+        // if the boot sequence never gets as far as its own timers, the page must
+        // still end up readable — this is the same 8s backstop <head> uses for the
+        // cover, and it is a no-op on every normal load
+        this._timers.push(setTimeout(() => this.armReveal(), 8000));
     }
 
     // One AbortController per in-flight request, so componentWillUnmount can
@@ -439,6 +443,7 @@ class Component extends DCLogic {
             // enough — a skip pressed while the gate is still shut has to lift it
             this._booted = true;
             document.documentElement.classList.add("boot-go");
+            this.armReveal();
             if (!this._dead) this.setState({introSkipped: true});
         };
         names.forEach((n) => window.addEventListener(n, skip, {passive: true}));
@@ -842,6 +847,17 @@ class Component extends DCLogic {
         });
 
         this._pending = new Set(rows);
+        // The boot screen covers the page for ~3.9s and ~/whoami is inside the
+        // reveal band from the first frame, so observing now spends the typewriter
+        // where nobody can see it: neofetch finishes typing under the intro and the
+        // visitor is handed a page that is already written. Hold the observer until
+        // the intro is gone. The rows are hidden either way, so nothing flashes and
+        // nothing is lost — the only difference is who watches it happen.
+        if (this.props.intro === false || this.state.introSkipped) this.observeRows(rows);
+        else this._armReveal = () => this.observeRows(rows);
+    }
+
+    observeRows(rows) {
         const io = new IntersectionObserver((entries) => {
             entries.forEach((e) => {
                 if (!e.isIntersecting) return;
@@ -881,6 +897,16 @@ class Component extends DCLogic {
             });
         };
         document.addEventListener("focusin", this._focusIn);
+    }
+
+    // The intro is over — the skip took it away, the timer that outlives the
+    // sequence fired, or the backstop did. Whichever arrives first wins; the rest
+    // are no-ops. If the reveal was never held back this does nothing at all.
+    armReveal() {
+        const arm = this._armReveal;
+        if (!arm) return;
+        this._armReveal = null;
+        arm();
     }
 
     // Once every row is typed there is nothing left for the observer, the scroll
@@ -994,6 +1020,7 @@ class Component extends DCLogic {
             this._timers.push(setTimeout(() => this.unlockScroll(), 3900));
             this._timers.push(setTimeout(() => {
                 if (this._introOff) this._introOff();
+                this.armReveal();
             }, 3900));
         };
         this._bootGo = go;

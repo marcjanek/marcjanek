@@ -525,3 +525,15 @@ instead of five minutes. The trap that creates — a stylesheet frozen for a yea
 change — is closed too: the build enumerates every `.css` under `assets/` and exits 1 if one of them
 was not stamped. Both paths verified: editing `page.css` moves its stamp, and an unstamped stylesheet
 stops the build with the file named.
+
+The same defect the portrait had turned out to apply to the reveal itself, and it was the first thing
+a visitor saw. `setupTypers()` armed the IntersectionObserver 60 ms after mount, and `~/whoami` is
+inside the reveal band from the first frame — so the neofetch block typed itself out under the boot
+screen. Measured on production: at 900 ms the command is already 87.5% typed and by 2000 ms the whole
+section is revealed, all of it behind an intro that runs to ~3.9 s. The visitor was handed a finished
+page. The observer is held back now and started by whichever comes first — the skip, the timer that
+outlives the sequence, or an 8 s backstop that does not depend on the boot sequence running at all.
+The rows were already hidden before the intro, so holding it costs nothing and shows nothing; the only
+difference is who watches it happen. After: still fully clipped at 3500 ms, typed just after the intro
+lifts, and unchanged on the two paths that have no intro to wait for — a skip reveals it at once, and
+`prefers-reduced-motion` still shows everything from the first frame.
