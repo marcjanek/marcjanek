@@ -98,9 +98,11 @@ const CERT_FILE = {
   'Associate Cloud Engineer Certification': 'google-associate-cloud-engineer',
   'Oracle Cloud Infrastructure Foundations 2020 Certified Associate': 'oracle-oci-foundations',
 }
+// `name` is here for README.md only. The page lists file names, so it is
+// stripped back out below rather than inlined into index.html for every visitor.
 const MICROSOFT_LEARN = [
-  { issued: '2021', expires: '2022', file: 'microsoft-az-204' },
-  { issued: '2021', expires: null, file: 'microsoft-az-900' },
+  { issued: '2021', expires: '2022', file: 'microsoft-az-204', name: 'Microsoft Certified: Azure Developer Associate (AZ-204)' },
+  { issued: '2021', expires: null, file: 'microsoft-az-900', name: 'Microsoft Certified: Azure Fundamentals (AZ-900)' },
 ]
 const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 /** "2021" and "2021-06-30" both occur. Pad so the order is a date comparison
@@ -122,15 +124,17 @@ for (const name of Object.keys(CERT_FILE)) {
   if (!names.has(name)) log(`WARNING: CERT_FILE key ${JSON.stringify(name)} matches no badge — renamed or removed on credly; that cert's file name is now derived from the badge name`)
 }
 
-baked.certs = [
+const certs = [
   ...badges.map((b) => ({
     issued: b.issued,
     expires: b.expires ?? null,
     file: CERT_FILE[b.name] ?? slug(b.name),
+    name: b.name,
   })),
   ...MICROSOFT_LEARN,
 ].sort((a, b) => issuedKey(b.issued).localeCompare(issuedKey(a.issued)) || a.file.localeCompare(b.file))
-log(`certs: ${baked.certs.length} (${baked.certs.length - MICROSOFT_LEARN.length} from credly)`)
+baked.certs = certs.map(({ issued, expires, file }) => ({ issued, expires, file }))
+log(`certs: ${certs.length} (${certs.length - MICROSOFT_LEARN.length} from credly)`)
 
 // Only a successful fetch may rewrite the cache. Writing after a failed fetch
 // would overwrite the last good data with a copy of itself at best, and with a
@@ -182,3 +186,45 @@ await rename(STAGE, p('output'))
 await writeFile(p('index.html'), html)
 
 log(`index.html ${(html.length / 1024).toFixed(1)} KB · output/ mirrored`)
+
+// ── README.md's certification block ────────────────────────────────────────
+// README.md renders at github.com/marcjanek because the repo name matches the
+// username, and it showed an expired OCI badge with no qualifier for four
+// years because it was written by hand. It is derived from the array above
+// now, by the same expiry rule the page uses, so the two cannot disagree and a
+// date that passes marks itself. Cloudflare's build does not commit, so what
+// is public changes when this runs here and the result is committed.
+const [OPEN, CLOSE] = ['<!--BUILD:certs-->', '<!--/BUILD:certs-->']
+const today = new Date().toISOString().slice(0, 10)
+const lapsed = (c) => Boolean(c.expires) && c.expires < today
+// Badge names are credly's to change, and a `|` in one would silently split a
+// table cell — markdown offers no other escape for it inside a table.
+const cell = (s) => String(s).replace(/\|/g, '\\|')
+const current = certs.filter((c) => !lapsed(c)).length
+const block = [
+  `**${certs.length} certifications, ${current} current.**`,
+  '',
+  '| Certification | Issued | Status |',
+  '|---|---|---|',
+  ...certs.map((c) => `| ${cell(c.name)} | ${c.issued} | ${lapsed(c) ? `expired ${c.expires}` : ''} |`),
+  '',
+  `Verify at [credly.com/users/${CREDLY}](https://www.credly.com/users/${CREDLY}) — everything except the two Microsoft entries, which are held on Microsoft Learn.`,
+].join('\n')
+
+const readme = await readFile(p('README.md'), 'utf8')
+const from = readme.indexOf(OPEN)
+const to = readme.indexOf(CLOSE)
+if (from < 0 || to < from) {
+  throw new Error(
+    `README.md is missing ${from < 0 ? OPEN : CLOSE}. Refusing to leave the profile's ` +
+    'certification list frozen at whatever it happens to say — hand-editing it is what ' +
+    'put a lapsed credential on the profile in the first place.',
+  )
+}
+const readmeNext = readme.slice(0, from + OPEN.length) + '\n' + block + '\n' + readme.slice(to)
+if (readmeNext === readme) {
+  log('README.md: certification block already current')
+} else {
+  await writeFile(p('README.md'), readmeNext)
+  log(`README.md: certification block written (${certs.length} certificates, ${certs.length - current} expired)`)
+}

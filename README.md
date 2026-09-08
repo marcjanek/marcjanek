@@ -1,44 +1,56 @@
 # Marcin Mozolewski
 
-**Cloud engineer** · [Procter & Gamble](https://us.pg.com/) · Poland
+**Senior Cloud Platform Engineer** · [Procter & Gamble](https://us.pg.com/) · Warsaw, Poland
 
-I build and run cloud infrastructure as code — three years of it commercially, and five before that teaching myself the tooling. Most of my work lives in Terraform, across more providers than any one job needs.
+I build the layer other engineers build on: cloud network architecture, egress security, and the provisioning path that new projects are created through. Commercially since 2021, five years self-taught before that.
 
-[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) · [mozolewski.eu](https://mozolewski.eu) · [LinkedIn](https://pl.linkedin.com/in/marcin-mozolewski) · [Stack Overflow](https://stackoverflow.com/users/13347227/marcin-mozolewski) · [Credly](https://www.credly.com/users/marcin-mozolewski)
+[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) · [mozolewski.eu](https://mozolewski.eu) · [LinkedIn](https://www.linkedin.com/in/marcin-mozolewski) · [Stack Overflow](https://stackoverflow.com/users/13347227/marcin-mozolewski) · [Credly](https://www.credly.com/users/marcin-mozolewski)
 
 ---
 
+### Selected work
+
+**A network foundation shared by two clouds and a data center.** Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering — in production, with disaster recovery in a second region, designed against a four-nines target.
+`cloud-interconnect` `cloud-router` `vpc` `terraform`
+
+**Egress policy that runs inside the request, not beside it.** Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path; it runs across two regions, and other teams adopt it through a Terraform provider I wrote.
+`envoy` `rust-wasm` `go` `postgresql` `kubernetes` `flux`
+
+**One path for every new project.** New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it; hundreds of applications have been provisioned on one uniform model.
+`terraform` `terraform-cloud` `google-cloud` `open-policy-agent`
+
+Career, expertise and the rest are on [mozolewski.eu](https://mozolewski.eu).
+
 ### Stack
 
-Scrolling [mozolewski.eu](https://mozolewski.eu) descends through it. Flattened here:
+- **Workload** · Kubernetes, Docker, Envoy
+- **Platform** · Terraform, Terraform Cloud, Open Policy Agent, Flux
+- **Providers** · Google Cloud daily; Azure, AWS, OCI, IBM Cloud, Alibaba Cloud, DigitalOcean and Cloudflare worked with
+- **Languages** · Python, Rust, Go, HCL, SQL
 
-**Workload** · Kubernetes, Docker  
-*runs on ↓*  
-**Platform** · Terraform, Ansible  
-*runs on ↓*  
-**Providers** · GCP, Azure, AWS, OCI
-
-Four providers in daily use; Alibaba Cloud, IBM Cloud, DigitalOcean and Cloudflare when a project asks for them. Linux and Git at every layer.
+Linux and Git at every layer.
 
 ### Certifications
 
-<a href="https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url"><img src="https://images.credly.com/size/110x110/images/0dc62494-dc94-469a-83af-e35309f27356/blob" width="56" height="56" alt="Terraform Associate (003)" title="Terraform Associate (003) — HashiCorp"></a>&nbsp;&nbsp;<a href="https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url"><img src="https://images.credly.com/size/110x110/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png" width="56" height="56" alt="Associate Cloud Engineer" title="Associate Cloud Engineer — Google Cloud"></a>&nbsp;&nbsp;<a href="https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url"><img src="https://images.credly.com/size/110x110/images/697cf123-74b0-4356-9055-9973471d26d6/03_Oracle_Cloud_Infrastructure_Foundations_Associate.png" width="56" height="56" alt="OCI Foundations 2020 Associate" title="OCI Foundations 2020 Associate — Oracle"></a>
+<!--BUILD:certs-->
+**10 certifications, 8 current.**
 
-[Terraform Associate (003)](https://www.credly.com/badges/e89e0ac3-0bb3-4f80-99e9-9fe88308acda/public_url) · [Associate Cloud Engineer](https://www.credly.com/badges/cf2de373-d196-4842-bd3c-f13a715463f1/public_url) · [OCI Foundations 2020 Associate](https://www.credly.com/badges/119c9762-a05a-4191-9022-308f61123370/public_url)
+| Certification | Issued | Status |
+|---|---|---|
+| GitHub Actions | 2025-06-30 |  |
+| GitHub Advanced Security | 2025-06-29 |  |
+| GitHub Administration | 2025-06-24 |  |
+| GitHub Copilot | 2025-06-21 |  |
+| GitHub Foundations | 2025-06-19 |  |
+| HashiCorp Certified: Terraform Associate (003) | 2024-12-29 |  |
+| Associate Cloud Engineer Certification | 2024-09-22 |  |
+| Microsoft Certified: Azure Developer Associate (AZ-204) | 2021 | expired 2022 |
+| Microsoft Certified: Azure Fundamentals (AZ-900) | 2021 |  |
+| Oracle Cloud Infrastructure Foundations 2020 Certified Associate | 2020-07-17 | expired 2022-01-17 |
+
+Verify at [credly.com/users/marcin-mozolewski](https://www.credly.com/users/marcin-mozolewski) — everything except the two Microsoft entries, which are held on Microsoft Learn.
+<!--/BUILD:certs-->
 
 ### Off the clock
 
 Open source, OSINT, and — away from screens — sailing, iceboating and brain teasers.
-
-### Now playing
-
-<a href="https://open.spotify.com/user/1176862723"><img src="https://spotify-github-profile.kittinanx.com/api/view?uid=1176862723&cover_image=true&theme=default&show_offline=true&background_color=121212&interchange=true&bar_color=b8442a&bar_color_cover=true" alt="What I'm listening to on Spotify" width="360"></a>
-
----
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://stackoverflow.com/users/flair/13347227.png?theme=dark">
-  <img src="https://stackoverflow.com/users/flair/13347227.png?theme=clean" width="208" height="58" alt="Marcin Mozolewski on Stack Overflow">
-</picture>
-
-<img src="https://komarev.com/ghpvc/?username=marcjanek&label=VIEWS&color=666f78&style=flat&abbreviated=true" alt="Profile view count">
