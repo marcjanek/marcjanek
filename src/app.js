@@ -258,13 +258,12 @@ class Component extends DCLogic {
         this._boot = setTimeout(() => this.setupTypers(), 60);
         this.armIntroSkip();
         this.lockScroll();
-        this.bootScroll();
+        this.startBoot();
         this.reserveNote();
         this._noteResize = () => this.reserveNote();
         window.addEventListener("resize", this._noteResize);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => {
             if (!this._dead) {
-                this.bootScroll();
                 this._noteW = 0;
                 this.reserveNote();
             }
@@ -389,7 +388,6 @@ class Component extends DCLogic {
         el.style.overflow = "hidden";
         el.style.touchAction = "none";
         document.body.style.overflow = "hidden";
-        this._timers.push(setTimeout(() => this.unlockScroll(), 3900));
     }
 
     unlockScroll() {
@@ -415,13 +413,14 @@ class Component extends DCLogic {
         const skip = () => {
             off();
             this.unlockScroll();
+            // the cover lives outside the component, so removing the intro is not
+            // enough — a skip pressed while the gate is still shut has to lift it
+            this._booted = true;
+            document.documentElement.classList.add("boot-go");
             if (!this._dead) this.setState({introSkipped: true});
         };
         names.forEach((n) => window.addEventListener(n, skip, {passive: true}));
         this._introOff = off;
-        this._timers.push(setTimeout(() => {
-            if (this._introOff) this._introOff();
-        }, 3900));
     }
 
     // Leaflet is 44.9 KB and the page's whole budget is 150 KB, so warming it for
@@ -941,6 +940,55 @@ class Component extends DCLogic {
         el.style.minHeight = Math.ceil(max) + "px";
     }
 
+    // Nothing of the intro moves until the stylesheet holding its @keyframes and the
+    // font it is set in are both in — see the inline <style> in index.html for why the
+    // browser can paint the log before either arrives. One class on <html> releases it,
+    // so the whole sequence starts from zero together.
+    //
+    // It is also the only honest moment to measure the log. bootScroll() used to run at
+    // mount, where on a real connection the box is not laid out yet: it read a
+    // clientHeight of 0, concluded the log fit, and returned — so in production the log
+    // never scrolled and a short screen lost its last lines. It worked only when
+    // something else had already forced layout, which is why it looked fine locally.
+    //
+    // Both waits are bounded by a timer: a font that never arrives must not leave a
+    // visitor on a black screen.
+    startBoot() {
+        if (this.props.intro === false) {
+            document.documentElement.classList.add("boot-go");
+            return;
+        }
+        const go = () => {
+            if (this._booted || this._dead) return;
+            this._booted = true;
+            this.bootScroll();
+            document.documentElement.classList.add("boot-go");
+            // the sequence runs ~3.9s from here, not from mount, so both timers that
+            // outlive it have to be started here too
+            this._timers.push(setTimeout(() => this.unlockScroll(), 3900));
+            this._timers.push(setTimeout(() => {
+                if (this._introOff) this._introOff();
+            }, 3900));
+        };
+        this._bootGo = go;
+        // page.css is what carries .sr { width: 1px } — and the @keyframes with it
+        const cssIn = () => {
+            const el = document.querySelector(".sr");
+            return !!el && window.getComputedStyle(el).width === "1px";
+        };
+        const fontIn = document.fonts && document.fonts.load
+            ? document.fonts.load('1em "JetBrains Mono"').catch(() => {})
+            : Promise.resolve();
+        let tries = 0;
+        const when = () => {
+            if (this._booted || this._dead) return;
+            if (cssIn()) requestAnimationFrame(go);
+            else if (tries++ < 90) requestAnimationFrame(when);
+        };
+        fontIn.then(() => when());
+        this._timers.push(setTimeout(go, 1500));
+    }
+
     bootScroll() {
         if (this.props.intro === false) return;
         const box = document.getElementById("boot");
@@ -1046,6 +1094,7 @@ class Component extends DCLogic {
             this._navSync = null;
             this._navEl = null;
         }
+        document.documentElement.classList.add("boot-go");
         if (this._noteResize) {
             window.removeEventListener("resize", this._noteResize);
             this._noteResize = null;

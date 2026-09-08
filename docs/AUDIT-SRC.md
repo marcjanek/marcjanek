@@ -251,10 +251,28 @@ Three defects the longer intro made visible, all fixed in the same pass:
 `~/visitor`'s note also reserves the tallest text it can hold, so the button above it stops jumping a
 line under the cursor that just pressed it; checked against all six note variants at four widths.
 
-Cost: 2.5 KB gzipped, which takes the first view to 134.7 KB and the headroom to 15.3 KB. Verified at
-320, 390, 768 and 1280 px: no horizontal scroll, nothing inside `main` overflowing, all nine sections
-reaching full length after a complete scroll, the console clean, and the scroll lock releasing on all
-three paths.
+Verified at 320, 390, 768 and 1280 px: no horizontal scroll, nothing inside `main` overflowing, all
+nine sections reaching full length after a complete scroll, the console clean, and the scroll lock
+releasing on all three paths.
+
+**One thing the longer intro made obvious, and one it hid.** `assets/page.css` is a `<link>` inside
+`<x-dc>`, so the browser paints the boot log before the `@keyframes` that stagger it arrive — the
+twenty-one lines appear at once, and the sequence then restarts underneath the visitor. Glaring on a
+slow connection, a flicker on a fast one. An inline `<style>` in `<head>` now holds an opaque cover
+over the intro and pauses every one of its animations until `startBoot()` confirms `page.css` applied
+and the font loaded, then releases all of it with one class so the sequence starts from zero together.
+Both waits are bounded by timers, and the gate is scoped to `html.js`, so a browser without JavaScript
+is never left on a black page.
+
+The thing it hid: `bootScroll()` ran at mount, where on a real connection the boot box is not laid out
+yet. It read a `clientHeight` of 0, concluded the log fit, and returned — so the log never scrolled in
+production and a short screen lost its last lines. It could not be seen locally, where layout finishes
+before mount, and a probe that read the DOM early forced the layout that made it look fine. Measuring
+at the gate is what fixes it. Measured on a throttled connection: black at 756 ms, the gate opening at
+2.3 s, then the lines staggering in one at a time.
+
+Cost: 3.9 KB gzipped for the boot work, which takes the first view to 136.1 KB and the headroom to
+13.9 KB.
 
 ---
 
@@ -374,12 +392,12 @@ closed by eye in a headed browser: the caret is visible.
 
 ### Byte budget
 
-**134.7 KB gzipped on first view against a 150 KB ceiling — 15.3 KB of headroom**, measured from the
-eight resources requested before any scroll. The two review passes cost 4.8 KB of the headroom.
+**136.1 KB gzipped on first view against a 150 KB ceiling — 13.9 KB of headroom**, measured from the
+eight resources requested before any scroll. The review passes cost 6.2 KB of the headroom.
 
 | Resource | raw | gz | |
 |---|---|---|---|
-| `index.html` | 102,880 | 25,208 | +3,774 |
+| `index.html` | 107,223 | 26,659 | +5,225 |
 | `react-dom.js` | 131,835 | 42,897 | |
 | `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) | |
 | `dc-runtime.js` | 69,150 | 19,017 | |

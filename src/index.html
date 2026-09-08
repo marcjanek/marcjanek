@@ -30,8 +30,36 @@
     <meta content="summary" name="twitter:card">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Marcin Mozolewski","url":"https://mozolewski.eu/","image":"https://mozolewski.eu/assets/img/marcin.jpg","jobTitle":"Senior Cloud Platform Engineer","worksFor":{"@type":"Organization","name":"Procter & Gamble"},"address":{"@type":"PostalAddress","addressLocality":"Warsaw","addressCountry":"PL"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Warsaw University of Technology"},"sameAs":["https://github.com/marcjanek","https://www.linkedin.com/in/marcin-mozolewski","https://stackoverflow.com/users/13347227/marcin-mozolewski","https://www.credly.com/users/marcin-mozolewski"]}</script>
     <script defer src="assets/vendor/dc-runtime.js"></script>
+    <script>
+        // Marks the document as scripted before anything paints: the gate below hides
+        // things only for a browser that can also un-hide them. The timer covers the
+        // case where this runs but the component never mounts — a cover only React can
+        // lift would otherwise be a permanently black page.
+        document.documentElement.classList.add("js");
+        setTimeout(function () { document.documentElement.classList.add("boot-go") }, 8000);
+    </script>
+    <style>
+        /* The boot markup is in the document, but assets/page.css is a <link> inside
+           <x-dc>, so the browser paints the log before the @keyframes it needs arrive.
+           Without them the twenty-one lines are not staggered — they are all visible at
+           once, and the sequence then restarts underneath the visitor. Glaring on a slow
+           connection, a flicker on a fast one. So: an opaque cover and a paused intro
+           until app.js has the stylesheet and the font, then everything starts from zero
+           together. This has to stay inline in <head> — a stylesheet cannot fix a race
+           it is the other half of. */
+        html { background: #0C0C0C }
+        html.js #boot-cover { position: fixed; inset: 0; z-index: 80; background: #000 }
+        /* the template is in the document and makes it tall, so without this the cover
+           has a scrollbar beside it and the page can be scrolled while it is up */
+        html.js:not(.boot-go) { overflow: hidden }
+        html.js:not(.boot-go) #boot, html.js:not(.boot-go) #boot *,
+        html.js:not(.boot-go) #sting, html.js:not(.boot-go) #sting *,
+        html.js:not(.boot-go) #skipnote { animation-play-state: paused !important }
+        html.boot-go #boot-cover { display: none }
+    </style>
 </head>
 <body>
+<div aria-hidden="true" id="boot-cover"></div>
 <x-dc>
     <helmet>
         <link href="assets/fonts.css" rel="stylesheet">
@@ -71,14 +99,14 @@
         <!-- Sits behind the boot log at z-index 59, so the log's wipe uncovers a
              wordmark already typing rather than cutting to it. It leaves by
              dissolving; only the log wipes. -->
-        <div aria-hidden="true" style="position:fixed;inset:0;z-index:59;background:#000;display:grid;place-items:center;padding:0 clamp(14px,4vw,56px);animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
+        <div aria-hidden="true" id="sting" style="position:fixed;inset:0;z-index:59;background:#000;display:grid;place-items:center;padding:0 clamp(14px,4vw,56px);animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
             <div style="display:flex;align-items:center;font-size:clamp(28px,7vw,64px);line-height:1.1;white-space:nowrap;color:#7FC8A9;animation:wmOut .65s cubic-bezier(.33,0,.2,1) 2.97s forwards">
                 <span style="clip-path:inset(0 100% 0 0);animation:wmType .62s steps(13) 2s both">mozolewski.eu</span>
                 <span style="width:.58em;height:1.05em;margin-left:.14em;background:#7FC8A9;opacity:0;animation:wmCaretOn .01s linear 2s forwards, caret 1.05s steps(1) 2s infinite, wmCaretOff .01s linear 2.9s forwards"></span>
             </div>
         </div>
 
-        <div aria-hidden="true" style="position:fixed;left:clamp(14px,4vw,56px);bottom:clamp(20px,6vh,64px);z-index:66;color:#8A857D;font-size:clamp(11px,1.05vw,14px);animation:fadeIn .01s linear .6s both, stingOut .55s ease 2.9s forwards">press any key or tap to skip</div>
+        <div aria-hidden="true" id="skipnote" style="position:fixed;left:clamp(14px,4vw,56px);bottom:clamp(20px,6vh,64px);z-index:66;color:#8A857D;font-size:clamp(11px,1.05vw,14px);animation:fadeIn .01s linear .6s both, stingOut .55s ease 2.9s forwards">press any key or tap to skip</div>
         </div>
     </sc-if>
 
