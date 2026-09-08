@@ -108,7 +108,8 @@
 
     <sc-if hint-placeholder-val="{{ true }}" value="{{ intro }}">
         <div>
-        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#151513;overflow:hidden;padding:calc(clamp(20px,6vh,64px) + env(safe-area-inset-top, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) calc(clamp(20px,6vh,64px) + 2.4em + env(safe-area-inset-bottom, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
+        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#151513;overflow:hidden;padding:calc(clamp(20px,6vh,64px) + env(safe-area-inset-top, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) calc(clamp(20px,6vh,64px) + 3.2em + env(safe-area-inset-bottom, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
+            <div id="boot-clip" style="max-height:100%;overflow:hidden">
             <div id="boot-log" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
                 <div style="animation:fadeIn .01s linear 0.05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
                 <div style="animation:fadeIn .01s linear 0.11s both"><span style="color:#8A857D">[    0.031418]</span> Command line: ro quiet net.ifnames=0</div>
@@ -133,6 +134,7 @@
                 <div style="animation:fadeIn .01s linear 1.19s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">multi-user.target</span></div>
                 <div style="height:14px"></div>
                 <div style="animation:fadeIn .01s linear 1.33s both">mozolewski.eu login: <span style="color:#F3EFE9">guest</span><span style="background:#D6D2CB;color:#000;animation:caret 1.05s steps(1) infinite">&nbsp;</span></div>
+            </div>
             </div>
         </div>
 
