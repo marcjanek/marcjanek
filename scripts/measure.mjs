@@ -254,7 +254,14 @@ async function revealTiming(cdp) {
 // every [data-prompt] row — the same selector setupTypers() uses — so a
 // section with no reveal mechanism (#shell has no data-prompt row) is
 // correctly skipped rather than hardcoded into a section-id list.
-async function revealScrollTiming(cdp) {
+//
+// speedPxPerSec is a parameter, not three copies of this function: the poll
+// cadence stays fixed at 40ms (matching a real scroll-driven JS listener's
+// typical granularity) and the distance covered per tick scales with speed,
+// so 150px/s and 1200px/s run the same code and only differ in how far each
+// tick moves and how many ticks the full page takes.
+async function revealScrollTiming(cdp, speedPxPerSec) {
+    const speed = speedPxPerSec || 3000;
     await cdp.send("Emulation.setDeviceMetricsOverride", {
         width: 1280, height: 900, deviceScaleFactor: 1, mobile: false,
     });
@@ -302,12 +309,14 @@ async function revealScrollTiming(cdp) {
         await new Promise((r) => setTimeout(r, 50));
         checkAll();
         const maxScroll = document.documentElement.scrollHeight - innerHeight;
+        const tickMs = 40;
+        const pxPerTick = Math.max(1, (${speed}) * tickMs / 1000);
+        const maxTicks = Math.ceil(maxScroll / pxPerTick) + 20;
         let y = 0;
-        // ~120px every ~40ms — a fast but human trackpad scroll, not a jump.
-        for (let i = 0; i < 500 && sections.some((s) => !s.arrived) && y < maxScroll; i++) {
-            y = Math.min(y + 120, maxScroll);
+        for (let i = 0; i < maxTicks && sections.some((s) => !s.arrived) && y < maxScroll; i++) {
+            y = Math.min(y + pxPerTick, maxScroll);
             window.scrollTo(0, y);
-            await new Promise((r) => setTimeout(r, 40));
+            await new Promise((r) => setTimeout(r, tickMs));
             checkAll();
         }
         // A section whose heading never crosses the line (page shorter than
@@ -333,11 +342,13 @@ try {
         if (ms < 0) { console.error("FAIL: never fully revealed"); process.exitCode = 1; }
         else console.error("reveal " + ms + "ms");
     } else if (process.argv.includes("--reveal-scroll")) {
-        const rows = await revealScrollTiming(cdp);
+        const speedFlag = process.argv.indexOf("--speed");
+        const speed = speedFlag > -1 ? Number(process.argv[speedFlag + 1]) : 3000;
+        const rows = await revealScrollTiming(cdp, speed);
         console.log(JSON.stringify(rows, null, 2));
         const ready = rows.reduce((a, r) => a + r.ready, 0);
         const total = rows.reduce((a, r) => a + r.total, 0);
-        console.error("ready on arrival: " + ready + "/" + total + " ("
+        console.error("speed " + speed + "px/s — ready on arrival: " + ready + "/" + total + " ("
             + (total ? Math.round(100 * ready / total) : 100) + "%) across "
             + rows.length + " sections");
     } else {
