@@ -11,12 +11,15 @@ class Component extends DCLogic {
 
     // COMMANDS is both what `help` lists and what Tab completes. ALIASES are
     // answered by run() and completable too, but stay out of help so the listing
-    // reads as a menu rather than a changelog. Everything run() answers to sits
-    // in one of the two lists, so the shell and its own documentation cannot drift.
+    // reads as a menu rather than a changelog. EGGS are in neither — a Tab that
+    // gives one away is not an easter egg. Everything run() answers to sits in
+    // one of the three lists, so the shell and its documentation cannot drift.
     SECTIONS = ["whoami", "work", "career", "stack", "certs", "visitor", "contact", "shell"];
     COMMANDS = ["cat", "cd", "clear", "date", "echo", "help", "ls", "mail", "neofetch", "ping", "pwd", "systemctl", "uptime", "whoami", "whois", "xdg-open"];
     ALIASES = ["goto", "contact", "ip", "open", "curl", "sudo", "rm", "exit", "logout"];
+    EGGS = ["2137"];
     PROBING = "probing…";
+    EGGWAIT = "loading…";
 
     // The argument data lives on the instance so run() and complete() read the
     // same tables. Null prototypes on purpose: `cat constructor` and
@@ -64,6 +67,12 @@ class Component extends DCLogic {
         onKey: (e) => this.keyDown(e)
     };
 
+    // One shape for every ~/shell history row: the template picks its branch from
+    // these flags, so a row built anywhere else renders as neither of them.
+    row(cmd, out, art) {
+        return {cmd: cmd, out: out, art: !!art, plain: !art};
+    }
+
     // ~/shell is a fixed-height window now (see [data-term] in page.css), so
     // anything printed has to bring the newest prompt back into view the way a
     // real terminal does — `help` is twenty lines and used to leave it below the
@@ -81,6 +90,50 @@ class Component extends DCLogic {
         if (!this._stick) return;
         this._stick = false;
         if (this._shell) this._shell.scrollTop = this._shell.scrollHeight;
+    }
+
+    // The picture is fetched, not inlined: this file ships inside index.html for
+    // every visitor, and 5 KB there is a third of what is left under the 150 KB
+    // first-view budget. As a same-origin asset it costs a page view nothing,
+    // connect-src is already 'self', and nothing is requested until the command
+    // is typed. The answer lands the way systemctl's does, rewriting the row.
+    loadEgg() {
+        // Cached runs answer synchronously, and must: run() is called from keyDown
+        // *before* the row it answers is appended, so an async fill finds nothing
+        // to replace and leaves that row on EGGWAIT for good. Measured failing.
+        if (this._egg) return this._egg;
+        if (!this._eggBusy) {
+            this._eggBusy = true;
+            const d = this.deadline(8000);
+            fetch("/assets/2137.txt", {signal: d.signal})
+                .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+                .then((t) => {
+                    this._egg = t.replace(/\s+$/, "");
+                    this.fillEgg(this._egg);
+                })
+                .catch(() => this.fillEgg("2137: cannot read the file"))
+                .then(() => {
+                    this._eggBusy = false;
+                    d.done();
+                });
+        }
+        return this.EGGWAIT;
+    }
+
+    // Every row still waiting, however many were entered during the one request.
+    fillEgg(text) {
+        if (this._dead) return;
+        this.setState((st) => ({
+            hist: st.hist.map((h) => (h.out === this.EGGWAIT ? this.row(h.cmd, text, this.isArt(text)) : h))
+        }));
+        this.scrollShell();
+    }
+
+    // run() answers with a string, but the picture needs the pre block rather than
+    // the pre-wrap one. It is one cached string, so identity settles it — this
+    // never has to sniff at the content of output the visitor could have typed.
+    isArt(out) {
+        return !!this._egg && out === this._egg;
     }
 
     reduced() {
@@ -211,6 +264,8 @@ class Component extends DCLogic {
             return "To: contact@mozolewski.eu";
         }
         if (c === "clear") return null;
+        // in EGGS, so neither `help` nor Tab gives it away. See loadEgg()
+        if (this.EGGS.indexOf(c) > -1) return this.loadEgg();
         if (c === "sudo") {
             if (/hire\s+marcin/i.test(cmd)) return "[sudo] password for recruiter: ********\nAccess granted. contact@mozolewski.eu";
             return "guest is not in the sudoers file. This incident will be reported.";
@@ -255,7 +310,7 @@ class Component extends DCLogic {
         this.setState((st) => {
             const prev = st.hist[st.hist.length - 1];
             if (prev && prev.cmd === line && prev.out === out) return {};
-            return {hist: st.hist.concat([{cmd: line, out: out}]).slice(-14)};
+            return {hist: st.hist.concat([this.row(line, out)]).slice(-14)};
         });
     }
 
@@ -619,7 +674,7 @@ class Component extends DCLogic {
             // fill them into whichever shell rows are still showing "probing…"
             const text = this.svcText();
             this.setState((st) => ({
-                hist: st.hist.map((h) => (h.out === this.PROBING ? {cmd: h.cmd, out: text} : h))
+                hist: st.hist.map((h) => (h.out === this.PROBING ? this.row(h.cmd, text) : h))
             }));
             this.scrollShell();
         });
@@ -1215,7 +1270,7 @@ class Component extends DCLogic {
             line: "",
             histIdx: -1,
             cmds: s.cmds.concat([raw]).slice(-50),
-            hist: out === null ? [] : s.hist.concat([{cmd: raw, out: out}]).slice(-14)
+            hist: out === null ? [] : s.hist.concat([this.row(raw, out, this.isArt(out))]).slice(-14)
         }));
         this.scrollShell();
     }

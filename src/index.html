@@ -440,7 +440,14 @@
                     <sc-for as="h" hint-placeholder-count="2" list="{{ hist }}">
                         <div style="display:flex;flex-direction:column;gap:2px">
                             <div style="display:flex;gap:0;flex-wrap:wrap"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span style="margin-left:1ch">{{ h.cmd }}</span></div>
-                            <div style="white-space:pre-wrap;color:#C5C0B8">{{ h.out }}</div>
+                            <sc-if hint-placeholder-val="{{ true }}" value="{{ h.plain }}"><div style="white-space:pre-wrap;color:#C5C0B8">{{ h.out }}</div></sc-if>
+                            <!-- The 2137 picture: pre, never pre-wrap, since a wrapped line is a
+                                 ruined raster. 120x58 characters sized from the window, because the
+                                 box pins to its bottom and anything taller lands with the face
+                                 scrolled off. The clamp repeats [data-term]'s and must keep matching
+                                 it; 64px is the prompt above plus the input row; 0.62 is the 0.6em
+                                 cell rounded up, so rounding cannot start a horizontal scrollbar. -->
+                            <sc-if hint-placeholder-val="{{ false }}" value="{{ h.art }}"><div style="container-type:inline-size"><div style="white-space:pre;line-height:1;color:#C5C0B8;font-size:min(calc((clamp(260px,44vh,380px) - 64px)/58),calc(100cqw/74.4))">{{ h.out }}</div></div></sc-if>
                         </div>
                     </sc-for>
                 </div>
