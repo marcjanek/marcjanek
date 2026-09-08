@@ -10,8 +10,14 @@ import {writeFileSync} from "node:fs";
 
 const CHROME = process.env.CHROME
     || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const PORT = 9333;
-const ORIGIN = "http://127.0.0.1:8731";
+// Both ports are overridable, and that is not a nicety. This repo is worked on
+// from git worktrees, and a second worktree's server binding 8731 first does not
+// announce itself: the `nohup python3 -m http.server 8731` in the other checkout
+// simply fails to bind, curl still answers 200, and every number measured after
+// that describes somebody else's branch. Set MZ_ORIGIN and MZ_CDP_PORT per
+// worktree and the two runs cannot reach each other.
+const PORT = Number(process.env.MZ_CDP_PORT) || 9333;
+const ORIGIN = process.env.MZ_ORIGIN || "http://127.0.0.1:8731";
 const WIDTHS = [320, 390, 768, 1440];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
