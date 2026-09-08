@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#151513">
+    <title>safe-area probe</title>
+    <style>
+        html, body { margin: 0; background: #0C0C0C; color: #D6D2CB;
+            font: 14px/1.6 ui-monospace, Menlo, Consolas, monospace }
+        /* Exactly what the site does: a fixed bar that grows by the inset and pads its
+           content below it. If viewport-fit=cover is in effect, the magenta reaches the
+           clock and the cyan reaches the home indicator. If it is not, both stop short
+           and a black strip is left at each end — which is the whole question. */
+        #top { position: fixed; top: 0; left: 0; right: 0; z-index: 9;
+            height: calc(34px + env(safe-area-inset-top, 0px));
+            padding-top: env(safe-area-inset-top, 0px);
+            background: #C0308A; color: #fff; text-align: center; line-height: 34px }
+        #bot { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9;
+            height: calc(30px + env(safe-area-inset-bottom, 0px));
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+            background: #2F7F8F; color: #fff; text-align: center; line-height: 30px }
+        main { padding: calc(54px + env(safe-area-inset-top, 0px)) 16px
+                        calc(50px + env(safe-area-inset-bottom, 0px)) }
+        .probe { position: absolute; left: -9999px; visibility: hidden }
+        #t { height: env(safe-area-inset-top, 0px) }
+        #b { height: env(safe-area-inset-bottom, 0px) }
+        #l { height: env(safe-area-inset-left, 0px) }
+        #r { height: env(safe-area-inset-right, 0px) }
+        b { color: #7FC8A9 }
+        .no { color: #E06C6C }
+    </style>
+</head>
+<body>
+<div id="top">magenta should reach the clock</div>
+<div class="probe" id="t"></div><div class="probe" id="b"></div>
+<div class="probe" id="l"></div><div class="probe" id="r"></div>
+<main><pre id="out">reading…</pre></main>
+<div id="bot">teal should reach the bottom edge</div>
+<script>
+    var px = function (id) { return getComputedStyle(document.getElementById(id)).height; };
+    var vv = window.visualViewport || {};
+    var lines = [
+        'safe-area-inset-top     ' + px('t'),
+        'safe-area-inset-bottom  ' + px('b'),
+        'safe-area-inset-left    ' + px('l'),
+        'safe-area-inset-right   ' + px('r'),
+        '',
+        'window.innerHeight      ' + window.innerHeight,
+        'screen.height           ' + screen.height,
+        'visualViewport.height   ' + Math.round(vv.height || 0),
+        'devicePixelRatio        ' + window.devicePixelRatio,
+        '',
+        'theme-color meta        ' + document.querySelector('meta[name=theme-color]').content,
+        'viewport meta           ' + document.querySelector('meta[name=viewport]').content
+    ];
+    var top = parseFloat(px('t'));
+    lines.push('', top > 0
+        ? 'VERDICT: viewport-fit IS in effect — the insets are non-zero.'
+        : 'VERDICT: insets are 0px. Either this device has none, or viewport-fit=cover is not being applied.');
+    lines.push('', 'UA: ' + navigator.userAgent);
+    document.getElementById('out').textContent = lines.join('\n');
+</script>
+</body>
+</html>
