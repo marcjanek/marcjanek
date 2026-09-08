@@ -100,7 +100,12 @@
         .sm { font-size: .84em }
         .lede { color: #8A857D; margin-top: 14px }
 
-        .cmd { display: flex; flex-wrap: wrap; margin-top: 18px }
+        /* align-items:baseline is what puts the caret on the text baseline. The
+           caret used to carry vertical-align:text-bottom, which does nothing at
+           all here — vertical-align has no effect on a flex item — so the block
+           sat at the cross-start of the line, level with the ascenders. Same
+           defect the main page's prompts had; see CLAUDE.md. */
+        .cmd { display: flex; flex-wrap: wrap; align-items: baseline; margin-top: 18px }
         .cmd .arg { margin-left: 1ch }
 
         /* The status block is a bordered box, not a run of box-drawing characters:
@@ -130,7 +135,7 @@
         a:focus-visible { outline: 2px solid #F3EFE9; outline-offset: 2px }
 
         .foot { margin-top: 44px; border-top: 1px solid #2A2724; padding-top: 14px }
-        .caret { display: inline-block; width: .6em; height: 1.05em; margin-left: 2px; background: #D6D2CB; vertical-align: text-bottom; animation: caret 1.05s steps(1) infinite }
+        .caret { display: inline-block; width: .6em; height: 1.05em; margin-left: 2px; background: #D6D2CB; position: relative; top: 2px; animation: caret 1.05s steps(1) infinite }
 
         @keyframes caret { 50% { opacity: 0 } }
         @media (prefers-reduced-motion: reduce) { .caret { animation: none } }
