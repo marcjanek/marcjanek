@@ -203,14 +203,31 @@ Three decisions were Marcin's and were applied by hand, because each spans both 
 
 ## 5. Open — needs a decision or work outside this repo
 
-**1. Nothing audited here is deployed yet.** `src/`, `assets/`, `scripts/` and `data/` are untracked;
+**1. RESOLVED — deployed 2026-09-08.** The terminal page is live on mozolewski.eu (`781a6a2`, then
+`6db8b6f`), GitHub Pages is disabled, and the Cloudflare build command is now `node scripts/build.mjs`
+instead of `exit 0`. Verified on production in headless Chrome: no third-party request except the
+Cloudflare beacon, no cookie, no storage, zero CSP violations, nine sections rendering, the status bar
+inside a 320 px viewport. The original finding read:
+
+> **Nothing audited here is deployed yet.** `src/`, `assets/`, `scripts/` and `data/` are untracked;
 `main` still carries the previous 18 KB single-file page, which loads `komarev.com`, `images.credly.com`
 and a Spotify widget host at view time — so the "no trackers" claim is currently false *in production*
 while being true in this tree. The fix is one changeset, and the ordering matters: **committing
 `index.html` without `assets/` would 404 every script and blank the site.** Commit `src/`, `scripts/`,
 `data/`, `assets/`, `output/` and the root `index.html` together.
 
-**2. Turn off Cloudflare Web Analytics at the Pages project.** The new `public/_headers` ships a
+**2. SUPERSEDED — Web Analytics stays on, by decision.** The Pages project's own analytics tag was
+cleared, but a zone-level injection remains and Marcin chose to keep it. The CSP now allows
+`static.cloudflareinsights.com` and `cloudflareinsights.com` rather than blocking them, because
+blocking a feature that is switched on is the worst of both — a console error on every load and no data
+collected. Two claims were corrected in the same change, since they stopped being true: the status line
+now reads `no cookies · cf analytics`, and the post-lookup note no longer says "nothing reached me".
+The narrow justification is that Cloudflare already terminates every request as the site's CDN, so the
+beacon adds no new recipient; it remains a third-party request and a page-view tracker, and the copy
+says so. Rocket Loader and Email Obfuscation were also settled — see `CLAUDE.md`. The original finding
+read:
+
+> **Turn off Cloudflare Web Analytics at the Pages project.** The new `public/_headers` ships a
 Content-Security-Policy that was verified end to end in Chrome — zero violations, all gated features
 still work. It necessarily blocks `static.cloudflareinsights.com`, the beacon the Pages project injects
 at the edge. That beacon is already on record as the one thing making "no trackers" arguable, so
