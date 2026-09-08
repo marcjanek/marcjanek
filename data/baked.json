@@ -4,42 +4,50 @@
    {
     "issued": "2024-09-22",
     "expires": "2027-09-22",
-    "name": "Associate Cloud Engineer Certification"
+    "name": "Associate Cloud Engineer Certification",
+    "id": "cf2de373-d196-4842-bd3c-f13a715463f1"
    },
    {
     "issued": "2020-07-17",
     "expires": "2022-01-17",
-    "name": "Oracle Cloud Infrastructure Foundations 2020 Certified Associate"
+    "name": "Oracle Cloud Infrastructure Foundations 2020 Certified Associate",
+    "id": "119c9762-a05a-4191-9022-308f61123370"
    },
    {
     "issued": "2025-06-30",
     "expires": "2028-06-30",
-    "name": "GitHub Actions"
+    "name": "GitHub Actions",
+    "id": "de909ccf-0ecf-4885-aa1d-9082964212f7"
    },
    {
     "issued": "2025-06-29",
     "expires": "2028-06-29",
-    "name": "GitHub Advanced Security"
+    "name": "GitHub Advanced Security",
+    "id": "1e71483f-95ea-48f8-b431-abe2f7833352"
    },
    {
     "issued": "2025-06-24",
     "expires": "2029-06-24",
-    "name": "GitHub Administration"
+    "name": "GitHub Administration",
+    "id": "b0c37e2b-1dbe-46dd-968e-1ea800057bd8"
    },
    {
     "issued": "2025-06-21",
     "expires": "2028-06-21",
-    "name": "GitHub Copilot"
+    "name": "GitHub Copilot",
+    "id": "49f6d002-ccc1-44fd-a5d3-8a878ea243b6"
    },
    {
     "issued": "2025-06-19",
     "expires": "2028-06-19",
-    "name": "GitHub Foundations"
+    "name": "GitHub Foundations",
+    "id": "ae221745-49a9-429b-9e07-58c0a91af0d6"
    },
    {
     "issued": "2024-12-29",
     "expires": "2026-12-29",
-    "name": "HashiCorp Certified: Terraform Associate (003)"
+    "name": "HashiCorp Certified: Terraform Associate (003)",
+    "id": "e89e0ac3-0bb3-4f80-99e9-9fe88308acda"
    }
   ]
  },
@@ -47,37 +55,44 @@
   {
    "issued": "2025-06-30",
    "expires": "2028-06-30",
-   "file": "github-actions"
+   "file": "github-actions",
+   "id": "de909ccf-0ecf-4885-aa1d-9082964212f7"
   },
   {
    "issued": "2025-06-29",
    "expires": "2028-06-29",
-   "file": "github-advanced-security"
+   "file": "github-advanced-security",
+   "id": "1e71483f-95ea-48f8-b431-abe2f7833352"
   },
   {
    "issued": "2025-06-24",
    "expires": "2029-06-24",
-   "file": "github-administration"
+   "file": "github-administration",
+   "id": "b0c37e2b-1dbe-46dd-968e-1ea800057bd8"
   },
   {
    "issued": "2025-06-21",
    "expires": "2028-06-21",
-   "file": "github-copilot"
+   "file": "github-copilot",
+   "id": "49f6d002-ccc1-44fd-a5d3-8a878ea243b6"
   },
   {
    "issued": "2025-06-19",
    "expires": "2028-06-19",
-   "file": "github-foundations"
+   "file": "github-foundations",
+   "id": "ae221745-49a9-429b-9e07-58c0a91af0d6"
   },
   {
    "issued": "2024-12-29",
    "expires": "2026-12-29",
-   "file": "hashicorp-terraform-associate-003"
+   "file": "hashicorp-terraform-associate-003",
+   "id": "e89e0ac3-0bb3-4f80-99e9-9fe88308acda"
   },
   {
    "issued": "2024-09-22",
    "expires": "2027-09-22",
-   "file": "google-associate-cloud-engineer"
+   "file": "google-associate-cloud-engineer",
+   "id": "cf2de373-d196-4842-bd3c-f13a715463f1"
   },
   {
    "issued": "2021",
@@ -92,7 +107,8 @@
   {
    "issued": "2020-07-17",
    "expires": "2022-01-17",
-   "file": "oracle-oci-foundations"
+   "file": "oracle-oci-foundations",
+   "id": "119c9762-a05a-4191-9022-308f61123370"
   }
  ]
 }

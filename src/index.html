@@ -357,11 +357,11 @@
                 <div class="ls" style="display:grid;grid-template-columns:max-content max-content max-content minmax(0,1fr);column-gap:2ch;font-size:14px;line-height:1.9;color:#C5C0B8">
                     <span style="grid-column:1/-1">{{ certTotal }}</span>
                     <sc-for as="c" hint-placeholder-count="10" list="{{ certLines }}">
-                        <div style="display:contents"><span class="ls-dim {{ c.cls }}">-rw-r--r--</span><span class="ls-dim {{ c.cls }}">1 marcin</span><span class="{{ c.cls }}" style="white-space:nowrap">{{ c.issued }}</span><span class="{{ c.cls }}" style="overflow-wrap:anywhere">{{ c.name }} {{ c.note }}</span></div>
+                        <div style="display:contents"><span class="ls-dim {{ c.cls }}">-rw-r--r--</span><span class="ls-dim {{ c.cls }}">1 marcin</span><span class="{{ c.cls }}" style="white-space:nowrap">{{ c.issued }}</span><span class="{{ c.cls }}" style="overflow-wrap:anywhere"><sc-if hint-placeholder-val="{{ true }}" value="{{ c.url }}"><a class="cert-link" href="{{ c.url }}">{{ c.name }}</a></sc-if><sc-if hint-placeholder-val="{{ false }}" value="{{ c.plain }}">{{ c.name }}</sc-if> {{ c.note }}</span></div>
                     </sc-for>
                 </div>
             </sc-if>
-            <div style="color:#8A857D">verify: <a class="tap" href="https://www.credly.com/users/marcin-mozolewski">credly.com/users/marcin-mozolewski</a> — everything except the <span style="color:#C5C0B8">microsoft-*</span> entries, which are held on Microsoft Learn</div>
+            <div style="color:#8A857D">verify: each name links to its own badge — except the <span style="color:#C5C0B8">microsoft-*</span> entries, which are held on Microsoft Learn. profile: <a class="tap" href="https://www.credly.com/users/marcin-mozolewski">credly.com/users/marcin-mozolewski</a></div>
         </section>
 
 

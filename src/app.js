@@ -345,7 +345,14 @@ class Component extends DCLogic {
                 issued: c.issued,
                 name: c.file + ".cert" + (dead ? ".expired" : ""),
                 note: dead ? "# expired " + c.expires : "",
-                cls: dead ? "cert-old" : "cert-ok"
+                cls: dead ? "cert-old" : "cert-ok",
+                // Baked by scripts/build.mjs from the badge Credly already
+                // returned, so linking one costs no request at page load and
+                // none until the visitor clicks. The two Microsoft Learn entries
+                // carry no id and render as plain text; the line under the
+                // listing is what explains the difference.
+                url: c.id ? "https://www.credly.com/badges/" + c.id : "",
+                plain: !c.id
             };
         });
         const expired = lines.filter((l) => l.note).length;

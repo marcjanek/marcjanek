@@ -64,7 +64,7 @@ const fresh = {
     const items = d?.data ?? d?.badges ?? []
     if (items.length > 12) log(`WARNING: credly returned ${items.length} badges — only the first 12 are kept, ${items.length - 12} dropped`)
     const badges = items.slice(0, 12)
-      .map((b) => ({ issued: String(b.issued_at_date ?? b.issued_at ?? '').slice(0, 10), expires: b.expires_at_date ? String(b.expires_at_date).slice(0, 10) : null, name: (b.badge_template ?? b.template ?? {}).name ?? b.name ?? '' }))
+      .map((b) => ({ issued: String(b.issued_at_date ?? b.issued_at ?? '').slice(0, 10), expires: b.expires_at_date ? String(b.expires_at_date).slice(0, 10) : null, name: (b.badge_template ?? b.template ?? {}).name ?? b.name ?? '', id: typeof b.id === 'string' && /^[0-9a-f-]{36}$/.test(b.id) && b.public !== false ? b.id : null }))
       .filter((x) => x.name)
     if (!badges.length) throw new Error('empty')
     return { badges }
@@ -131,10 +131,15 @@ const certs = [
     expires: b.expires ?? null,
     file: CERT_FILE[b.name] ?? slug(b.name),
     name: b.name,
+    // The public badge page, which is what ~/certs links each name to. Null for
+    // a badge Credly reports as private and for the two Microsoft Learn entries,
+    // which are not on Credly at all — those render as plain text, and the line
+    // under the listing is what says why.
+    id: b.id ?? null,
   })),
   ...MICROSOFT_LEARN,
 ].sort((a, b) => issuedKey(b.issued).localeCompare(issuedKey(a.issued)) || a.file.localeCompare(b.file))
-baked.certs = certs.map(({ issued, expires, file }) => ({ issued, expires, file }))
+baked.certs = certs.map(({ issued, expires, file, id }) => (id ? { issued, expires, file, id } : { issued, expires, file }))
 log(`certs: ${certs.length} (${certs.length - MICROSOFT_LEARN.length} from credly)`)
 
 // Only a successful fetch may rewrite the cache. Writing after a failed fetch
