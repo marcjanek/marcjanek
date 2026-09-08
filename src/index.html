@@ -240,7 +240,7 @@
                 <div style="font-size:12.5px;color:#8A857D">==&gt; <span style="color:#E0A33C">sys-02.md</span> &lt;==</div>
                 <div style="color:#F3EFE9;font-weight:500;font-size:17px;line-height:1.45"># Egress policy that runs inside the request, not beside it</div>
                 <div style="max-width:66ch;color:#C5C0B8">Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time, which I established before building anything. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path. It runs across two regions and is operated hands-off through GitOps. Other teams adopt it through a Terraform provider I wrote.</div>
-                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: two regions · fail-closed · no round trip on the decision path</div>
+                <div style="max-width:66ch;color:#7FC8A9;padding-top:2px">result: two regions · fail-closed · no network round trip on the decision path</div>
                 <div style="font-size:12.5px;color:#8A857D">tags: <span style="color:#6FA8FF">envoy rust-wasm go postgresql kubernetes flux</span></div>
             </div>
 
