@@ -477,3 +477,16 @@ link, and that is how skip links are normally built: verified at 1280x800 that T
 "skip to content", Enter still focuses `#whoami` and scrolls it to 64 px under the bar, and the next
 Tab continues from the first link *inside* the section, which has its own visible focus style. The
 `tabindex` stays — removing it is what breaks the skip link.
+
+The blinking block caret at the end of each of the eight prompts sat slightly high against the text
+beside it, and the `vertical-align: -2px` it carried was never doing anything: the prompt is a flex
+row and `vertical-align` has no effect on a flex item, so the block was parked at the cross-start of
+the line with its bottom edge on the text baseline. Measured, that put its centre 2.89 px above the
+centre of the capitals next to it, identically in all eight. `[data-prompt] { align-items: baseline }`
+makes the bottom edge the baseline by construction rather than by the coincidence that the block is
+exactly as tall as the line's ascent at this line-height, and `[data-caret] { position: relative;
+top: 3px }` supplies the offset that centres it — painted, not laid out. Two other routes were tried
+and measured as doing nothing: `align-self` on the caret alone, which has nothing to share a baseline
+with and falls back to cross-start, and a negative bottom margin, which a synthesized border-box
+baseline ignores. After: −0.11 px at 320, 390, 768, 1280 and 1440, with row heights, document height
+and horizontal overflow identical to before at every one.

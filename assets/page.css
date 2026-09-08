@@ -3,6 +3,26 @@ html { scroll-behavior: smooth; }
   a { color: #6FA8FF; }
   a:hover { color: #E0A33C; }
   @keyframes caret { 0%, 45% { opacity: 1 } 46%, 100% { opacity: 0 } }
+
+  /* The block caret at the end of each prompt. Its parent is a flex row, so the
+     vertical-align it used to carry did nothing at all — vertical-align has no
+     effect on a flex item — and the block was left at the cross-start of the line
+     with its bottom edge exactly on the text baseline. Measured at 1280x900, that
+     put its centre 2.89px above the centre of the capitals beside it in all eight
+     prompts, which reads as a caret sitting slightly high.
+
+     Baseline on the row is what anchors it: it makes the caret's bottom edge the
+     text baseline by construction, rather than by the coincidence that the block
+     is exactly as tall as the line's ascent at this line-height. Two things that
+     do not work, both tried and measured: align-self on the caret alone, because
+     the only baseline-aligned item in a line has nothing to share a baseline with
+     and falls back to cross-start; and a negative bottom margin, because a flex
+     item with no text has its baseline synthesized from the border box, so the
+     margin changes the line's size and not the block's position. The 3px that
+     centres it is therefore painted, not laid out — relative offset, no effect on
+     anything around it. */
+  [data-prompt] { align-items: baseline }
+  [data-caret] { position: relative; top: 3px }
   @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
   @keyframes introOut { to { clip-path: inset(0 0 100% 0); opacity: 0; visibility: hidden } }
   @keyframes decode { from { clip-path: inset(0 0 100% 0) } to { clip-path: inset(0 0 0 0) } }
