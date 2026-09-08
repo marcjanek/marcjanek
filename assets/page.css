@@ -48,8 +48,15 @@ html { scroll-behavior: smooth; }
      the browser's scroll-into-view on Tab knows about neither. Without this a
      focused link or the shell input can come to rest completely underneath one
      of them (WCAG 2.2 SC 2.4.11). scroll-margin-top on the sections only helps
-     the anchors, not what is inside them. */
-  main a, main button, main input { scroll-margin-block: 48px 40px }
+     the anchors, not what is inside them.
+
+     Since viewport-fit=cover, both bars are as tall as themselves plus the inset
+     they sit in, so everything that has to clear them carries the inset too. The
+     section rule needs !important: the value it overrides is an inline style. On
+     anything without a notch every env() here is 0px and none of this moves. */
+  main a, main button, main input { scroll-margin-block: calc(48px + env(safe-area-inset-top, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)) }
+  main section[id] { scroll-margin-top: calc(48px + env(safe-area-inset-top, 0px)) !important }
+  .skip:focus { top: calc(42px + env(safe-area-inset-top, 0px)) !important }
 
   /* Without this, any `width:100%` that also has padding or a border is wider
      than its parent. That is what pushed ~/visitor's map box past the viewport
@@ -75,12 +82,12 @@ html { scroll-behavior: smooth; }
      discoverable instead of being a secret. The bar grows by the 6px the
      scrollbar occupies, and the skip link clears the taller bar. */
   @media (max-width: 1040px) {
-    nav { height: 42px !important; scrollbar-width: thin !important; scrollbar-color: #7FC8A9 #151513 }
+    nav { height: calc(42px + env(safe-area-inset-top, 0px)) !important; scrollbar-width: thin !important; scrollbar-color: #7FC8A9 #151513 }
     nav a, nav > span { line-height: 34px !important }
     nav::-webkit-scrollbar { height: 6px }
     nav::-webkit-scrollbar-track { background: #151513 }
     nav::-webkit-scrollbar-thumb { background: #7FC8A9 }
-    .skip:focus { top: 50px !important }
+    .skip:focus { top: calc(50px + env(safe-area-inset-top, 0px)) !important }
     .navmore { display: flex !important }
   }
 

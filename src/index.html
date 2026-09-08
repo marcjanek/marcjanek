@@ -12,7 +12,7 @@
     <script id="mz-baked" type="application/json">"BUILD:baked"</script>
     <title>Marcin Mozolewski — Senior Cloud Platform Engineer</title>
     <meta content="Senior Cloud Platform Engineer in Warsaw. Cloud network architecture, in-process egress security, and one provisioning path for hundreds of applications." name="description">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
     <meta content="dark" name="color-scheme">
     <meta content="Marcin Mozolewski" name="author">
     <link href="https://mozolewski.eu/" rel="canonical">
@@ -91,7 +91,7 @@
 
     <sc-if hint-placeholder-val="{{ true }}" value="{{ intro }}">
         <div>
-        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#0C0C0C;overflow:hidden;padding:clamp(20px,6vh,64px) clamp(14px,4vw,56px) calc(clamp(20px,6vh,64px) + 2.4em);font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
+        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#0C0C0C;overflow:hidden;padding:calc(clamp(20px,6vh,64px) + env(safe-area-inset-top, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) calc(clamp(20px,6vh,64px) + 2.4em + env(safe-area-inset-bottom, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
             <div id="boot-log" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
                 <div style="animation:fadeIn .01s linear 0.05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
                 <div style="animation:fadeIn .01s linear 0.11s both"><span style="color:#8A857D">[    0.031418]</span> Command line: ro quiet net.ifnames=0</div>
@@ -122,20 +122,20 @@
         <!-- Sits behind the boot log at z-index 59, so the log's wipe uncovers a
              wordmark already typing rather than cutting to it. It leaves by
              dissolving; only the log wipes. -->
-        <div aria-hidden="true" id="sting" style="position:fixed;inset:0;z-index:59;background:#0C0C0C;display:grid;place-items:center;padding:0 clamp(14px,4vw,56px);animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
+        <div aria-hidden="true" id="sting" style="position:fixed;inset:0;z-index:59;background:#0C0C0C;display:grid;place-items:center;padding:0 calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) 0 calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
             <div style="display:flex;align-items:center;font-size:clamp(28px,7vw,64px);line-height:1.1;white-space:nowrap;color:#7FC8A9;animation:wmOut .65s cubic-bezier(.33,0,.2,1) 2.97s forwards">
                 <span style="clip-path:inset(0 100% 0 0);animation:wmType .62s steps(13) 2s both">mozolewski.eu</span>
                 <span style="width:.58em;height:1.05em;margin-left:.14em;background:#7FC8A9;opacity:0;animation:wmCaretOn .01s linear 2s forwards, caret 1.05s steps(1) 2s infinite, wmCaretOff .01s linear 2.9s forwards"></span>
             </div>
         </div>
 
-        <div aria-hidden="true" id="skipnote" style="position:fixed;left:clamp(14px,4vw,56px);bottom:clamp(20px,6vh,64px);z-index:66;color:#8A857D;font-size:clamp(11px,1.05vw,14px);animation:fadeIn .01s linear .6s both, stingOut .55s ease 2.9s forwards">press any key or tap to skip</div>
+        <div aria-hidden="true" id="skipnote" style="position:fixed;left:calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));bottom:calc(clamp(20px,6vh,64px) + env(safe-area-inset-bottom, 0px));z-index:66;color:#8A857D;font-size:clamp(11px,1.05vw,14px);animation:fadeIn .01s linear .6s both, stingOut .55s ease 2.9s forwards">press any key or tap to skip</div>
         </div>
     </sc-if>
 
     <a class="skip" href="#whoami" style="position:fixed;left:-9999px;top:0;z-index:70;background:#0C0C0C;color:#7FC8A9;border:1px solid #7FC8A9;padding:10px 14px" style-focus="left:8px;top:42px">skip to content</a>
 
-    <nav aria-label="Sections" style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;flex-wrap:nowrap;align-items:center;gap:2px;background:#151513;background-image:linear-gradient(90deg,#151513,#151513),linear-gradient(90deg,rgba(12,12,12,0),rgba(12,12,12,.92));background-repeat:no-repeat;background-position:right center;background-size:32px 100%;background-attachment:local,scroll;border-bottom:1px solid #2A2724;padding:0 10px;font-size:12.5px;height:34px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none">
+    <nav aria-label="Sections" style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;flex-wrap:nowrap;align-items:center;gap:2px;background:#151513;background-image:linear-gradient(90deg,#151513,#151513),linear-gradient(90deg,rgba(12,12,12,0),rgba(12,12,12,.92));background-repeat:no-repeat;background-position:right center;background-size:32px 100%;background-attachment:local,scroll;border-bottom:1px solid #2A2724;padding:env(safe-area-inset-top, 0px) max(10px,env(safe-area-inset-right, 0px)) 0 max(10px,env(safe-area-inset-left, 0px));font-size:12.5px;height:calc(34px + env(safe-area-inset-top, 0px));overflow-x:auto;overflow-y:hidden;scrollbar-width:none">
         <span style="background:#7FC8A9;color:#0C0C0C;font-weight:700;padding:0 10px;line-height:34px">tmux</span>
         <a href="#whoami" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">0:whoami</a>
         <a href="#work" style="color:#D6D2CB;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">1:work</a>
@@ -152,9 +152,9 @@
     <!-- iOS Safari only draws a scrollbar while the finger is down, so the bar
          needs a second signal: an arrow at the right edge that goes away once
          the last window is on screen. -->
-    <div aria-hidden="true" class="navmore" id="nav-more" style="position:fixed;top:0;right:0;z-index:41;display:none;align-items:center;justify-content:flex-end;height:42px;width:52px;padding-right:9px;color:#7FC8A9;font-size:17px;pointer-events:none;background:linear-gradient(90deg,rgba(21,21,19,0),#151513 55%);transition:opacity .25s ease">›</div>
+    <div aria-hidden="true" class="navmore" id="nav-more" style="position:fixed;top:0;right:0;z-index:41;display:none;align-items:center;justify-content:flex-end;height:calc(42px + env(safe-area-inset-top, 0px));width:52px;padding:env(safe-area-inset-top, 0px) calc(9px + env(safe-area-inset-right, 0px)) 0 0;color:#7FC8A9;font-size:17px;pointer-events:none;background:linear-gradient(90deg,rgba(21,21,19,0),#151513 55%);transition:opacity .25s ease">›</div>
 
-    <main style="max-width:1180px;margin:0 auto;padding:64px clamp(14px,4vw,40px) 96px;display:flex;flex-direction:column;gap:44px">
+    <main style="max-width:1180px;margin:0 auto;padding:calc(64px + env(safe-area-inset-top, 0px)) calc(clamp(14px,4vw,40px) + env(safe-area-inset-right, 0px)) calc(96px + env(safe-area-inset-bottom, 0px)) calc(clamp(14px,4vw,40px) + env(safe-area-inset-left, 0px));display:flex;flex-direction:column;gap:44px">
         <h1 class="sr">Marcin Mozolewski — Senior Cloud Platform Engineer</h1>
 
         <section aria-labelledby="h-whoami" id="whoami" tabindex="-1" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
@@ -413,7 +413,7 @@
         </section>
     </main>
 
-    <footer style="position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;gap:12px;background:#151513;border-top:1px solid #2A2724;padding:0 12px;height:30px;align-items:center;font-size:12px;color:#8A857D;overflow:hidden">
+    <footer style="position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;gap:12px;background:#151513;border-top:1px solid #2A2724;padding:0 max(12px,env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(12px,env(safe-area-inset-left, 0px));height:calc(30px + env(safe-area-inset-bottom, 0px));align-items:center;font-size:12px;color:#8A857D;overflow:hidden">
         <span style="white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis;max-width:clamp(0px,(100vw - 380px)*999,420px)"><span style="color:#7FC8A9">-- NORMAL --</span> mozolewski.eu</span>
         <span style="display:flex;gap:14px;white-space:nowrap;flex:none"><span style="display:flex;gap:14px;overflow:hidden;max-width:clamp(0px,(100vw - 700px)*999,320px)"><span style="color:#7FC8A9">{{ rttShort }}</span><span>session {{ session }}</span></span><span>{{ trackNote }}</span></span>
     </footer>
