@@ -240,7 +240,7 @@ answer to "can the first screen come up faster".
 |---|---|
 | Every boot line appears at once, then the sequence restarts | `assets/page.css` is a `<link>` inside `<x-dc>`, so the browser paints the log before the `@keyframes` that stagger it arrive. An inline `<style>` in `<head>` now covers the intro and pauses it until `startBoot()` has the stylesheet and the font |
 | The boot log's last line lands on "press any key or tap to skip" | The note is a separate fixed element on the same bottom inset; `#boot` reserves 2.4em of padding for it |
-| Tapping `0:whoami` rings the whole section | It is the only section with `tabindex="-1"`, because it is where the skip link lands, and Safari rings a focused `tabindex="-1"` element. `:not(:focus-visible)` keeps the ring for the keyboard |
+| Tapping `0:whoami` rings the whole section | It is the only section with `tabindex="-1"`, because it is where the skip link lands, and Safari rings a focused `tabindex="-1"` element. `:not(:focus-visible)` was the first fix and did not hold — see below |
 | A strip beside the home indicator is not the footer's colour | `viewport-fit=cover` plus `env(safe-area-inset-*)` on every fixed edge, so the footer's own box reaches the bottom of the display |
 
 Giving `html` the bar colour was tried first for that last one and put a lighter band across the
@@ -467,3 +467,13 @@ attributes.
   emits it, not the page.
 - **On one cold load with an empty cache, the five self-directed HEAD probes aborted** and were handled
   silently by the existing `.catch()`. Every subsequent load reported `5 packets transmitted, 5 received`.
+
+`#whoami:focus:not(:focus-visible)` shipped and the ring came back on the next phone check. Safari
+counts the focus a fragment jump moves onto a `tabindex="-1"` element as focus-visible even when the
+jump came from a finger, so the guard never matches; Chrome agrees whenever the jump is scripted
+rather than tapped, which is why a local check passed. The rule is unconditional now,
+`#whoami:focus { outline: none }`. What that costs is the box a keyboard user saw after using the skip
+link, and that is how skip links are normally built: verified at 1280x800 that Tab still lands on
+"skip to content", Enter still focuses `#whoami` and scrolls it to 64 px under the bar, and the next
+Tab continues from the first link *inside* the section, which has its own visible focus style. The
+`tabindex` stays — removing it is what breaks the skip link.

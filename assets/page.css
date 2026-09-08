@@ -67,10 +67,18 @@ html { scroll-behavior: smooth; }
      skip link lands and without it Tab would carry on from the nav — the classic
      way a skip link fails. The side effect is that any jump to #whoami focuses the
      section, and Safari paints a ring around the whole thing: tapping 0:whoami in
-     the tmux bar drew a box no other section draws. Chrome never showed it because
-     it only rings :focus-visible. Keep the ring for the keyboard, which is who it
-     is for, and drop it for the pointer. */
-  #whoami:focus:not(:focus-visible) { outline: none }
+     the tmux bar drew a box no other section draws, which Chrome never shows.
+     :focus:not(:focus-visible) was tried and shipped and does not fix it — Safari
+     counts the focus a fragment jump moves onto a tabindex="-1" element as
+     focus-visible even when the jump came from a finger, so the guard never
+     matches and the ring stays. Unconditional, then. What it costs is the box a
+     keyboard user saw after the skip link, and that is the normal way skip links
+     are built: the page still scrolls to the section, focus still sits there so
+     the next Tab continues from inside it, and the first link in the section has
+     its own visible focus style. Do not put this back behind :focus-visible, and
+     do not take the tabindex off to avoid the ring — that is what breaks the skip
+     link. */
+  #whoami:focus { outline: none }
 
   /* ~/certs row colours. These live here rather than in a style attribute so
      the template never interpolates into CSS, which nothing can parse. */
