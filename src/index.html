@@ -52,11 +52,12 @@
             <div style="animation:fadeIn .01s linear 2.05s both">[<span style="color:#E0A33C"> INFO </span>] terraform: hundreds of applications reconciled</div>
             <div style="animation:fadeIn .01s linear 2.3s both">[<span style="color:#7FC8A9">  OK  </span>] Reached target <span style="color:#F3EFE9">multi-user.target</span></div>
             <div style="height:14px"></div>
+            <div style="position:absolute;left:clamp(14px,4vw,56px);bottom:clamp(20px,6vh,64px);color:#8A857D;animation:fadeIn .01s linear .8s both">press any key or tap to skip</div>
             <div style="animation:fadeIn .01s linear 2.6s both">mozolewski.eu login: <span style="color:#F3EFE9">guest</span><span style="background:#D6D2CB;color:#000;animation:caret 1.05s steps(1) infinite">&nbsp;</span></div>
         </div>
     </sc-if>
 
-    <a href="#whoami" style="position:fixed;left:-9999px;top:0;z-index:70;background:#0C0C0C;color:#7FC8A9;border:1px solid #7FC8A9;padding:10px 14px" style-focus="left:8px;top:42px">skip to content</a>
+    <a class="skip" href="#whoami" style="position:fixed;left:-9999px;top:0;z-index:70;background:#0C0C0C;color:#7FC8A9;border:1px solid #7FC8A9;padding:10px 14px" style-focus="left:8px;top:42px">skip to content</a>
 
     <nav aria-label="Sections" style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;flex-wrap:nowrap;align-items:center;gap:2px;background:#151513;background-image:linear-gradient(90deg,#151513,#151513),linear-gradient(90deg,rgba(12,12,12,0),rgba(12,12,12,.92));background-repeat:no-repeat;background-position:right center;background-size:32px 100%;background-attachment:local,scroll;border-bottom:1px solid #2A2724;padding:0 10px;font-size:12.5px;height:34px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none">
         <span style="background:#7FC8A9;color:#0C0C0C;font-weight:700;padding:0 10px;line-height:34px">tmux</span>
@@ -71,6 +72,11 @@
         <a href="#shell" style="color:#7FC8A9;text-decoration:none;padding:0 10px;line-height:34px;white-space:nowrap;flex:none">8:shell*</a>
         <span style="margin-left:auto;color:#8A857D;padding:0 10px;white-space:nowrap;flex:none">guest@mozolewski.eu · {{ clock }}</span>
     </nav>
+
+    <!-- iOS Safari only draws a scrollbar while the finger is down, so the bar
+         needs a second signal: an arrow at the right edge that goes away once
+         the last window is on screen. -->
+    <div aria-hidden="true" class="navmore" id="nav-more" style="position:fixed;top:0;right:0;z-index:41;display:none;align-items:center;justify-content:flex-end;height:42px;width:52px;padding-right:9px;color:#7FC8A9;font-size:17px;pointer-events:none;background:linear-gradient(90deg,rgba(21,21,19,0),#151513 55%);transition:opacity .25s ease">›</div>
 
     <main style="max-width:1180px;margin:0 auto;padding:64px clamp(14px,4vw,40px) 96px;display:flex;flex-direction:column;gap:44px">
         <h1 class="sr">Marcin Mozolewski — Senior Cloud Platform Engineer</h1>
@@ -104,7 +110,7 @@
                         <span style="color:#E0A33C">Location</span><span>Warsaw, Poland</span>
                         <span style="color:#E0A33C">Languages</span><span>Polish (native) · English (professional)</span>
                         <span style="color:#E0A33C">Off-clock</span><span>open source · OSINT · sailing · iceboating · brain teasers</span>
-                        <span style="color:#E0A33C">Contact</span><span><a href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a></span>
+                        <span style="color:#E0A33C">Contact</span><span><a class="tap" href="mailto:contact@mozolewski.eu">contact@mozolewski.eu</a></span>
                     </div>
                 </div>
             </div>
@@ -118,8 +124,10 @@
                 <span style="width:34px;height:16px;background:#8FD3E8;display:block"></span>
                 <span style="width:34px;height:16px;background:#D6D2CB;display:block"></span>
             </div>
-            <div style="margin-top:10px;white-space:pre-wrap;color:#8A857D;font-size:13px;line-height:1.9">clouds [<span style="color:#E0A33C">█</span><span style="color:#4E4E4A">░░░░░░░░░</span>] 1 of 8 in daily use
-certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4E4A">{{ certEmpty }}</span>] {{ certGauge }}</div>
+            <div style="margin-top:10px;color:#8A857D;font-size:13px;line-height:1.9;display:grid;grid-template-columns:max-content max-content minmax(0,1fr);column-gap:1ch;align-items:center;width:fit-content;max-width:100%">
+                <span>clouds</span><span style="white-space:nowrap">[<span class="gauge"><span class="g-on"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span><span class="g-off"></span></span>]</span><span>1 of 8 in daily use</span>
+                <span>certs</span><span style="white-space:nowrap">[<span class="gauge"><sc-for as="g" hint-placeholder-count="10" list="{{ certCells }}"><span class="{{ g.cls }}"></span></sc-for></span>]</span><span>{{ certGauge }}</span>
+            </div>
         </section>
 
         <section aria-labelledby="h-work" id="work" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:22px">
@@ -155,12 +163,12 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/career</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Replayed <span style="color:#F3EFE9">career/</span> — 4 commits</div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">git log --graph career/</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
-            <div style="display:grid;grid-template-columns:14px max-content minmax(0,1fr);column-gap:16px;row-gap:20px;align-items:start;font-size:13.5px">
+            <div class="cgrid" style="display:grid;grid-template-columns:14px max-content minmax(0,1fr);column-gap:16px;row-gap:20px;align-items:start;font-size:13.5px">
                 <div style="display:contents">
                     <div style="position:relative;align-self:stretch;color:#E0A33C;line-height:1.7">*
                         <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
                     </div>
-                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2023-05 — now</div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2023-05 — now</span><span class="d-short">05/23—now</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
                         <div><span style="color:#F3EFE9">Senior Cloud Platform Engineer</span><span style="color:#8A857D"> — Procter &amp; Gamble</span> <span style="color:#E0A33C">(HEAD -&gt; main)</span></div>
                         <div style="color:#8A857D">cloud network and platform architecture, security, policy as code, cost optimization; mentoring the engineers who build on it</div>
@@ -170,7 +178,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
                     <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*
                         <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
                     </div>
-                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2021-07 — 2023-04</div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2021-07 — 2023-04</span><span class="d-short">07/21—04/23</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
                         <div><span style="color:#F3EFE9">Junior Cloud Developer</span><span style="color:#8A857D"> — PKO BP Finat</span></div>
                         <div style="color:#8A857D">Google Cloud infrastructure provisioning</div>
@@ -180,7 +188,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
                     <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*
                         <div style="position:absolute;left:5px;top:20px;bottom:-20px;border-left:1px solid #2A2724"></div>
                     </div>
-                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2019-08 — 2019-09</div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2019-08 — 2019-09</span><span class="d-short">08/19—09/19</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
                         <div><span style="color:#F3EFE9">Java Developer (intern)</span><span style="color:#8A857D"> — eService</span></div>
                         <div style="color:#8A857D">Java and Spring Boot</div>
@@ -188,7 +196,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
                 </div>
                 <div style="display:contents">
                     <div style="position:relative;align-self:stretch;color:#8A857D;line-height:1.7">*</div>
-                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums">2017 — 2022</div>
+                    <div style="color:#8A857D;white-space:nowrap;font-variant-numeric:tabular-nums"><span class="d-full">2017 — 2022</span><span class="d-short">2017—2022</span></div>
                     <div style="display:flex;flex-direction:column;gap:2px">
                         <div><span style="color:#F3EFE9">MSc Eng &amp; BEng, Computer Science</span><span style="color:#8A857D"> — Warsaw University of Technology</span> <span style="color:#E0A33C">(root)</span></div>
                         <div style="color:#8A857D">Faculty of Electronics and Information Technology</div>
@@ -217,30 +225,16 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
             <div style="display:flex;justify-content:space-between;gap:10px;background:#151513;border:1px solid #2A2724;padding:5px 10px;font-size:12px;color:#8A857D"><span>guest@mozolewski.eu</span><span style="color:#6FA8FF">~/stack</span></div>
             <div data-ok="1" style="color:#8A857D;font-size:12.5px;opacity:1">[<span style="color:#7FC8A9">  OK  </span>] Loaded <span style="color:#F3EFE9">stack.modules</span></div>
             <div data-prompt="1" style="display:flex;gap:0;flex-wrap:wrap;width:fit-content;max-width:100%;overflow:hidden"><span style="color:#7FC8A9">guest@mozolewski.eu</span><span style="color:#8A857D">:</span><span style="color:#6FA8FF">~</span><span style="color:#8A857D">$</span><span data-cmd="1" style="margin-left:1ch">tree ~/stack -L 2</span><span data-caret="1" style="margin-left:2px;background:#D6D2CB;width:9px;height:16px;display:inline-block;vertical-align:-2px;animation:caret 1.05s steps(1) infinite"></span></div>
-            <div style="white-space:pre-wrap;font-size:13.5px;line-height:1.9;color:#C5C0B8"><span style="color:#6FA8FF">~/stack</span>
-├── <span style="color:#E0A33C">workload/</span>
-│   ├── kubernetes
-│   ├── docker
-│   └── envoy
-├── <span style="color:#E0A33C">platform/</span>
-│   ├── terraform
-│   ├── terraform-cloud
-│   ├── open-policy-agent
-│   └── flux
-├── <span style="color:#E0A33C">providers/</span>
-│   ├── google-cloud <span style="color:#8A857D">daily</span>
-│   ├── azure <span style="color:#8A857D">worked with</span>
-│   ├── aws <span style="color:#8A857D">worked with</span>
-│   ├── oci <span style="color:#8A857D">worked with</span>
-│   ├── ibm-cloud <span style="color:#8A857D">worked with</span>
-│   ├── alibaba-cloud <span style="color:#8A857D">worked with</span>
-│   ├── digitalocean <span style="color:#8A857D">worked with</span>
-│   └── cloudflare <span style="color:#8A857D">worked with</span>
-└── <span style="color:#E0A33C">constants/</span>
-    ├── linux
-    └── git
-
-4 directories, 17 files</div>
+            <div style="font-size:13.5px;line-height:1.9;color:#C5C0B8">
+                <div style="color:#6FA8FF">~/stack</div>
+                <ul class="tree">
+                    <li><span style="color:#E0A33C">workload/</span><ul><li>kubernetes</li><li>docker</li><li>envoy</li></ul></li>
+                    <li><span style="color:#E0A33C">platform/</span><ul><li>terraform</li><li>terraform-cloud</li><li>open-policy-agent</li><li>flux</li></ul></li>
+                    <li><span style="color:#E0A33C">providers/</span><ul><li>google-cloud <span style="color:#8A857D">daily</span></li><li>azure <span style="color:#8A857D">worked with</span></li><li>aws <span style="color:#8A857D">worked with</span></li><li>oci <span style="color:#8A857D">worked with</span></li><li>ibm-cloud <span style="color:#8A857D">worked with</span></li><li>alibaba-cloud <span style="color:#8A857D">worked with</span></li><li>digitalocean <span style="color:#8A857D">worked with</span></li><li>cloudflare <span style="color:#8A857D">worked with</span></li></ul></li>
+                    <li><span style="color:#E0A33C">constants/</span><ul><li>linux</li><li>git</li></ul></li>
+                </ul>
+                <div style="margin-top:1.9em">4 directories, 17 files</div>
+            </div>
         </section>
 
         <section aria-labelledby="h-certs" id="certs" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:14px">
@@ -256,7 +250,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
                     </sc-for>
                 </div>
             </sc-if>
-            <div style="color:#8A857D">verify: <a href="https://www.credly.com/users/marcin-mozolewski">credly.com/users/marcin-mozolewski</a> — everything except the <span style="color:#C5C0B8">microsoft-*</span> entries, which are held on Microsoft Learn</div>
+            <div style="color:#8A857D">verify: <a class="tap" href="https://www.credly.com/users/marcin-mozolewski">credly.com/users/marcin-mozolewski</a> — everything except the <span style="color:#C5C0B8">microsoft-*</span> entries, which are held on Microsoft Learn</div>
         </section>
 
 
@@ -322,7 +316,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
         <section aria-labelledby="h-shell" id="shell" style="scroll-margin-top:48px;display:flex;flex-direction:column;gap:12px;border:1px solid #2A2724;background:#0E0E0D;padding:16px 18px 18px">
             <h2 class="sr" id="h-shell">Interactive shell</h2>
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;color:#8A857D;font-size:12.5px;border-bottom:1px solid #2A2724;padding-bottom:10px">
-                <span><span style="color:#7FC8A9">●</span> bash — interactive</span>
+                <span><span class="dot"></span> bash — interactive</span>
                 <span>try: help · ls · cd work · sudo hire marcin</span>
             </div>
             <div role="presentation" sc-camel-on-click="{{ focusShell }}" style="display:flex;flex-direction:column;gap:8px;min-height:200px;cursor:text;font-size:13.5px">

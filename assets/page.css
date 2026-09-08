@@ -50,3 +50,54 @@ html { scroll-behavior: smooth; }
      the template never interpolates into CSS, which nothing can parse. */
   .cert-ok { color: #C5C0B8 }
   .cert-old { color: #8A857D }
+
+  /* Below 1040px the tmux bar cannot show all eight windows at once. It stays a
+     scroller — the fix is that the scrollbar is now visible, so the swipe is
+     discoverable instead of being a secret. The bar grows by the 6px the
+     scrollbar occupies, and the skip link clears the taller bar. */
+  @media (max-width: 1040px) {
+    nav { height: 42px !important; scrollbar-width: thin !important; scrollbar-color: #7FC8A9 #151513 }
+    nav a, nav > span { line-height: 34px !important }
+    nav::-webkit-scrollbar { height: 6px }
+    nav::-webkit-scrollbar-track { background: #151513 }
+    nav::-webkit-scrollbar-thumb { background: #7FC8A9 }
+    .skip:focus { top: 50px !important }
+    .navmore { display: flex !important }
+  }
+
+  /* Two inline links sat at 18-19px high, under the 24px WCAG 2.5.8 asks for.
+     Padding, not a bigger font, so the neofetch grid keeps its rhythm. */
+  a.tap { display: inline-block; padding-block: 3px }
+
+  /* ~/career's date column is max-content and cannot wrap, so on a phone it was
+     taking two thirds of the row and leaving one word per line for the job
+     title. Below 560px the same dates print short. */
+  .d-short { display: none }
+  @media (max-width: 560px) {
+    .d-full { display: none }
+    .d-short { display: inline }
+    /* the two 16px gutters are worth 32px of job title on a 320px screen */
+    .cgrid { column-gap: 8px !important }
+  }
+
+  /* ~/stack used to be drawn with U+2500 box characters. They are not in the
+     JetBrains Mono subset, so they came from the OS fallback at a different
+     advance width — on Windows that is Consolas, about 8% narrower, which bends
+     the columns out of line. Same shape, drawn with borders that cannot drift. */
+  .tree, .tree ul { list-style: none; margin: 0; padding: 0 }
+  .tree li { position: relative; padding-left: 4ch }
+  .tree li::before { content: ""; position: absolute; left: .5ch; top: 0; bottom: 0; border-left: 1px solid #C5C0B8 }
+  .tree li:last-child::before { bottom: auto; height: .95em }
+  .tree li::after { content: ""; position: absolute; left: .5ch; top: .95em; width: 2.4ch; border-top: 1px solid #C5C0B8 }
+
+  /* The last character the subset did not carry: ~/shell's status dot, a lone
+     U+25CF. It aligned nothing, so it was only ever a hairline of wrongness —
+     but nothing on the page needs the OS fallback any more. */
+  .dot { display: inline-block; width: .55em; height: .55em; border-radius: 50%; background: #7FC8A9; vertical-align: .06em }
+
+  /* The two gauges were U+2588 and U+2591 for the same reason, and drifted the
+     same way. Ten cells, one per tenth. */
+  .gauge { display: inline-flex; vertical-align: -.15em }
+  .gauge span { display: block; width: .6em; height: 1.05em }
+  .g-on { background: #E0A33C }
+  .g-off { background: #4E4E4A }

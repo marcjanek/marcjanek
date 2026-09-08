@@ -4,7 +4,7 @@ class Component extends DCLogic {
         vIp: "—", vCity: "—", vNet: "—", vTz: "reading…", vClient: "reading…",
         vRan: false, vFailed: false, hasGeo: null,
         vNote: "# nothing has been sent yet. this asks ipapi.co (Kloudend, Inc., USA) — or ipwho.is if it does not answer — where your IP is, and loads tiles from openstreetmap.org. all three would see it.",
-        certLines: [], certTotal: "", certOk: "", certFill: "", certEmpty: "░░░░░░░░░░", certGauge: "",
+        certLines: [], certTotal: "", certOk: "", certCells: [], certGauge: "", introSkipped: false,
         rttLine: "pinging…", colo: "", rttShort: "rtt …", svcLines: [], svcNote: "",
         certsOk: false
     };
@@ -256,6 +256,8 @@ class Component extends DCLogic {
         this.tick();
         this._t = setInterval(() => this.tick(), 1000);
         this._boot = setTimeout(() => this.setupTypers(), 60);
+        this.armIntroSkip();
+        this.watchNav();
         this.prepareVisitor();
         this.certificates();
         this._timers.push(setTimeout(() => this.probeNetwork(), 600));
@@ -296,7 +298,7 @@ class Component extends DCLogic {
     certificates() {
         const certs = (this.baked().certs || []).filter((c) => c && c.file);
         if (!certs.length) {
-            this.setState({certLines: [], certsOk: false, certTotal: "", certOk: "", certFill: "", certEmpty: "░░░░░░░░░░", certGauge: "no certificate data"});
+            this.setState({certLines: [], certsOk: false, certTotal: "", certOk: "", certCells: this.gaugeCells(0), certGauge: "no certificate data"});
             return;
         }
         const today = new Date().toISOString().slice(0, 10);
@@ -321,10 +323,64 @@ class Component extends DCLogic {
             // nothing is verified at page load — scripts/build.mjs baked this list
             // from credly, plus the two Microsoft Learn entries credly does not carry
             certOk: "Baked " + lines.length + " certificates from credly and microsoft learn, " + expired + " expired",
-            certFill: "█".repeat(fill),
-            certEmpty: "░".repeat(10 - fill),
+            certCells: this.gaugeCells(fill),
             certGauge: valid + " of " + lines.length + " still valid"
         });
+    }
+
+    // The arrow next to the tmux bar. Shown while there is more of the window
+    // list to the right, gone once the end is reached — on iOS the scrollbar
+    // itself is only drawn mid-gesture, so it cannot carry that alone.
+    watchNav() {
+        const nav = document.querySelector("nav");
+        const more = document.getElementById("nav-more");
+        if (!nav || !more) return;
+        const sync = () => {
+            more.style.opacity = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 4 ? "0" : "1";
+        };
+        // One mount-time measurement lands before the font swap, when the bar
+        // still fits and the arrow hides itself for good. Re-measure once the
+        // layout has settled, and keep measuring while the bar's size changes.
+        sync();
+        requestAnimationFrame(sync);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync).catch(() => {});
+        this._timers.push(setTimeout(sync, 600));
+        if (window.ResizeObserver) {
+            this._navRo = new ResizeObserver(sync);
+            this._navRo.observe(nav);
+        }
+        nav.addEventListener("scroll", sync, {passive: true});
+        window.addEventListener("resize", sync);
+        this._navEl = nav;
+        this._navSync = sync;
+    }
+
+    // Ten cells, filled or not. The gauge used to be a string of U+2588 and
+    // U+2591, which the font subset does not carry — see assets/fonts.css.
+    gaugeCells(fill) {
+        const cells = [];
+        for (let i = 0; i < 10; i++) cells.push({cls: i < fill ? "g-on" : "g-off"});
+        return cells;
+    }
+
+    // The boot screen runs 3.1s whether or not the visitor wants it. Any key,
+    // click or tap ends it, and the listeners come straight back off.
+    armIntroSkip() {
+        if (this.props.intro === false) return;
+        const names = ["pointerdown", "keydown", "touchstart"];
+        const off = () => {
+            names.forEach((n) => window.removeEventListener(n, skip));
+            this._introOff = null;
+        };
+        const skip = () => {
+            off();
+            if (!this._dead) this.setState({introSkipped: true});
+        };
+        names.forEach((n) => window.addEventListener(n, skip, {passive: true}));
+        this._introOff = off;
+        this._timers.push(setTimeout(() => {
+            if (this._introOff) this._introOff();
+        }, 3900));
     }
 
     // Leaflet is 44.9 KB and the page's whole budget is 150 KB, so warming it for
@@ -855,6 +911,17 @@ class Component extends DCLogic {
         if (this._vio) this._vio.disconnect();
         this._io = null;
         this._vio = null;
+        if (this._navRo) {
+            this._navRo.disconnect();
+            this._navRo = null;
+        }
+        if (this._navSync) {
+            if (this._navEl) this._navEl.removeEventListener("scroll", this._navSync);
+            window.removeEventListener("resize", this._navSync);
+            this._navSync = null;
+            this._navEl = null;
+        }
+        if (this._introOff) this._introOff();
         if (this._sweep) window.removeEventListener("scroll", this._sweep);
         if (this._focusIn) document.removeEventListener("focusin", this._focusIn);
         this._sweep = null;
@@ -913,7 +980,7 @@ class Component extends DCLogic {
 
     renderVals() {
         return {
-            intro: this.props.intro ?? true,
+            intro: (this.props.intro ?? true) && !this.state.introSkipped,
             clock: this.state.now,
             session: this.state.session,
             vIp: this.state.vIp,
@@ -925,8 +992,7 @@ class Component extends DCLogic {
             certLines: this.state.certLines,
             certTotal: this.state.certTotal,
             certOk: this.state.certOk,
-            certFill: this.state.certFill,
-            certEmpty: this.state.certEmpty,
+            certCells: this.state.certCells,
             certGauge: this.state.certGauge,
             certsOk: this.state.certsOk,
             rttLine: this.state.rttLine,

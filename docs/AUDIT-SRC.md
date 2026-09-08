@@ -140,7 +140,7 @@ found wrong, with the evidence recorded.
 | `date` prints a JavaScript date string, not `date` output | `src/app.js:77` | fixed — `Tue Sep  8 14:23:11 CEST 2026` |
 | `neofetch` and `help` implemented but unlisted, while the copy claims `help` lists everything | `src/app.js:44` | fixed — both listed |
 | Terminal identity contradicts itself: `login: marcin`, `guest@` prompts, `pwd` → `/home/marcin` | both files | fixed — unified on a guest session; `/home/marcin` stays as the mounted home |
-| Box-drawing glyphs fall back to the OS font — no shipped subset covers U+2500–U+25CF | `assets/fonts.css:8,17` | **open** — see §5 |
+| Box-drawing glyphs fall back to the OS font — no shipped subset covers U+2500–U+25CF | `assets/fonts.css:8,17` | **fixed** in the follow-up pass — the tree, both gauges and the shell's status dot are CSS; nothing on the page needs the OS fallback any more |
 | `#8A857D` on `#151513` at 4.99:1 leaves 0.49 of headroom | palette | noted — passes; do not darken the foreground or lighten the pane |
 
 ### LOW and NIT
@@ -199,6 +199,28 @@ Three decisions were Marcin's and were applied by hand, because each spans both 
   ipwho.is and openstreetmap.org before the click; the note after the click interpolates whichever host
   actually answered, rather than asserting one.
 
+### Follow-up pass — a second review, applied whole
+
+A later review of the deployed page came back with five changes, all of them taken. They touch
+`src/app.js`, `src/index.html` and `assets/page.css` only; no new host, no storage, no change to the
+CSP or to `scripts/build.mjs`.
+
+| Change | Why |
+|---|---|
+| `~/stack`'s tree and both gauges redrawn in CSS | closes §5.3 — no glyph the font subset lacks is positioning anything any more |
+| The boot overlay skips on any key, click or tap | it ran 3.8 s whether or not the visitor wanted it; the overlay now says so from 0.8 s |
+| The tmux bar gets a visible scrollbar and a `›` below 1040 px | the bar has always scrolled — its `scrollWidth` is 1040 — and nothing said so on a phone |
+| `~/career` prints short dates below 560 px | the `max-content` date column was taking two thirds of a 320 px row |
+| Two inline links padded to 24 px | WCAG 2.5.8; padding rather than a larger font, so the neofetch grid keeps its rhythm |
+
+`~/shell`'s `●` was finished off in the same commit — the one character the review left behind, and
+with it gone the page asks the OS fallback for nothing.
+
+Cost: 2.1 KB gzipped of the 20.1 KB headroom. Re-verified in headless Chrome at 320, 390, 768 and
+1440 px: `scrollWidth` equals `clientWidth` at every width, nothing inside `main` overflows, both
+gauges measure identically, no link or button has a target under 24 px, the shell's status dot is a
+6.9 px CSS circle, and the build still exits 0.
+
 ---
 
 ## 5. Open — needs a decision or work outside this repo
@@ -235,7 +257,15 @@ blocking it is deliberate — but left enabled it will now fail loudly in every 
 Two other zone settings from `docs/AUDIT.md` remain outstanding: **Rocket Loader is on** and rewrites
 script types, which would break dc-runtime; **Email Obfuscation is on** and rewrites the `mailto:`.
 
-**3. The box-drawing glyphs still come from the OS fallback font.** Neither shipped woff2 contains
+**3. RESOLVED — the box characters are gone, replaced by CSS.** The second of the two ways out was
+taken in the follow-up pass. `~/stack`'s tree is a `<ul class="tree">` drawn with `border-left` and
+`border-top`, and the two gauges are ten `<span>`s each; nothing is positioned by a glyph the font
+does not carry, and `~/shell`'s `●` status dot became a CSS circle in the same pass. Scanning the
+built `index.html` for codepoints outside the subset's `unicode-range` now returns **nothing**. That
+also removed the need to test on Windows: there is no fallback glyph left to measure. The original
+finding read:
+
+> **The box-drawing glyphs still come from the OS fallback font.** Neither shipped woff2 contains
 U+2500–U+25CF, and the subset cannot be produced from what is in the repo — the source is upstream
 JetBrains Mono, which is not on disk. Measured impact on macOS is 0.03 px per character, a hairline.
 On Windows the next family in the stack is Consolas at roughly 8% narrower per glyph, which would
@@ -254,7 +284,16 @@ gap worth closing first.
   on Microsoft Learn. The line now says so; a Microsoft Learn transcript URL would close it properly.
 - "hundreds of applications" is the page's largest unqualified number, in four places.
 
-**5. Deploy configuration.** The Cloudflare Pages build command should be `node scripts/build.mjs` with
+**5. RESOLVED — and the safety net it assumed is gone.** The Cloudflare Pages build command is
+`node scripts/build.mjs` with output directory `output/`, set and verified in CI: `.nvmrc` honoured
+(Node 22.22.0), the Credly fetch succeeding, `_headers` picked up. What has changed since the finding
+was written is that **`output/` and the root `index.html` are no longer committed** (`d99cb30`) — they
+used to mean every asset lived in the repo twice. So the build command is now load-bearing rather than
+a nicety: without it there is nothing to serve. The trade is deliberate — the build exits non-zero
+rather than ship a truncated page, and Cloudflare keeps serving the previous deployment when it does.
+The original finding read:
+
+> **Deploy configuration.** The Cloudflare Pages build command should be `node scripts/build.mjs` with
 output directory `output/`. `output/` is committed as well, so the site still deploys if the command is
 unset — it just stops refreshing the baked certification data, and `public/_headers` would never reach
 the output root.
@@ -300,19 +339,19 @@ closed by eye in a headed browser: the caret is visible.
 
 ### Byte budget
 
-**129.9 KB gzipped on first view against a 150 KB ceiling — 20.1 KB of headroom**, measured from the
-eight resources requested before any scroll.
+**131.9 KB gzipped on first view against a 150 KB ceiling — 18.1 KB of headroom**, measured from the
+eight resources requested before any scroll. The follow-up pass cost 2.1 KB of the headroom.
 
-| Resource | raw | gz |
-|---|---|---|
-| `index.html` | 88,652 | 21,434 |
-| `react-dom.js` | 131,835 | 42,897 |
-| `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) |
-| `dc-runtime.js` | 69,150 | 19,017 |
-| `marcin.webp` | 11,592 | 11,627 (raw counted) |
-| `react.js` | 10,751 | 4,272 |
-| `page.css` | 3,020 | 1,457 |
-| `fonts.css` | 3,353 | 943 |
+| Resource | raw | gz | |
+|---|---|---|---|
+| `index.html` | 93,034 | 22,645 | +1,211 |
+| `react-dom.js` | 131,835 | 42,897 | |
+| `jetbrains-mono-latin.woff2` | 31,340 | 31,395 (raw counted) | |
+| `dc-runtime.js` | 69,150 | 19,017 | |
+| `marcin.webp` | 11,592 | 11,627 (raw counted) | |
+| `react.js` | 10,751 | 4,272 | |
+| `page.css` | 5,827 | 2,518 | +1,061 |
+| `fonts.css` | 2,061 | 809 | −134 |
 
 Leaflet's 45,961 B is what moved: deferring it is what brings 168.8 KB back under the ceiling.
 `index.html` itself grew 16.1 → 21.4 KB gz, from the larger `app.js`, the JSON-LD block and the ARIA
@@ -320,9 +359,9 @@ attributes.
 
 ### Known and accepted
 
-- **A 5 px internal overflow inside `~/career` at 320 px.** The section and one grid `div` report
-  `scrollWidth 297` against `clientWidth 292`. Contained — the right edge is at 306 in a 320 px
-  viewport, `documentElement.scrollWidth` stays 320, and the screenshot shows no visible clipping.
+- ~~**A 5 px internal overflow inside `~/career` at 320 px.**~~ Gone. It was contained anyway, but the
+  follow-up pass — short dates below 560 px and an 8 px column gap — removed it: the section and the
+  grid both report `scrollWidth 292` against `clientWidth 292` at a 320 px viewport.
 - **Forward Tab does not leave the shell input while it holds text.** `keyDown` intercepts Tab whenever
   the line is non-empty, which is what a real shell does. WCAG 2.1.2 is satisfied by three other exits:
   Shift+Tab, Escape, and Tab on an empty line. Deliberate.

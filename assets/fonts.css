@@ -1,16 +1,15 @@
-/* KNOWN GAP — the page draws 111 box, block and shade characters (U+2500 ×42,
-   U+2591 ×30, U+251C ×16, U+2502 ×15, U+2514 ×5, U+2588 ×2, U+25CF ×1) and no
-   face below covers any of them. Verified by reading the cmap out of both
-   woff2 files: neither contains a single codepoint above U+2113, so widening a
-   unicode-range would not help — the glyphs are simply not in the subsets.
-   They therefore render from the OS fallback, which is a different advance
-   width: measured at 14px, JetBrains Mono is 8.400px and the macOS fallback
-   8.429px (+0.34%). Consolas, next in the family list and what Windows would
-   most likely supply, is 0.55em against JetBrains Mono's 0.60em — about 8%
-   narrower, which is enough to visibly break a column.
-   Fixing it needs a subset built from the upstream JetBrains Mono covering
-   U+2500-259F and U+25A0-25FF; it cannot be cut from the files here. The
-   alternative is to stop drawing rules with characters and use CSS borders. */
+/* The page draws no box, block or shade characters any more: ~/stack's tree
+   and the two gauges in ~/whoami are CSS borders and boxes — see page.css.
+   That was forced. The subset below does not carry a single codepoint above
+   U+2113 (read out of its cmap; the deleted latin-ext file was no better), so
+   those glyphs came from the OS fallback at a different advance width. On
+   macOS that cost +0.34% — 8.429px against JetBrains Mono's 8.400px at 14px —
+   and Consolas, next in the family list and what Windows would most likely
+   supply, is 0.55em against 0.60em, about 8% narrower, which is enough to
+   visibly break a column. Widening a unicode-range would not have helped: the
+   glyphs are not in the subset at all. Nothing outside the subset is drawn any
+   more — ~/shell's status dot was the last one, and it is a CSS circle now.
+   Do not draw a rule, a tree, a bar or a dot with characters again. */
 /* latin */
 @font-face {
   font-family: 'JetBrains Mono';
