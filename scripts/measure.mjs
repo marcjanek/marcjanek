@@ -246,6 +246,78 @@ async function revealTiming(cdp) {
     })()`);
 }
 
+// revealTiming() jumps a section straight to the top of the viewport, so it
+// cannot see rootMargin at all — the band is already crossed the instant the
+// section lands. This times the question a reader's eye actually asks: during
+// a normal, gradual scroll down the page, is a section's content already
+// shown by the moment its heading reaches the middle of the viewport? Walks
+// every [data-prompt] row — the same selector setupTypers() uses — so a
+// section with no reveal mechanism (#shell has no data-prompt row) is
+// correctly skipped rather than hardcoded into a section-id list.
+async function revealScrollTiming(cdp) {
+    await cdp.send("Emulation.setDeviceMetricsOverride", {
+        width: 1280, height: 900, deviceScaleFactor: 1, mobile: false,
+    });
+    await cdp.send("Page.navigate", {url: ORIGIN + "/?rs=1"});
+    await sleep(300);
+    if (!await waitForBoot(cdp)) throw new Error("boot-go never arrived");
+    await cdp.send("Input.dispatchKeyEvent", {type: "keyDown", key: "Escape"});
+    await cdp.send("Input.dispatchKeyEvent", {type: "keyUp", key: "Escape"});
+    await sleep(300);
+    const json = await cdp.eval(`(async () => {
+        // Same targeting as setupTypers(): everything after the prompt row in
+        // its section, plus the [data-ok] line if the section has one — the
+        // exact set that starts opacity:0/visibility:hidden and is what a
+        // reader is actually waiting on.
+        const rows = Array.from(document.querySelectorAll("[data-prompt]"));
+        const sections = rows.map((row) => {
+            const sec = row.parentElement;
+            const kids = Array.from(sec.children);
+            const els = kids.slice(kids.indexOf(row) + 1);
+            const ok = sec.querySelector("[data-ok]");
+            if (ok) els.push(ok);
+            return {id: sec.id, heading: sec.querySelector("h2"), els, arrived: false};
+        });
+        const readyCount = (s) => s.els.filter((el) => {
+            const cs = getComputedStyle(el);
+            return cs.opacity === "1" && cs.visibility === "visible";
+        }).length;
+        const out = [];
+        const record = (s) => {
+            s.arrived = true;
+            const n = readyCount(s);
+            out.push({id: s.id, total: s.els.length, ready: n, pending: s.els.length - n});
+        };
+        // "the reader's eye arrives" — a heading crossing the vertical middle
+        // of the viewport, not the top: a heading at the very top edge is
+        // already past what a reader is looking at.
+        const checkAll = () => {
+            for (const s of sections) {
+                if (s.arrived) continue;
+                if (!s.heading) { record(s); continue; }
+                if (s.heading.getBoundingClientRect().top <= innerHeight * 0.5) record(s);
+            }
+        };
+        window.scrollTo(0, 0);
+        await new Promise((r) => setTimeout(r, 50));
+        checkAll();
+        const maxScroll = document.documentElement.scrollHeight - innerHeight;
+        let y = 0;
+        // ~120px every ~40ms — a fast but human trackpad scroll, not a jump.
+        for (let i = 0; i < 500 && sections.some((s) => !s.arrived) && y < maxScroll; i++) {
+            y = Math.min(y + 120, maxScroll);
+            window.scrollTo(0, y);
+            await new Promise((r) => setTimeout(r, 40));
+            checkAll();
+        }
+        // A section whose heading never crosses the line (page shorter than
+        // expected, or the last section) still gets recorded, not dropped.
+        sections.forEach((s) => { if (!s.arrived) record(s); });
+        return JSON.stringify(out);
+    })()`);
+    return JSON.parse(json);
+}
+
 const outFlag = process.argv.indexOf("--out");
 const outFile = outFlag > -1 ? process.argv[outFlag + 1] : null;
 
@@ -260,6 +332,14 @@ try {
         console.log(JSON.stringify({revealMs: ms}));
         if (ms < 0) { console.error("FAIL: never fully revealed"); process.exitCode = 1; }
         else console.error("reveal " + ms + "ms");
+    } else if (process.argv.includes("--reveal-scroll")) {
+        const rows = await revealScrollTiming(cdp);
+        console.log(JSON.stringify(rows, null, 2));
+        const ready = rows.reduce((a, r) => a + r.ready, 0);
+        const total = rows.reduce((a, r) => a + r.total, 0);
+        console.error("ready on arrival: " + ready + "/" + total + " ("
+            + (total ? Math.round(100 * ready / total) : 100) + "%) across "
+            + rows.length + " sections");
     } else {
         const results = [];
         for (const w of WIDTHS) results.push(await measure(cdp, w));
