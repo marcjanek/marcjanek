@@ -305,7 +305,18 @@ async function revealScrollTiming(cdp, speedPxPerSec) {
                 if (s.heading.getBoundingClientRect().top <= innerHeight * 0.5) record(s);
             }
         };
-        window.scrollTo(0, 0);
+        // assets/page.css:1 sets html { scroll-behavior: smooth }, reset to
+        // auto only under prefers-reduced-motion (page.css:25) — which this
+        // harness must NOT emulate, because setupTypers() (src/app.js) skips
+        // the whole reveal mechanism under reduced motion, hiding nothing and
+        // making every section trivially "ready" from y=0. The two-argument
+        // scrollTo(x, y) form defers to that CSS property, so the stepped
+        // scroll below was being smoothed by the browser: negligible at
+        // 150px/s, growing at 400px/s, and unbounded at 1200px/s (measured
+        // ~428px behind target and still climbing). Passing an explicit
+        // behavior: "instant" overrides the CSS regardless of scroll-behavior
+        // — do not drop this back to the two-argument form.
+        window.scrollTo({top: 0, left: 0, behavior: "instant"});
         await new Promise((r) => setTimeout(r, 50));
         checkAll();
         const maxScroll = document.documentElement.scrollHeight - innerHeight;
@@ -315,7 +326,7 @@ async function revealScrollTiming(cdp, speedPxPerSec) {
         let y = 0;
         for (let i = 0; i < maxTicks && sections.some((s) => !s.arrived) && y < maxScroll; i++) {
             y = Math.min(y + pxPerTick, maxScroll);
-            window.scrollTo(0, y);
+            window.scrollTo({top: y, left: 0, behavior: "instant"});
             await new Promise((r) => setTimeout(r, tickMs));
             checkAll();
         }
