@@ -7,8 +7,9 @@
 // badges are fetched here, at build time, so that a visitor's browser never
 // contacts credly.com. A network failure is not fatal — the last good
 // data/baked.json is used instead.
-import { readFile, writeFile, mkdir, cp, rm, rename } from 'node:fs/promises'
-import { dirname, join } from 'node:path'
+import { readFile, writeFile, mkdir, cp, rm, rename, readdir } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { dirname, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -151,7 +152,51 @@ const [tpl, app] = await Promise.all([readFile(p('src/index.html'), 'utf8'), rea
 for (const marker of ['<!--BUILD:app.js-->', '"BUILD:baked"']) {
   if (!tpl.includes(marker)) throw new Error(`src/index.html is missing ${marker}`)
 }
-const payload = { 'src/app.js': forScript(app.trimEnd()), 'data/baked.json': forJson(baked) }
+
+// ── stylesheet cache stamps ────────────────────────────────────────────────
+// The stylesheets are served from a stable name, and index.html is not cached
+// at all, so a deploy put new markup in front of whatever stylesheet the edge
+// still had. A change split across the two then ships *broken* rather than
+// merely stale — it did: ~/shell lost its old min-height in the markup while
+// the new height was still in the un-arrived CSS, and the terminal came out
+// 64px tall and growing. Stamping each URL with a hash of the file it points at
+// makes the pair inseparable: different CSS is a different URL, so the two can
+// never disagree, and _headers can cache them for a year instead of for five
+// minutes. The stamp goes on the source, before app.js is inlined, so the
+// assertions below count only real references and not the copy in the payload.
+const stamped = new Set()
+const stamp = async (text, what, href, expected) => {
+  const v = createHash('sha256').update(await readFile(p(href))).digest('hex').slice(0, 8)
+  const needle = `${href}"`
+  const n = text.split(needle).length - 1
+  // Every reference to one file has to end up with the same URL. The two in
+  // index.html are the preload in <head> and the stylesheet in <helmet>, and a
+  // preload whose URL does not match the tag it warms is worse than none: the
+  // browser fetches the file twice and logs "preloaded but not used".
+  if (n !== expected) throw new Error(`${what}: expected ${expected} references to ${href}, found ${n}`)
+  stamped.add(href)
+  return text.split(needle).join(`${href}?v=${v}"`)
+}
+
+let doc = tpl
+for (const href of ['assets/fonts.css', 'assets/page.css']) doc = await stamp(doc, 'src/index.html', href, 2)
+// leaflet.css is injected by loadLeaflet() and warmed by warmLeaflet(), which
+// have to agree or the warm fetch is thrown away
+const src = await stamp(app, 'src/app.js', 'assets/leaflet.css', 2)
+
+// A stylesheet that nothing stamped would be frozen for a year under a name
+// that can change — the exact trap the year-long header creates. Adding one and
+// forgetting to stamp it stops the build rather than reaching a visitor.
+const sheets = (await readdir(p('assets'), { recursive: true }))
+  .map((f) => 'assets/' + f.split(sep).join('/'))
+  .filter((f) => f.endsWith('.css'))
+const missed = sheets.filter((f) => !stamped.has(f))
+if (missed.length) {
+  throw new Error(`${missed.join(', ')}: served under a year-long cache with no ?v= stamp — add it to the list in scripts/build.mjs, or a returning visitor keeps the old file`)
+}
+log(`css stamped: ${sheets.length} (${sheets.map((f) => f.split('/').pop()).join(', ')})`)
+
+const payload = { 'src/app.js': forScript(src.trimEnd()), 'data/baked.json': forJson(baked) }
 // The badge names come from credly, which is not ours to control. If escaping
 // ever fails to neutralise them, stop here — a build that exits 0 and deploys a
 // blank page is the one failure nobody would notice.
@@ -159,7 +204,7 @@ for (const [what, text] of Object.entries(payload)) {
   const hit = text.match(BREAKS_OUT)
   if (hit) throw new Error(`${what}: ${JSON.stringify(hit[0])} survived escaping and would break out of its <script> element`)
 }
-const html = tpl
+const html = doc
   .replace('<!--BUILD:app.js-->', () => payload['src/app.js'])
   .replace('"BUILD:baked"', () => payload['data/baked.json'])
 

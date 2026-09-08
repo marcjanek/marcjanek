@@ -514,3 +514,14 @@ version on its own. The height and the overflow are inline in `index.html` now a
 colours are left in the stylesheet — verified by disabling `page.css` outright, where the box is still
 380 px and still scrolls. The rule this leaves behind: **structure the markup depends on ships with
 the markup**, and a stale stylesheet may only cost a colour.
+
+The cache split that caused it is closed rather than worked around. `scripts/build.mjs` stamps every
+stylesheet URL with the first eight hex of a SHA-256 of the file it points at — both references in
+`index.html` (the `<head>` preload and the `<helmet>` tag, which must match or the preload is worse
+than none) and both in `app.js` (`warmLeaflet()` and `loadLeaflet()`, which must match or the warm
+fetch is thrown away). A changed stylesheet is therefore a different URL and can never be served
+against markup that expects the other one, so `/assets/*.css` is `max-age=31536000, immutable` now
+instead of five minutes. The trap that creates — a stylesheet frozen for a year under a name that can
+change — is closed too: the build enumerates every `.css` under `assets/` and exits 1 if one of them
+was not stamped. Both paths verified: editing `page.css` moves its stamp, and an unstamped stylesheet
+stops the build with the file named.

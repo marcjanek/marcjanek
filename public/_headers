@@ -40,16 +40,25 @@
 # cache. Those duplicate requests are also what produced four "preloaded but not
 # used" warnings in the console on production and none locally.
 #
-# The three directories below are content that does not change in place: the
-# vendor bundles are never edited, and a new portrait or font subset arrives
-# under a new name. **If you ever overwrite one of these files without renaming
-# it, a returning visitor keeps the old one for a year.** The stylesheets are
-# hand-edited, so they get five minutes instead — long enough to serve one page
-# load from cache, short enough that a deploy is picked up before anyone
-# notices. index.html itself is untouched here and stays uncached, so a deploy
-# is always visible immediately.
+# The directories below are content that does not change in place: the vendor
+# bundles are never edited, and a new portrait or font subset arrives under a new
+# name. **If you ever overwrite one of these files without renaming it, a
+# returning visitor keeps the old one for a year.**
+#
+# The stylesheets are hand-edited and keep their names, so they used to get five
+# minutes instead. That was the wrong trade. index.html is uncached, so for those
+# five minutes after a deploy a visitor ran new markup against the previous
+# stylesheet — which is not "slightly out of date", it is broken whenever a
+# change has a half in each file, and one shipped that way. scripts/build.mjs
+# stamps every stylesheet URL with a hash of the file it points at now, so a
+# changed stylesheet is a different URL and the two can never disagree; it
+# refuses to build if a .css under assets/ has no stamp. That makes a year
+# correct here, and it also spares a returning visitor the revalidation.
+#
+# index.html itself is untouched here and stays uncached, so a deploy is always
+# visible immediately.
 /assets/*.css
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/vendor/*
   Cache-Control: public, max-age=31536000, immutable
