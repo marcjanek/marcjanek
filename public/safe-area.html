@@ -36,6 +36,9 @@
 <div class="probe" id="t"></div><div class="probe" id="b"></div>
 <div class="probe" id="l"></div><div class="probe" id="r"></div>
 <main><pre id="out">reading…</pre></main>
+<!-- ?overlay=4 puts a full-screen #0C0C0C sheet over everything for four seconds,
+     which is what the site's boot screen does. If the two bars go dark under it and
+     only come back when it lifts, the intro is what iOS Safari is reading. -->
 <div id="bot">teal should reach the bottom edge</div>
 <script>
     var px = function (id) { return getComputedStyle(document.getElementById(id)).height; };
@@ -60,6 +63,16 @@
         : 'VERDICT: insets are 0px. Either this device has none, or viewport-fit=cover is not being applied.');
     lines.push('', 'UA: ' + navigator.userAgent);
     document.getElementById('out').textContent = lines.join('\n');
+
+    var secs = parseFloat((location.search.match(/overlay=([\d.]+)/) || [])[1] || 0);
+    if (secs > 0) {
+        var sheet = document.createElement('div');
+        sheet.style.cssText = 'position:fixed;inset:0;z-index:99;background:#0C0C0C;color:#8A857D;' +
+            'display:grid;place-items:center;font:14px/1.6 ui-monospace,Menlo,monospace';
+        sheet.textContent = 'boot-screen stand-in — ' + secs + 's';
+        document.body.appendChild(sheet);
+        setTimeout(function () { sheet.remove(); }, secs * 1000);
+    }
 </script>
 </body>
 </html>
