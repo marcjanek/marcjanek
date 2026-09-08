@@ -24,17 +24,21 @@ html { scroll-behavior: smooth; }
   [data-prompt] { align-items: baseline }
   [data-caret] { position: relative; top: 3px }
 
-  /* ~/shell is a terminal, and a terminal has a window. This box had a min-height
-     and no ceiling, so `help` — twenty lines — grew the section, pushed the rest of
-     the page down and left the new prompt below the fold with nothing to say that
-     anything had happened. A fixed height and its own scrollbar instead, with
-     scrollShell() in app.js pinning it to the bottom after every command, which is
-     what a real terminal does. The height tracks the viewport, so it survives a
-     200% zoom, and the section's own height stops changing as output arrives. The
-     region needs no tabindex of its own: the prompt input lives inside it. */
+  /* ~/shell is a terminal, and a terminal has a window: the box is a fixed height
+     with its own scrollbar, and scrollShell() in app.js pins it to the bottom after
+     every command. Before it, `help` — twenty lines — grew the section, pushed the
+     rest of the page down and left the new prompt below the fold. The region needs
+     no tabindex of its own: the prompt input lives inside it.
+
+     Only the scrollbar is styled here. The height and the overflow are inline in
+     index.html, and that is deliberate: this file is served max-age=300 while the
+     HTML is not cached at all, so for five minutes after a deploy a visitor can be
+     running new markup against the previous stylesheet. That window is harmless for
+     a colour and not for a geometry — it shipped once, and because the markup had
+     already dropped its old min-height the box came out 64px tall and growing,
+     which is worse than either version. Structure that the markup depends on goes
+     in the markup. */
   [data-term] {
-    height: clamp(260px, 44vh, 380px);
-    overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #7FC8A9 #0E0E0D;
   }

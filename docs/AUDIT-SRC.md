@@ -502,3 +502,15 @@ land before the row does; measured, `help` left the box at `scrollTop` 0 of 168.
 per-second clock render costs nothing. Measured at 1280, 390 and 320: the box height, the section
 height and the document height are unchanged by anything typed into it, the newest prompt is inside
 the visible box after every command, and there is no horizontal overflow at any width.
+
+That window shipped broken for five minutes and the reason is worth keeping. `/assets/*.css` is served
+`public, max-age=300` and `index.html` is not cached at all, so straight after a deploy Cloudflare's
+edge still answers `/assets/page.css` with the previous file — `cf-cache-status: HIT`, `Age: 256`,
+measured — while every visitor already has the new markup. Verifying the deploy with a cache-busting
+query missed it completely: `?cb=…` is a different cache key and returned the new stylesheet from the
+first poll. The markup had dropped the old `min-height` and the stylesheet that was to supply the new
+height had not arrived, so the terminal came out 64 px tall and growing, which is worse than either
+version on its own. The height and the overflow are inline in `index.html` now and only the scrollbar
+colours are left in the stylesheet — verified by disabling `page.css` outright, where the box is still
+380 px and still scrolls. The rule this leaves behind: **structure the markup depends on ships with
+the markup**, and a stale stylesheet may only cost a colour.
