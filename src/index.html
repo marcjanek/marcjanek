@@ -71,13 +71,24 @@
         /* The canvas, and it must be the same colour as body. Giving html the bar
            colour instead was tried, to fill the strip iOS Safari paints under the fixed
            footer: it put a lighter band across the middle of the page wherever Safari
-           had not repainted the body box. One dark, everywhere — which now includes the
-           intro, whose #000 was a second dark. iOS Safari tints its chrome from what the
-           page paints and re-tints when that changes, so a boot screen darker than the
-           page is a colour it has to correct a few seconds in. That is what "the top and
-           bottom fill in after a moment" looks like. */
+           had not repainted the body box. So html stays #0C0C0C.
+
+           The intro does not. iOS Safari tints the bands above and below the page from
+           the pixels the page paints at those edges, and re-tints when they change — so
+           an intro that covers the whole viewport in the page colour makes the bands the
+           page colour for as long as it is up, and they snap to the bar colour when it
+           lifts. That is what "the top and bottom fill in after a moment" was. Measured
+           on an iPhone (iOS 18.7) with a stand-in sheet: a 2px strip of another colour at
+           each end is ignored, a 34px strip is picked up, so Safari reads about a bar's
+           worth of the edge and no invisible hairline can fix it. #boot-cover, #boot and
+           #sting are therefore the bar colour, not the page colour — the edges are
+           #151513 from the first paint to long after the intro, and Safari never has a
+           change to chase. The difference from #0C0C0C is nine values per channel; it is
+           the bands this buys, not a lighter boot screen anyone will notice.
+           env(safe-area-inset-*) is not the mechanism: the probe measured all four at 0px
+           on that phone while the bands were still wrong. */
         html { background: #0C0C0C }
-        html.js #boot-cover { position: fixed; inset: 0; z-index: 80; background: #0C0C0C }
+        html.js #boot-cover { position: fixed; inset: 0; z-index: 80; background: #151513 }
         /* the template is in the document and makes it tall, so without this the cover
            has a scrollbar beside it and the page can be scrolled while it is up */
         html.js:not(.boot-go) { overflow: hidden }
@@ -97,7 +108,7 @@
 
     <sc-if hint-placeholder-val="{{ true }}" value="{{ intro }}">
         <div>
-        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#0C0C0C;overflow:hidden;padding:calc(clamp(20px,6vh,64px) + env(safe-area-inset-top, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) calc(clamp(20px,6vh,64px) + 2.4em + env(safe-area-inset-bottom, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
+        <div aria-hidden="true" id="boot" style="position:fixed;inset:0;z-index:60;background:#151513;overflow:hidden;padding:calc(clamp(20px,6vh,64px) + env(safe-area-inset-top, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) calc(clamp(20px,6vh,64px) + 2.4em + env(safe-area-inset-bottom, 0px)) calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));font-size:clamp(11px,1.05vw,14px);line-height:1.65;animation:introOut .5s cubic-bezier(.7,0,.3,1) 1.72s forwards">
             <div id="boot-log" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
                 <div style="animation:fadeIn .01s linear 0.05s both"><span style="color:#8A857D">[    0.000000]</span> Booting mozolewski.eu 6.9.0-cloud (x86_64)</div>
                 <div style="animation:fadeIn .01s linear 0.11s both"><span style="color:#8A857D">[    0.031418]</span> Command line: ro quiet net.ifnames=0</div>
@@ -128,7 +139,7 @@
         <!-- Sits behind the boot log at z-index 59, so the log's wipe uncovers a
              wordmark already typing rather than cutting to it. It leaves by
              dissolving; only the log wipes. -->
-        <div aria-hidden="true" id="sting" style="position:fixed;inset:0;z-index:59;background:#0C0C0C;display:grid;place-items:center;padding:0 calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) 0 calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
+        <div aria-hidden="true" id="sting" style="position:fixed;inset:0;z-index:59;background:#151513;display:grid;place-items:center;padding:0 calc(clamp(14px,4vw,56px) + env(safe-area-inset-right, 0px)) 0 calc(clamp(14px,4vw,56px) + env(safe-area-inset-left, 0px));animation:stingOut .9s cubic-bezier(.33,0,.2,1) 2.95s forwards">
             <div style="display:flex;align-items:center;font-size:clamp(28px,7vw,64px);line-height:1.1;white-space:nowrap;color:#7FC8A9;animation:wmOut .65s cubic-bezier(.33,0,.2,1) 2.97s forwards">
                 <span style="clip-path:inset(0 100% 0 0);animation:wmType .62s steps(13) 2s both">mozolewski.eu</span>
                 <span style="width:.58em;height:1.05em;margin-left:.14em;background:#7FC8A9;opacity:0;animation:wmCaretOn .01s linear 2s forwards, caret 1.05s steps(1) 2s infinite, wmCaretOff .01s linear 2.9s forwards"></span>

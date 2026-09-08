@@ -247,6 +247,20 @@ Giving `html` the bar colour was tried first for that last one and put a lighter
 middle of the page — a reminder that a colour fix aimed at a browser nobody here can drive is a guess,
 and has to be verified on the device before it is trusted.
 
+Neither guess was the cause, and the safe-area work fixed a different thing than the one reported. A
+throwaway probe page carrying two fixed bars, deployed and read on the phone, settled it in three
+measurements: `env(safe-area-inset-*)` is `0px` on all four sides of that device while its bars still
+reach both screen edges, so insets were never the mechanism; a full-screen sheet in the page colour
+turns the bands dark for exactly as long as it is up and they snap to the bar colours when it lifts;
+and a strip of another colour at each end of that sheet is ignored at 2 px but picked up at 34 px.
+**iOS Safari tints its bands from the pixels the page paints at the edges, reading about a bar's worth
+of them, and re-tints when they change.** The intro covers the viewport in the page colour for four
+seconds, which is the whole of the reported "it fills in after a moment". `#boot-cover`, `#boot` and
+`#sting` are now `#151513` — the same colour the nav and the footer put against those edges — so what
+Safari samples is identical from the first paint onwards. Verified locally at 390×844: the topmost
+opaque background at `y = 0` and at `y = height - 1` is `rgb(21, 21, 19)` during the log, during the
+wordmark, after the intro and mid-scroll. The probe page was deleted in the same commit.
+
 On speed: the first screen is not waiting on bytes. Measured on production, TTFB is 47 ms, the first
 paint 110 ms and the intro starts at 191 ms; content appears at about 4.0 s, so **95% of the wait is
 the intro itself**, which is a deliberate design and stays. What was recovered underneath it: react
