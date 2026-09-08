@@ -261,6 +261,27 @@ html { scroll-behavior: smooth; }
     .map-ph { height: auto !important; padding: 20px 16px !important }
   }
 
+  /* ~/contact's label column is 14ch, because `stackoverflow` is 13 characters
+     wide. That leaves the value 154px of a 320px screen — 18 characters — so
+     every one of the five URLs wrapped, and `overflow-wrap: anywhere` broke them
+     where the room ran out rather than at a separator: `github.com/marcjane` /
+     `k`, `contact@mozolewski.` / `eu`. The labels, centred against two-line
+     values, floated free of them.
+
+     Below 560px the label goes above its value and the value gets the whole
+     296px. The label keeps its 9px of top padding and loses the bottom one, so
+     the pair sits 9px apart and reads as a pair; the anchors keep theirs whole,
+     which is what holds them over the 24px WCAG 2.5.8 asks for. */
+  @media (max-width: 560px) {
+    .crow { grid-template-columns: minmax(0, 1fr) !important; column-gap: 0 !important; align-items: start !important }
+    .crow > :first-child { padding-bottom: 0 !important }
+    /* 9px above the label and 9px above the value put 33px inside a pair against
+       41px between pairs, which is not enough difference to group them. 2px
+       above the value makes it 26 against 41. The anchors keep 9px below, so
+       they still measure 34.8px against the 24px WCAG 2.5.8 asks for. */
+    .crow > :nth-child(2) { padding-top: 2px !important }
+  }
+
   /* ~/stack used to be drawn with U+2500 box characters. They are not in the
      JetBrains Mono subset, so they came from the OS fallback at a different
      advance width — on Windows that is Consolas, about 8% narrower, which bends
