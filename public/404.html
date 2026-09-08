@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- Cloudflare Pages falls back to index.html with a 200 for every path it
+     cannot find unless this file exists, which made every typo'd inbound link an
+     indexable duplicate of the homepage — and answered /robots.txt with 116 KB of
+     HTML. This page's only job is to make that fallback a real 404.
+
+     It is deliberately self-contained: no <link rel=stylesheet>. /assets/*.css is
+     served max-age=31536000, immutable and only ever reaches a visitor under the
+     ?v= stamp scripts/build.mjs writes into src/index.html and src/app.js. A
+     reference from here would carry no stamp, and an unstamped immutable URL
+     freezes for a year. Every URL below is absolute for the same reason the
+     fallback exists: this document is served for /a/b/c as readily as for /x. -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>404 — mozolewski.eu</title>
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+    <meta content="noindex" name="robots">
+    <meta content="#151513" name="theme-color">
+    <meta content="dark" name="color-scheme">
+    <style>
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url("/assets/fonts/jetbrains-mono-latin.woff2") format('woff2');
+        }
+
+        html, body { background: #0C0C0C; margin: 0 }
+
+        body {
+            color: #D6D2CB;
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            /* A prompt line is 39 monospace characters and cannot be broken at a
+               sensible place, so it is scaled down and allowed to wrap anywhere
+               rather than pushing the document wider than the viewport. The site
+               next door holds scrollWidth == clientWidth from 320px up; this page
+               has no reason to be the one that does not. */
+            font-size: clamp(12.5px, 3.3vw, 15px);
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: max(24px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
+        }
+
+        main { width: 100%; max-width: 62ch; margin: 0 auto; display: flex; flex-direction: column; gap: 14px }
+
+        .bar { display: flex; justify-content: space-between; gap: 10px; background: #151513; border: 1px solid #2A2724; padding: 5px 10px; font-size: .82em; color: #8A857D }
+
+        h1 { font-size: 1em; font-weight: 400; margin: 0; line-height: inherit }
+
+        .dim { color: #8A857D }
+        .path { color: #6FA8FF }
+        .fail { color: #E0A33C }
+        .ok { color: #7FC8A9 }
+        .caret { display: inline-block; width: .6em; height: 1.05em; margin-left: 2px; background: #D6D2CB; vertical-align: text-bottom; animation: caret 1.05s steps(1) infinite }
+
+        a { color: #7FC8A9; display: inline-block; padding: 6px 0; min-height: 24px }
+        a:focus-visible { outline: 2px solid #F3EFE9; outline-offset: 2px }
+
+        @keyframes caret { 50% { opacity: 0 } }
+        @media (prefers-reduced-motion: reduce) { .caret { animation: none } }
+    </style>
+</head>
+<body>
+<main>
+    <div class="bar"><span>guest@mozolewski.eu</span><span class="path">~</span></div>
+    <div><span class="ok">guest@mozolewski.eu</span><span class="dim">:</span><span class="path">~</span><span class="dim">$</span> cat <span class="fail">$REQUEST_URI</span></div>
+    <h1>cat: no such file or directory</h1>
+    <div class="dim">[<span class="fail"> FAIL </span>] 404 — nothing is mounted at that path.</div>
+    <div><span class="ok">guest@mozolewski.eu</span><span class="dim">:</span><span class="path">~</span><span class="dim">$</span> <a href="/">cd ~</a><span class="caret"></span></div>
+</main>
+</body>
+</html>

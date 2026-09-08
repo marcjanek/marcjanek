@@ -1,0 +1,14 @@
+# Cloudflare's managed content-signals block is injected ahead of this file, so
+# what a crawler receives is that block and then this one. Two `User-agent: *`
+# groups is legal — a parser merges the rules — and `Sitemap:` is a non-group
+# directive, read wherever it sits.
+#
+# Until this file existed, /robots.txt was answered with the whole homepage:
+# Cloudflare Pages falls back to index.html for any path it cannot find, so the
+# response was 200 text/plain, 116 KB, the managed block followed by the entire
+# document. public/404.html is what stops that fallback.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://mozolewski.eu/sitemap.xml

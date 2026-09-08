@@ -22,19 +22,32 @@
     <meta content="dark" name="color-scheme">
     <meta content="Marcin Mozolewski" name="author">
     <link href="https://mozolewski.eu/" rel="canonical">
+    <!-- The defaults, said out loud, plus the two that are not defaults: a snippet may
+         be any length, and the share card may be shown large in results and Discover
+         rather than as a thumbnail. Nothing here grants a crawler anything the absence
+         of a robots meta did not already grant. -->
+    <meta content="index, follow, max-snippet:-1, max-image-preview:large" name="robots">
     <meta content="website" property="og:type">
     <meta content="https://mozolewski.eu/" property="og:url">
     <meta content="mozolewski.eu" property="og:site_name">
     <meta content="en_US" property="og:locale">
     <meta content="Marcin Mozolewski — Senior Cloud Platform Engineer" property="og:title">
     <meta content="Senior Cloud Platform Engineer in Warsaw. Cloud network architecture, in-process egress security, and one provisioning path for hundreds of applications." property="og:description">
-    <meta content="https://mozolewski.eu/assets/img/marcin.jpg" property="og:image">
-    <meta content="image/jpeg" property="og:image:type">
-    <meta content="440" property="og:image:width">
-    <meta content="506" property="og:image:height">
-    <meta content="Marcin Mozolewski" property="og:image:alt">
-    <meta content="summary" name="twitter:card">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Marcin Mozolewski","url":"https://mozolewski.eu/","image":"https://mozolewski.eu/assets/img/marcin.jpg","jobTitle":"Senior Cloud Platform Engineer","knowsAbout":["Cloud network architecture","Egress security","Infrastructure provisioning","Policy as code","FinOps"],"worksFor":{"@type":"Organization","name":"Procter & Gamble"},"address":{"@type":"PostalAddress","addressLocality":"Warsaw","addressCountry":"PL"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Warsaw University of Technology"},"sameAs":["https://github.com/marcjanek","https://www.linkedin.com/in/marcin-mozolewski","https://stackoverflow.com/users/13347227/marcin-mozolewski","https://www.credly.com/users/marcin-mozolewski"]}</script>
+    <!-- The share card, not the portrait. og:image was assets/img/marcin.jpg — 440x506,
+         which LinkedIn, Slack and X all draw as a small square thumbnail. This one is
+         1200x630, built from scripts/og-card.html by headless Chrome and committed; that
+         file carries the command. The portrait keeps its own job below, as the JSON-LD
+         Person.image, which should be a picture of the person and not a card.
+         assets/img/* is immutable for a year: a regenerated card arrives under a NEW
+         name and this URL moves with it. It is fetched by crawlers only and never counts
+         against the page-view budget. -->
+    <meta content="https://mozolewski.eu/assets/img/og-card.png" property="og:image">
+    <meta content="image/png" property="og:image:type">
+    <meta content="1200" property="og:image:width">
+    <meta content="630" property="og:image:height">
+    <meta content="Marcin Mozolewski — Senior Cloud Platform Engineer — mozolewski.eu" property="og:image:alt">
+    <meta content="summary_large_image" name="twitter:card">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Marcin Mozolewski","url":"https://mozolewski.eu/","image":"https://mozolewski.eu/assets/img/marcin.jpg","jobTitle":"Senior Cloud Platform Engineer","knowsAbout":["Cloud network architecture","AI","Infrastructure provisioning","Engineer","FinOps"],"worksFor":{"@type":"Organization","name":"Procter & Gamble"},"address":{"@type":"PostalAddress","addressLocality":"Warsaw","addressCountry":"PL"},"alumniOf":{"@type":"CollegeOrUniversity","name":"Warsaw University of Technology"},"sameAs":["https://github.com/marcjanek","https://www.linkedin.com/in/marcin-mozolewski","https://stackoverflow.com/users/13347227/marcin-mozolewski","https://www.credly.com/users/marcin-mozolewski"]}</script>
     <!-- Both stylesheets are declared in <helmet>, which the parser only reaches most
          of a document later; preloading starts them at the top of <head> instead. They
          stay in <helmet> deliberately: a render-blocking stylesheet in <head> holds the

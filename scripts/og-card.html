@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!-- Source for assets/img/og-card.png — the 1200x630 card LinkedIn, Slack and X
+     draw when the link is pasted. og:image used to be the 440x506 portrait, which
+     those three render as a small square thumbnail.
+
+     It is a source file, not a deployed one: scripts/ is never copied into
+     output/. Regenerate with the Chrome on this machine — scripts/build.mjs stays
+     zero-dependency and has to run in Cloudflare's build environment, where there
+     is no browser:
+
+       python3 -m http.server 8731 --bind 127.0.0.1 --directory . &
+       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+         --headless=new --disable-gpu --hide-scrollbars --window-size=1200,630 \
+         --screenshot=assets/img/og-card.png \
+         http://127.0.0.1:8731/scripts/og-card.html
+
+     Served over http rather than file:// so the woff2 loads: a file:// document
+     gets an opaque origin and the font is dropped, which silently produces a card
+     in the system monospace.
+
+     assets/img/* is Cache-Control: immutable for a year, so a regenerated card
+     has to arrive under a NEW name — same rule as the portrait and the font
+     subset — and og:image in src/index.html has to move with it.
+
+     Every line it prints is copied from ~/whoami — the host line, the title, the
+     tagline, Location and Kernel are the page's own values, verbatim. Nothing new
+     is asserted here, and the Kernel row quotes the neofetch block rather than the
+     JSON-LD knowsAbout, so editing one does not silently make the other wrong. -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>og-card</title>
+    <style>
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 400;
+            src: url("../assets/fonts/jetbrains-mono-latin.woff2") format('woff2');
+        }
+
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 500;
+            src: url("../assets/fonts/jetbrains-mono-latin.woff2") format('woff2');
+        }
+
+        * { box-sizing: border-box }
+
+        html, body { margin: 0; background: #0C0C0C }
+
+        body {
+            width: 1200px;
+            height: 630px;
+            overflow: hidden;
+            color: #D6D2CB;
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 22px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .win { width: 1200px; height: 630px; display: flex; flex-direction: column }
+
+        .bar {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: #151513;
+            border-bottom: 1px solid #2A2724;
+            height: 52px;
+            font-size: 19px;
+            color: #D6D2CB;
+            padding-right: 22px;
+        }
+
+        .bar .tag { background: #7FC8A9; color: #0C0C0C; font-weight: 500; padding: 0 16px; line-height: 51px }
+        .bar .win-item { padding: 0 14px }
+        .bar .right { margin-left: auto; color: #8A857D }
+
+        .body { flex: 1; padding: 46px 64px 40px; display: flex; flex-direction: column }
+
+        .prompt { font-size: 21px; color: #8A857D }
+        .prompt .u { color: #7FC8A9 }
+        .prompt .p { color: #6FA8FF }
+        .prompt .cmd { color: #D6D2CB; margin-left: 1ch }
+
+        .host {
+            font-size: 30px;
+            line-height: 1.3;
+            width: fit-content;
+            border-bottom: 1px solid #4E4E4A;
+            padding-bottom: 9px;
+            margin: 26px 0 30px;
+        }
+
+        .host .a { color: #7FC8A9 }
+        .host .b { color: #6FA8FF }
+
+        .name { font-size: 68px; line-height: 1.12; font-weight: 500; color: #F3EFE9; letter-spacing: -.5px }
+        .role { font-size: 36px; line-height: 1.3; color: #7FC8A9; margin-top: 12px }
+        .tagline { font-size: 25px; line-height: 1.5; color: #C5C0B8; margin-top: 22px }
+
+        .foot { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 32px }
+        .knows { flex: 1 1 auto; min-width: 0; font-size: 18px; line-height: 1.65; color: #8A857D }
+        .knows b { color: #E0A33C; font-weight: 400 }
+        .url { flex: none; font-size: 27px; color: #7FC8A9; white-space: nowrap; display: flex; align-items: center }
+        .caret { display: inline-block; width: 14px; height: 27px; margin-left: 5px; background: #7FC8A9 }
+    </style>
+</head>
+<body>
+<div class="win">
+    <div class="bar">
+        <span class="tag">tmux</span>
+        <span class="win-item">0:whoami</span>
+        <span class="win-item">1:work</span>
+        <span class="win-item">2:career</span>
+        <span class="win-item">3:stack</span>
+        <span class="right">guest@mozolewski.eu</span>
+    </div>
+    <div class="body">
+        <div class="prompt"><span class="u">guest@mozolewski.eu</span>:<span class="p">~</span>$<span class="cmd">neofetch</span></div>
+        <div class="host"><span class="a">marcin</span>@<span class="b">mozolewski</span></div>
+        <div class="name">Marcin Mozolewski</div>
+        <div class="role">Senior Cloud Platform Engineer</div>
+        <div class="tagline">I build the layer other engineers build on.</div>
+        <div class="foot">
+            <div class="knows"><b>Location</b> Warsaw, Poland<br><b>Kernel</b> Cloud · Terraform · Kubernetes · Computing · Optimization · AI</div>
+            <div class="url">mozolewski.eu<span class="caret"></span></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
