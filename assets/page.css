@@ -248,6 +248,19 @@ html { scroll-behavior: smooth; }
     .cgrid > div > :nth-child(3) { grid-column: 2; grid-row: 2; margin-top: 2px }
   }
 
+  /* The two boxes that stand where the map will be are 214px and 220px tall, so
+     ~/visitor shows every visitor a third of a 320px screen of empty dashed
+     rectangle — and most never press the button that fills it. They hug their
+     text on a phone instead. Nothing is lost: what the box says, that the tiles
+     come from openstreetmap.org, the note above the button already says before
+     the press, which is where the disclosure has to be anyway. The press then
+     grows the section rather than swapping equal heights, and that is the right
+     trade — the button is above the box and does not move, so nothing shifts
+     under the finger that just tapped it. */
+  @media (max-width: 560px) {
+    .map-ph { height: auto !important; padding: 20px 16px !important }
+  }
+
   /* ~/stack used to be drawn with U+2500 box characters. They are not in the
      JetBrains Mono subset, so they came from the OS fallback at a different
      advance width — on Windows that is Consolas, about 8% narrower, which bends

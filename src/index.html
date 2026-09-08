@@ -387,7 +387,7 @@
                 <div style="flex:none;width:min(100%,420px)">
                     <sc-if hint-placeholder-val="{{ false }}" value="{{ notRan }}">
                         <div style="border:1px dashed #2A2724;background:#111110;padding:6px">
-                            <div style="width:100%;height:214px;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">the map is drawn from openstreetmap.org<br>once you run the lookup</div>
+                            <div class="map-ph" style="width:100%;height:214px;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">the map is drawn from openstreetmap.org<br>once you run the lookup</div>
                         </div>
                         <div style="color:#8A857D;font-size:12.5px;margin-top:6px">no tiles requested yet</div>
                     </sc-if>
@@ -398,7 +398,7 @@
                         <div style="color:#8A857D;font-size:12.5px;margin-top:6px">openstreetmap tiles · approximate</div>
                     </sc-if>
                     <sc-if hint-placeholder-val="{{ false }}" value="{{ noGeo }}">
-                        <div style="width:100%;height:220px;border:1px dashed #2A2724;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">location unavailable — no coordinates to plot</div>
+                        <div class="map-ph" style="width:100%;height:220px;border:1px dashed #2A2724;display:grid;place-items:center;color:#8A857D;font-size:12.5px;text-align:center;padding:0 16px">location unavailable — no coordinates to plot</div>
                     </sc-if>
                 </div>
             </div>
