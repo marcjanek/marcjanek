@@ -235,9 +235,23 @@ html { scroll-behavior: smooth; }
      the columns out of line. Same shape, drawn with borders that cannot drift. */
   .tree, .tree ul { list-style: none; margin: 0; padding: 0 }
   .tree li { position: relative; padding-left: 4ch }
+  /* Where the elbow meets the stem is half a line down, and there is no unit for
+     that: `em` is the font size, not the line box. --tree-half is that half,
+     written out — .95em against line-height 1.9 — so the two move together. Change
+     the line-height of .tree-box without changing this and every elbow slides off
+     its label. */
+  .tree { --tree-half: .95em }
   .tree li::before { content: ""; position: absolute; left: .5ch; top: 0; bottom: 0; border-left: 1px solid #C5C0B8 }
-  .tree li:last-child::before { bottom: auto; height: .95em }
-  .tree li::after { content: ""; position: absolute; left: .5ch; top: .95em; width: 2.4ch; border-top: 1px solid #C5C0B8 }
+  .tree li:last-child::before { bottom: auto; height: var(--tree-half) }
+  .tree li::after { content: ""; position: absolute; left: .5ch; top: var(--tree-half); width: 2.4ch; border-top: 1px solid #C5C0B8 }
+
+  /* ~/stack is 26 rows of one or two words each, and 1.9 gives every one of them
+     26.6px on a screen 320px wide — 931px of section for twenty labels. 1.6 is
+     still loose for a list and gives back four pixels a row. */
+  @media (max-width: 560px) {
+    .tree-box { line-height: 1.6 !important }
+    .tree { --tree-half: .8em }
+  }
 
   /* The last character the subset did not carry: ~/shell's status dot, a lone
      U+25CF. It aligned nothing, so it was only ever a hairline of wrongness —
