@@ -13,9 +13,12 @@
 # same promise the status line makes, enforced by the browser instead of by
 # code review.
 #
-# Note: this blocks Cloudflare Web Analytics, whose beacon is injected at the
-# edge from static.cloudflareinsights.com. That is deliberate — turn the feature
-# off at the Pages project rather than widening script-src for it.
+# Cloudflare Web Analytics is deliberately allowed: the beacon is injected at
+# the edge from static.cloudflareinsights.com and reports page counts to
+# cloudflareinsights.com. Cloudflare already terminates every request to this
+# site as its CDN, so the beacon adds no new recipient — but it is still a
+# third-party request and a page-view tracker, which is why the status line
+# says "cf analytics" rather than "no trackers".
 #
 # Hosts, all of them behind a click except the first-party ones:
 #   ipapi.co, ipwho.is          ~/visitor, the whois button
@@ -27,4 +30,4 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: geolocation=(), camera=(), microphone=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://ipapi.co https://ipwho.is https://github.com https://mozolewski.eu https://rysinder.mozolewski.eu
+  Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://cloudflareinsights.com https://ipapi.co https://ipwho.is https://github.com https://mozolewski.eu https://rysinder.mozolewski.eu

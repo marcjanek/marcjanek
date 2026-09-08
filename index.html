@@ -917,7 +917,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
                 vCity: city || "unknown",
                 vNet: d.org || d.connection && d.connection.org || "unknown",
                 vTz: d.timezone && d.timezone.id || d.timezone || tz,
-                vNote: "# you ran this. your IP address went to " + host + ", which logs queries for a limited time; the map tiles came from openstreetmap.org. nothing was written to your device, and nothing reached me."
+                vNote: "# you ran this. your IP address went to " + host + ", which logs queries for a limited time; the map tiles came from openstreetmap.org. nothing was written to your device, and the only thing that reaches me is a page count, from cloudflare."
             });
             const la = d.latitude, lo = d.longitude;
             if (typeof la === "number" && typeof lo === "number") {
@@ -1294,7 +1294,7 @@ certs  [<span style="color:#E0A33C">{{ certFill }}</span><span style="color:#4E4
             // is the honest binding for that attribute — vRan alone would keep
             // announcing "disabled" over a button that works.
             whoisDisabled: this.state.vRan === true && this.state.vFailed !== true,
-            trackNote: this.state.vRan ? "1 lookup, on your command · utf-8" : "no trackers · no cookies · utf-8",
+            trackNote: this.state.vRan ? "1 lookup, on your command · utf-8" : "no cookies · cf analytics · utf-8",
             noGeo: this.state.hasGeo === false,
             line: this.state.line,
             hist: this.state.hist,
