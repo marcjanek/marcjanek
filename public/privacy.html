@@ -149,14 +149,15 @@
     <p class="lede">This is the information notice required by Article 13 of the GDPR. It is written against
         what the code actually does rather than against a template, and the last section tells you how to
         check every claim on this page without taking my word for it.</p>
-    <p class="dim sm">Last updated: 8 September 2026.</p>
+    <p class="dim sm">Last updated: 9 September 2026.</p>
 
     <div class="status">
         <div>[<span class="ok">&nbsp;&nbsp;OK&nbsp;&nbsp;</span>] No cookies. Nothing is written to your device and nothing is read back from it. That is why there is no consent banner.</div>
         <div>[<span class="ok">&nbsp;&nbsp;OK&nbsp;&nbsp;</span>] No accounts, no login, no contact form, no comments, no newsletter.</div>
         <div>[<span class="ok">&nbsp;&nbsp;OK&nbsp;&nbsp;</span>] One page counter, from Cloudflare, and it is cookieless.</div>
         <div>[<span class="ok">&nbsp;&nbsp;OK&nbsp;&nbsp;</span>] Hosts outside this domain appear in the code, and not one of them is contacted until you press a button or type a command.</div>
-        <div>[<span class="warn">&nbsp;INFO&nbsp;</span>] No Google Analytics, no Tag Manager, no Google Fonts, no ad network, no social embed, no view counter. The typeface and every image are served from this domain.</div>
+        <div>[<span class="warn">&nbsp;INFO&nbsp;</span>] No Google Analytics, no Tag Manager, no Google Fonts, no ad network, no social embed, no view counter. The typeface and every image are served from this domain, and your browser makes no request to any Google host at all.</div>
+        <div>[<span class="warn">&nbsp;INFO&nbsp;</span>] This domain <span class="bright">is</span> registered in Google Search Console, which runs the other way round: a report Google sends me about its own search results, not a script Google runs on you. <a href="#google">What that means</a>.</div>
     </div>
 
     <h2>Who is responsible</h2>
@@ -206,6 +207,32 @@
         its Data Processing Addendum incorporates the European Commission's Standard Contractual Clauses as a
         fallback if that certification ever lapses.</p>
 
+    <h3>What your browser is asked about, and never tells anyone</h3>
+    <p>This one is on page load, not behind a button, so it belongs here rather than further down. The
+        <span class="path">~/visitor</span> panel shows your timezone, browser language, screen size and
+        whether your system asks for a dark theme. Those are read on your device the moment the page runs,
+        printed straight back to you, and <span class="bright">never transmitted</span> — they are there to
+        make the point that any website can see them without asking. They do not reach me, Cloudflare, or
+        anyone else. Your IP address is a different matter and is not among them: that is the button, and it
+        is the section below.</p>
+
+    <h3>Two smaller things the edge adds</h3>
+    <p>Both are named here because the last section invites you to read the network tab, and you would
+        otherwise find two requests this page had not mentioned. Both are served from this domain, and
+        neither is a new recipient of anything.</p>
+    <ul>
+        <li><span class="bright">Email address obfuscation.</span> Cloudflare rewrites the addresses printed
+            on the page and adds a small first-party script,
+            <span class="dim">/cdn-cgi/scripts/&hellip;/email-decode.min.js</span>, which puts them back in a
+            real browser. It exists so that address-harvesting bots collect a scramble instead of a working
+            mailbox. It reads nothing about you.</li>
+        <li><span class="bright">Speculation rules</span> (Cloudflare Speed Brain). A small first-party
+            file, <span class="dim">/cdn-cgi/speculation</span>, tells your browser which links it may fetch
+            ahead of a click. Its rule matches <span class="dim">/*</span> relative to this document, so the
+            only thing it can pull early is another page of this site, from this site. Open the file and
+            read it — it is four lines.</li>
+    </ul>
+
     <h2>What does not happen</h2>
     <ul>
         <li><span class="bright">No storage on your device.</span> No cookie, no localStorage, no
@@ -225,6 +252,26 @@
         <li><span class="bright">Nothing is sold</span>, and nothing is passed to anyone for their own
             purposes.</li>
     </ul>
+
+    <h2 id="google">Where Google does come in</h2>
+    <p>Saying "no Google Analytics" and stopping there would be a half-truth, so here is the whole one. This
+        domain is registered in <span class="bright">Google Search Console</span>. That is not a tag, a
+        script or a cookie — it is a report, and it runs in the opposite direction to analytics.</p>
+    <ul>
+        <li>Ownership of the domain is proved by a <span class="bright">DNS TXT record</span>, not by
+            anything on this page. There is no verification meta tag in the HTML and never has been.</li>
+        <li>What Search Console shows me is which search terms led people here, how many saw the link, how
+            many clicked it and roughly where the page ranked. <span class="bright">All of it is measured by
+            Google on Google's own search results page</span>, where Google is the controller and its own
+            privacy policy applies — before anyone reaches this site at all.</li>
+        <li>What arrives on my side is <span class="bright">aggregated</span>: counts, search terms and
+            average positions. Never an IP address, never a name, never anything that picks out one person.</li>
+        <li>Nothing about it touches your device, and <span class="bright">no request from these pages goes
+            to any Google host</span> — which you can check in the network tab, and which the
+            Content-Security-Policy would enforce even if the code tried.</li>
+    </ul>
+    <p>Put plainly: if you arrived here from a Google search, Google already knew that before this page
+        loaded. Opening it adds nothing to what Google has, and sends Google nothing new.</p>
 
     <h2>What happens only if you ask for it</h2>
     <p>Parts of this site can reach outside this domain. Each of them waits for you, and says so before you
@@ -258,12 +305,6 @@
         this site itself. The other is <span class="bright">github.com</span>, which receives your IP
         address exactly as any request to GitHub would. The command's own help line names it before you
         run it. Legal basis: Article 6(1)(a) GDPR, your consent, given by typing it.</p>
-
-    <h3>What is read from your browser and never sent anywhere</h3>
-    <p>The <span class="path">~/visitor</span> panel also shows your timezone, browser language, screen size
-        and whether your system asks for a dark theme. Those are read on your device, printed back to you and
-        <span class="bright">never transmitted</span> — they are there to make the point that any website can
-        see them without asking. They do not reach me, Cloudflare, or anyone else.</p>
 
     <h2>If you email me</h2>
     <p><span class="bright">contact@mozolewski.eu</span> is a plain <span class="bright">mailto:</span> link.
@@ -423,9 +464,15 @@
             host your browser is permitted to contact. A host that is not on that list cannot be reached from
             this page whatever the code says, because the browser refuses it. Read it for yourself:
             <span class="dim">curl -sI https://mozolewski.eu/ | grep -i content-security-policy</span></li>
-        <li>Open your browser's developer tools, reload, and read the network tab. Then open the storage tab:
-            it is empty.
-        </li>
+        <li>Open your browser's developer tools, reload, and read the network tab. A fresh load of this page
+            makes six requests, and every one of them is accounted for above: the document itself,
+            <span class="dim">/cdn-cgi/speculation</span>, the email-decode script, the typeface,
+            <span class="dim">/cdn-cgi/rum</span> (the page count) and
+            <span class="dim">static.cloudflareinsights.com</span> (the script that sends it). Five from this
+            domain, one from Cloudflare, none from anywhere else. <span class="bright">If you see a seventh,
+            this page is wrong and I would like to know.</span></li>
+        <li>Then open the storage tab: it is empty. No cookie, no localStorage, no sessionStorage — on this
+            page and on every other one.</li>
     </ul>
 
     <h2>Changes</h2>
