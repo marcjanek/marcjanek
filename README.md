@@ -4,7 +4,7 @@
 
 I build the layer other engineers build on: cloud network architecture, egress security, and the provisioning path that new projects are created through. Commercially since 2021, five years self-taught before that.
 
-[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) · [mozolewski.eu](https://mozolewski.eu) · [LinkedIn](https://www.linkedin.com/in/marcin-mozolewski) · [Stack Overflow](https://stackoverflow.com/users/13347227/marcin-mozolewski) · [Credly](https://www.credly.com/users/marcin-mozolewski)
+[contact@mozolewski.eu](mailto:contact@mozolewski.eu?subject=Contact) · [mozolewski.eu](https://mozolewski.eu) · [LinkedIn](https://www.linkedin.com/in/marcin-mozolewski) · [Stack Overflow](https://stackoverflow.com/users/13347227) · [Credly](https://www.credly.com/users/marcin-mozolewski)
 
 ---
 

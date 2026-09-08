@@ -24,7 +24,7 @@ class Component extends DCLogic {
     LINK = Object.assign(Object.create(null), {
         github: "https://github.com/marcjanek",
         linkedin: "https://www.linkedin.com/in/marcin-mozolewski",
-        stackoverflow: "https://stackoverflow.com/users/13347227/marcin-mozolewski",
+        stackoverflow: "https://stackoverflow.com/users/13347227",
         credly: "https://www.credly.com/users/marcin-mozolewski"
     });
     CAT = Object.assign(Object.create(null), {
