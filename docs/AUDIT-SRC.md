@@ -490,3 +490,15 @@ and measured as doing nothing: `align-self` on the caret alone, which has nothin
 with and falls back to cross-start, and a negative bottom margin, which a synthesized border-box
 baseline ignores. After: −0.11 px at 320, 390, 768, 1280 and 1440, with row heights, document height
 and horizontal overflow identical to before at every one.
+
+`~/shell` had no window. The box carried a `min-height` and no ceiling, so `help` — twenty lines —
+grew the section, pushed everything below it down the page and left the new prompt off screen with
+nothing to say that it had moved. A terminal has a window, so this one does too: `[data-term]` is a
+`clamp(260px, 44vh, 380px)` box with its own scrollbar, and `scrollShell()` pins it to the bottom
+after every command and again when `systemctl`'s answers land. Two `requestAnimationFrame`s were the
+first attempt at that pin and are not enough — React commits from its own scheduler, so the frame can
+land before the row does; measured, `help` left the box at `scrollTop` 0 of 168. The pin runs from
+`componentDidUpdate`, which dc-runtime forwards to the logic class, and is armed by a flag so the
+per-second clock render costs nothing. Measured at 1280, 390 and 320: the box height, the section
+height and the document height are unchanged by anything typed into it, the newest prompt is inside
+the visible box after every command, and there is no horizontal overflow at any width.

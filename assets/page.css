@@ -23,6 +23,25 @@ html { scroll-behavior: smooth; }
      anything around it. */
   [data-prompt] { align-items: baseline }
   [data-caret] { position: relative; top: 3px }
+
+  /* ~/shell is a terminal, and a terminal has a window. This box had a min-height
+     and no ceiling, so `help` — twenty lines — grew the section, pushed the rest of
+     the page down and left the new prompt below the fold with nothing to say that
+     anything had happened. A fixed height and its own scrollbar instead, with
+     scrollShell() in app.js pinning it to the bottom after every command, which is
+     what a real terminal does. The height tracks the viewport, so it survives a
+     200% zoom, and the section's own height stops changing as output arrives. The
+     region needs no tabindex of its own: the prompt input lives inside it. */
+  [data-term] {
+    height: clamp(260px, 44vh, 380px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #7FC8A9 #0E0E0D;
+  }
+  [data-term]::-webkit-scrollbar { width: 8px }
+  [data-term]::-webkit-scrollbar-track { background: #0E0E0D }
+  [data-term]::-webkit-scrollbar-thumb { background: #2A2724 }
+  [data-term]::-webkit-scrollbar-thumb:hover { background: #7FC8A9 }
   @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
   @keyframes introOut { to { clip-path: inset(0 0 100% 0); opacity: 0; visibility: hidden } }
   @keyframes decode { from { clip-path: inset(0 0 100% 0) } to { clip-path: inset(0 0 0 0) } }

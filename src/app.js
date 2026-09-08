@@ -54,12 +54,34 @@ class Component extends DCLogic {
         inputRef: (el) => {
             this._input = el;
         },
+        shellRef: (el) => {
+            this._shell = el;
+        },
         focusShell: () => {
             if (this._input) this._input.focus();
         },
         onChange: (e) => this.setState({line: e.target.value}),
         onKey: (e) => this.keyDown(e)
     };
+
+    // ~/shell is a fixed-height window now (see [data-term] in page.css), so
+    // anything printed has to bring the newest prompt back into view the way a
+    // real terminal does — `help` is twenty lines and used to leave it below the
+    // fold. This only arms the pin; componentDidUpdate does it, once the row is
+    // actually in the DOM. Two requestAnimationFrames were tried first and are not
+    // enough: React commits from its own scheduler, so the frame can land before
+    // the row does and scrollHeight is then measured a command behind. Measured
+    // that way, `help` left the box at scrollTop 0 of 168.
+    scrollShell() {
+        this._stick = true;
+    }
+
+    componentDidUpdate() {
+        // every clock tick renders, so this has to stay cheap and armed-only
+        if (!this._stick) return;
+        this._stick = false;
+        if (this._shell) this._shell.scrollTop = this._shell.scrollHeight;
+    }
 
     reduced() {
         return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -585,6 +607,7 @@ class Component extends DCLogic {
             this.setState((st) => ({
                 hist: st.hist.map((h) => (h.out === this.PROBING ? {cmd: h.cmd, out: text} : h))
             }));
+            this.scrollShell();
         });
     }
 
@@ -1158,6 +1181,7 @@ class Component extends DCLogic {
             cmds: s.cmds.concat([raw]).slice(-50),
             hist: out === null ? [] : s.hist.concat([{cmd: raw, out: out}]).slice(-14)
         }));
+        this.scrollShell();
     }
 
     renderVals() {

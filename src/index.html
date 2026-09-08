@@ -412,7 +412,7 @@
                 <span><span class="dot"></span> bash — interactive</span>
                 <span>try: help · ls · cd work · sudo hire marcin</span>
             </div>
-            <div role="presentation" sc-camel-on-click="{{ focusShell }}" style="display:flex;flex-direction:column;gap:8px;min-height:200px;cursor:text;font-size:13.5px">
+            <div data-term="1" ref="{{ shellRef }}" role="presentation" sc-camel-on-click="{{ focusShell }}" style="display:flex;flex-direction:column;gap:8px;cursor:text;font-size:13.5px">
                 <div style="color:#8A857D;font-size:12.5px"><span style="color:#7FC8A9">#</span> this prompt works. <span style="color:#C5C0B8">up</span> recalls, <span style="color:#C5C0B8">tab</span> completes, <span style="color:#C5C0B8">help</span> lists everything.</div>
                 <div aria-atomic="false" aria-live="polite" role="log" style="display:flex;flex-direction:column;gap:8px">
                     <sc-for as="h" hint-placeholder-count="2" list="{{ hist }}">
