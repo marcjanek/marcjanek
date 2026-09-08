@@ -13,7 +13,7 @@ class Component extends DCLogic {
     // answered by run() and completable too, but stay out of help so the listing
     // reads as a menu rather than a changelog. Everything run() answers to sits
     // in one of the two lists, so the shell and its own documentation cannot drift.
-    SECTIONS = ["whoami", "work", "career", "expertise", "stack", "certs", "visitor", "contact", "shell"];
+    SECTIONS = ["whoami", "work", "career", "stack", "certs", "visitor", "contact", "shell"];
     COMMANDS = ["cat", "cd", "clear", "date", "echo", "help", "ls", "mail", "neofetch", "ping", "pwd", "systemctl", "uptime", "whoami", "whois", "xdg-open"];
     ALIASES = ["goto", "contact", "ip", "open", "curl", "sudo", "rm", "exit", "logout"];
     PROBING = "probing…";

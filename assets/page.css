@@ -128,11 +128,11 @@ html { scroll-behavior: smooth; }
   .cert-ok { color: #C5C0B8 }
   .cert-old { color: #8A857D }
 
-  /* Below 1040px the tmux bar cannot show all eight windows at once. It stays a
+  /* Below 936px the tmux bar cannot show all eight windows at once. It stays a
      scroller — the fix is that the scrollbar is now visible, so the swipe is
      discoverable instead of being a secret. The bar grows by the 6px the
      scrollbar occupies, and the skip link clears the taller bar. */
-  @media (max-width: 1040px) {
+  @media (max-width: 936px) {
     nav { height: calc(42px + env(safe-area-inset-top, 0px)) !important; scrollbar-width: thin !important; scrollbar-color: #7FC8A9 #151513 }
     nav a, nav > span { line-height: 34px !important }
     nav::-webkit-scrollbar { height: 6px }

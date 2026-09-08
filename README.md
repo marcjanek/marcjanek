@@ -19,7 +19,7 @@ I build the layer other engineers build on: cloud network architecture, egress s
 **One path for every new project.** New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it. Since 2026 it is the only way a new project is created, not one route among several, and hundreds of applications have been provisioned on one uniform model.
 `terraform` `terraform-cloud` `google-cloud` `open-policy-agent`
 
-Career, expertise and the rest are on [mozolewski.eu](https://mozolewski.eu).
+Career and the rest are on [mozolewski.eu](https://mozolewski.eu).
 
 ### Stack
 
