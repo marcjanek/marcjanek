@@ -10,13 +10,13 @@ I build the layer other engineers build on: cloud network architecture, egress s
 
 ### Selected work
 
-**A network foundation shared by two clouds and a data center.** Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering — in production, with disaster recovery in a second region, designed against a four-nines target.
+**A network foundation shared by two clouds and a data center.** Every team solved connectivity in its own way, and there was no highly available path between Google Cloud, on-premises and a second public cloud. I helped design and build a redundant interconnect with geo-redundant failover, and a pattern that lets spoke networks attach to it without one-off engineering — in production, with disaster recovery in a second region, engineered for 20 Gbps against a four-nines target, and about 25% better than the path the first applications left.
 `cloud-interconnect` `cloud-router` `vpc` `terraform`
 
 **Egress policy that runs inside the request, not beside it.** Traffic arriving over Private Service Connect carries nothing that identifies the consumer behind it, so egress policy cannot be enforced per consumer — and no managed service offered it at the time. I built a control plane that resolves each connection's consumer and decides allow or deny in-process inside the proxy, fail-closed, with no network round trip on the decision path; it runs across two regions, and other teams adopt it through a Terraform provider I wrote.
 `envoy` `rust-wasm` `go` `postgresql` `kubernetes` `flux`
 
-**One path for every new project.** New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it; hundreds of applications have been provisioned on one uniform model.
+**One path for every new project.** New projects, their Terraform workspaces and their infrastructure repositories were created ad hoc, with no consistent model to inherit. I designed the automated path they all take now — creation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it. Since 2026 it is the only way a new project is created, not one route among several, and hundreds of applications have been provisioned on one uniform model.
 `terraform` `terraform-cloud` `google-cloud` `open-policy-agent`
 
 Career, expertise and the rest are on [mozolewski.eu](https://mozolewski.eu).
@@ -24,7 +24,8 @@ Career, expertise and the rest are on [mozolewski.eu](https://mozolewski.eu).
 ### Stack
 
 - **Workload** · Kubernetes, Docker, Envoy
-- **Platform** · Terraform, Terraform Cloud, Open Policy Agent, Flux
+- **Platform** · Terraform, Terraform Cloud, Open Policy Agent, Flux, GitHub Actions
+- **Observability** · Google Managed Prometheus, Cloud Trace
 - **Providers** · Google Cloud daily; Azure, AWS, OCI, IBM Cloud, Alibaba Cloud, DigitalOcean and Cloudflare worked with
 - **Languages** · Python, Rust, Go, HCL, SQL
 

@@ -28,9 +28,9 @@ class Component extends DCLogic {
         credly: "https://www.credly.com/users/marcin-mozolewski"
     });
     CAT = Object.assign(Object.create(null), {
-        "sys-01": "A network foundation shared by two clouds and a data center.\nRedundant interconnect with geo-redundant failover; spokes attach to it without one-off engineering.\ntags: cloud-interconnect cloud-router vpc terraform",
+        "sys-01": "A network foundation shared by two clouds and a data center.\nRedundant interconnect with geo-redundant failover; spokes attach to it without one-off engineering.\nIn production with DR in a second region — 20 Gbps and four nines by design, ~25% better on the traffic moved.\ntags: cloud-interconnect cloud-router vpc terraform",
         "sys-02": "Egress policy that runs inside the request, not beside it.\nPer-consumer allow/deny resolved in-process inside the proxy, fail-closed, no round trip.\ntags: envoy rust-wasm go postgresql kubernetes flux",
-        "sys-03": "One path for every new project.\nCreation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it.\ntags: terraform terraform-cloud google-cloud open-policy-agent"
+        "sys-03": "One path for every new project.\nCreation, labeling, perimeter placement, identity federation, multi-environment support — and the API in front of it.\nSince 2026 the only way a new project is created — hundreds of applications on one uniform model.\ntags: terraform terraform-cloud google-cloud open-policy-agent"
     });
 
     // Which commands have a completable argument. Free-text commands (echo) are
