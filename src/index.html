@@ -3,7 +3,14 @@
 <head>
     <meta charset="utf-8">
     <link as="font" crossorigin href="assets/fonts/jetbrains-mono-latin.woff2" rel="preload" type="font/woff2">
-    <link href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='5'%20fill='%230C0C0C'/%3E%3Cpath%20d='M8%2011l5.5%205-5.5%205'%20stroke='%237FC8A9'%20stroke-width='3'%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Crect%20x='16.5'%20y='19.5'%20width='9'%20height='3'%20rx='1.5'%20fill='%237FC8A9'/%3E%3C/svg%3E" rel="icon" type="image/svg+xml">
+    <!-- A file, not a data: URI, and that is the whole point. Google will only show a
+         site's favicon in a search result if it can *crawl* it: the icon has to live at
+         a URL. This was inline, and /favicon.ico was a 404, so Google had nothing to
+         fetch and drew its generic globe beside the result instead. Same drawing, byte
+         for byte — the terminal chevron and its cursor bar — now under a name.
+         assets/img/* is immutable for a year, so a redrawn icon arrives under a NEW
+         name and this href moves with it. -->
+    <link href="assets/img/icon.svg" rel="icon" type="image/svg+xml">
     <!-- This is the one lever a page has over the bands iOS Safari paints above and
          below it. It is NOT the same knob as the html background: theme-color paints
          only browser chrome, never a pixel inside the page, so it cannot repeat the
@@ -17,7 +24,12 @@
     };</script>
     <script id="mz-baked" type="application/json">"BUILD:baked"</script>
     <title>Marcin Mozolewski — Senior Cloud Platform Engineer</title>
-    <meta content="Senior Cloud Platform Engineer in Warsaw. Cloud network architecture, in-process egress security, and one provisioning path for hundreds of applications." name="description">
+    <!-- Google used the previous string verbatim in the result, so this one is written
+         for that slot: the tagline from ~/whoami first, because it is the strongest line
+         on the page and it is what a reader sees before the role. 153 characters, inside
+         the ~160 Google shows before it truncates. It must stay identical to
+         og:description below — one string, two consumers. -->
+    <meta content="I build the layer other engineers build on. Senior Cloud Platform Engineer in Warsaw: cloud networking, architecture, and one path every new project takes." name="description">
     <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
     <meta content="dark" name="color-scheme">
     <!-- iOS Safari reads ~/career's `2023-05 — 2024-09` as a phone number and offers to dial it.
@@ -35,7 +47,7 @@
     <meta content="mozolewski.eu" property="og:site_name">
     <meta content="en_US" property="og:locale">
     <meta content="Marcin Mozolewski — Senior Cloud Platform Engineer" property="og:title">
-    <meta content="Senior Cloud Platform Engineer in Warsaw. Cloud network architecture, in-process egress security, and one provisioning path for hundreds of applications." property="og:description">
+    <meta content="I build the layer other engineers build on. Senior Cloud Platform Engineer in Warsaw: cloud networking, architecture, and one path every new project takes." property="og:description">
     <!-- The share card, not the portrait. og:image was assets/img/marcin.jpg — 440x506,
          which LinkedIn, Slack and X all draw as a small square thumbnail. This one is
          1200x630, built from scripts/og-card.html by headless Chrome and committed; that
